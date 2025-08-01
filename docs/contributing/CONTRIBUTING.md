@@ -30,9 +30,9 @@ Note: By contributing, you agree to follow our Code of Conduct (CoC) and project
 We use:
 - Python: 3.11+
 - Package manager: uv
-- Linting/formatting: ruff
+- Linting/formatting: ruff + black
 - Type checking: mypy
-- Tests: pytest
+- Tests: pytest (+ coverage)
 
 Local setup
 1. Install Python 3.11+.
@@ -42,23 +42,22 @@ Local setup
    - git clone <repo-url>
    - cd Arachne
 4. Create and activate a virtual environment (uv will manage it automatically for most commands, but you can also do it yourself if preferred).
-5. Install dependencies:
-   - uv pip install -r requirements.txt
-   - If the project uses a pyproject.toml with uv, run:
-     - uv sync
-6. Install dev tools (if not included in the sync):
-   - uv pip install ruff mypy pytest
-7. Verify setup:
-   - ruff --version
-   - mypy --version
-   - pytest --version
+5. Install dependencies (managed by uv via pyproject.toml):
+   - uv lock
+   - uv sync
+6. Verify setup:
+   - uv --version
+   - uv run ruff --version
+   - uv run black --version
+   - uv run mypy --version
+   - uv run pytest --version
 
 Common commands
-- Lint: ruff check .
-- Format: ruff format .
-- Type-check: mypy .
-- Tests: pytest -q
-- Run a subset of tests: pytest -q tests/path::TestClass::test_method
+- Lint: uv run ruff check .
+- Format check: uv run black --check .
+- Type-check: uv run mypy src
+- Tests (with coverage gates): uv run pytest
+- Run a subset of tests: uv run pytest -q tests/path::TestClass::test_method
 
 Note: Some commands may be wrapped by scripts in scripts/ to ensure consistent options. Prefer those if present.
 
@@ -215,8 +214,9 @@ All contributors and maintainers must follow our CoC. Be respectful, constructiv
 Checklist Before Opening a PR
 
 - [ ] Code compiles and passes tests locally
-- [ ] ruff check . and ruff format . run clean
-- [ ] mypy . passes (or narrow, justified suppressions)
+- [ ] uv run ruff check . and uv run black --check . run clean
+- [ ] uv run mypy src passes (or narrow, justified suppressions)
+- [ ] uv run pytest passes locally (coverage gate ≥80% overall for M1)
 - [ ] Tests added/updated, including regression tests if fixing a bug
 - [ ] Docs updated (README, examples, or deeper docs as needed)
 - [ ] No payload contents in error events or logs; redaction applied where appropriate

@@ -36,13 +36,13 @@ Deliverables
 - Documentation:
   - README.md (quickstart, dev loop, contribution guidelines summary)
   - CHANGELOG.md (Keep a Changelog format, SemVer)
-  - LICENSE (MIT or organization default)
+  - LICENSE (BSD 3-Clause or organization default)
 - Verified CI run passing on main branch with the scaffold.
 
 Scope and Tasks
 1) Repository and tooling
 - Create pyproject.toml:
-  - Project metadata (name: arachne, version: 0.0.0, license: MIT)
+  - Project metadata (name: arachne, version: 0.0.0, license: BSD 3-Clause)
   - Dependencies: none (runtime) for M1
   - Dev dependencies: ruff, black, mypy, pytest, pytest-cov, types-*
   - [tool.ruff], [tool.black], [tool.pytest.ini_options] sections
