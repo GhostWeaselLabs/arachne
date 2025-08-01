@@ -3,7 +3,7 @@ from __future__ import annotations
 import time
 from collections.abc import Iterable
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from ..observability.logging import get_logger, with_context
 from ..observability.metrics import get_metrics, time_block
@@ -20,11 +20,11 @@ class Node:
     name: str
     inputs: list[Port] = field(default_factory=list)
     outputs: list[Port] = field(default_factory=list)
-    _metrics = field(default_factory=lambda: get_metrics(), init=False, repr=False)
+    _metrics: Any = field(default_factory=lambda: get_metrics(), init=False, repr=False)
     _scheduler: Scheduler | None = field(default=None, init=False, repr=False)
-    _messages_total = None
-    _errors_total = None
-    _tick_duration = None
+    _messages_total: Any = None
+    _errors_total: Any = None
+    _tick_duration: Any = None
 
     def __post_init__(self) -> None:
         """Initialize metrics after construction."""
