@@ -1,5 +1,26 @@
 # Milestone M7: Testing and Hardening
 
+## EARS Tasks and Git Workflow
+
+Branch name: feature/m7-testing-hardening
+
+EARS loop
+- Explore: inventory gaps in unit/integration/stress/soak coverage
+- Analyze: set performance budgets and diagnostics
+- Implement: tests across suites; benchmarks; CI gates
+- Specify checks: coverage thresholds and regression comparisons
+- Commit after each major step
+
+Git commands
+- git checkout -b feature/m7-testing-hardening
+- git add -A && git commit -m "test(unit): expand core coverage for primitives and scheduler"
+- git add -A && git commit -m "test(integration): backpressure, policies, priorities, shutdown"
+- git add -A && git commit -m "test(stress,soak): throughput/latency and long-running stability"
+- git add -A && git commit -m "chore(ci): coverage gates and benchmark regression checks"
+- git add -A && git commit -m "docs(testing): how to run suites and interpret benchmarks"
+- git push -u origin feature/m7-testing-hardening
+- Open PR early; keep commits small and focused
+
 Status: Planned
 Owner: Core Maintainers
 Duration: 5–7 days

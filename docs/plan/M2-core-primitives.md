@@ -1,6 +1,28 @@
 # Milestone M2: Core Primitives
 
-Status: Planned
+## EARS Tasks and Git Workflow
+
+Branch name: feature/m2-core-primitives
+
+EARS loop
+- Explore: review Message, PortSpec, Policies, Edge, Node, Subgraph contracts and tests
+- Analyze: define typing and policy interfaces; validate backpressure semantics
+- Implement: add message.py, ports.py, policies.py, edge.py, node.py, subgraph.py
+- Specify checks: unit/integration tests and microbenchmarks; enforce typing and coverage
+- Commit after each major step
+
+Git commands
+- git checkout -b feature/m2-core-primitives
+- git add -A && git commit -m "feat(core): add Message and header helpers"
+- git add -A && git commit -m "feat(core): introduce PortSpec and overflow Policy types"
+- git add -A && git commit -m "feat(core): implement Edge with bounded queue and policies"
+- git add -A && git commit -m "feat(core): add Node base with lifecycle and emit"
+- git add -A && git commit -m "feat(core): add Subgraph composition and validation"
+- git add -A && git commit -m "test(core): cover policies, edge behavior, and validation"
+- git push -u origin feature/m2-core-primitives
+- Open PR early; keep commits small and focused
+
+Status: Planned [DONE] [PASS]
 Owner: Core Maintainers
 Duration: 3–5 days
 

@@ -1,5 +1,26 @@
 # Milestone M4: Observability (Logs, Metrics, Tracing)
 
+## EARS Tasks and Git Workflow
+
+Branch name: feature/m4-observability
+
+EARS loop
+- Explore: map required logs, metrics, tracing to core touchpoints
+- Analyze: define logging/metrics/tracing interfaces with no-op defaults
+- Implement: logging.py, metrics.py, tracing.py and core wiring
+- Specify checks: unit/integration tests for counters, gauges, logs, spans
+- Commit after each major step
+
+Git commands
+- git checkout -b feature/m4-observability
+- git add -A && git commit -m "feat(obs): JSON logging facade with context"
+- git add -A && git commit -m "feat(obs): metrics interfaces and no-op + Prometheus adapter"
+- git add -A && git commit -m "feat(obs): tracing adapter with contextvars"
+- git add -A && git commit -m "feat(obs): wire nodes/edges/scheduler metrics and logs"
+- git add -A && git commit -m "test(obs): logging/metrics/tracing and core instrumentation"
+- git push -u origin feature/m4-observability
+- Open PR early; keep commits small and focused
+
 Status: Planned
 Owner: Core Maintainers
 Duration: 3–5 days

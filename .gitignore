@@ -99,3 +99,6 @@ Arachne/docs/private/**
 # ---- Generated docs/artifacts (optional) ----
 Arachne/docs/**/generated/
 Arachne/docs/**/diagrams/*.png
+
+# ---- Crush tooling cache ----
+.crush/
