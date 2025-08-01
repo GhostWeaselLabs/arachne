@@ -161,4 +161,12 @@ class RuntimePlan:
     def connect_nodes_to_scheduler(self, scheduler: Any) -> None:
         """Connect all nodes to the scheduler for backpressure-aware emission."""
         for node_ref in self.nodes.values():
-            node_ref.node._set_scheduler(scheduler) 
+            node_ref.node._set_scheduler(scheduler)
+    
+    def get_outgoing_edges(self, node_name: str, port_name: str) -> list[Any]:
+        """Get outgoing edges for a specific node and port."""
+        edges = []
+        for edge_ref in self.edges.values():
+            if edge_ref.edge.source_node == node_name and edge_ref.edge.source_port.name == port_name:
+                edges.append(edge_ref.edge)
+        return edges 
