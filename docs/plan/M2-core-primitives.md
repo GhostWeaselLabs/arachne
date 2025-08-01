@@ -7,8 +7,8 @@ Branch name: feature/m2-core-primitives
 EARS loop
 - Explore: review Message, PortSpec, Policies, Edge, Node, Subgraph contracts and tests
 - Analyze: define typing and policy interfaces; validate backpressure semantics
-- Implement: add message.py, ports.py, policies.py, edge.py, node.py, subgraph.py
-- Specify checks: unit/integration tests and microbenchmarks; enforce typing and coverage
+- Implement: add message.py, ports.py, policies.py, edge.py, node.py, subgraph.py [DONE]
+- Specify checks: unit/integration tests and microbenchmarks; enforce typing and coverage [DONE] [PASS]
 - Commit after each major step
 
 Git commands
