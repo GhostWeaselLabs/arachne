@@ -1,0 +1,101 @@
+# ---- Python build artifacts ----
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.dylib
+*.egg
+*.egg-info/
+.eggs/
+build/
+dist/
+pip-wheel-metadata/
+*.manifest
+*.spec
+
+# ---- Virtual environments & uv ----
+.venv/
+venv/
+env/
+.uv/
+uv.lock
+
+# ---- Packaging & archives ----
+*.whl
+*.tar
+*.tar.gz
+*.zip
+*.log
+
+# ---- Test & coverage ----
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# ---- Linters & type checkers ----
+.mypy_cache/
+.pytype/
+.dmypy.json
+.ruff_cache/
+
+# ---- IDE/editor settings ----
+.vscode/
+.idea/
+*.iml
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ---- Local scripts & experiments (optional; keep curated ones tracked) ----
+scratch/
+experiments/
+local/
+tmp/
+**/tmp/
+
+# ---- Diagnostics & snapshots (privacy-first defaults) ----
+diagnostics/
+**/diagnostics/
+*.diag.zip
+*.diag.tar
+*.diag.tar.gz
+*.snapshot.json
+*.snapshot.yaml
+*.snapshot.yml
+
+# ---- Logs & runtime outputs ----
+logs/
+**/*.log
+*.trace
+trace.out
+profile.out
+
+# ---- Node/web frontend leftovers (if any) ----
+node_modules/
+*.map
+.next/
+.out/
+dist-*/  # e.g., dist-web/
+
+# ---- OS-specific ----
+Icon?
+ehthumbs.db
+
+# ---- Optional: dependency lock files (uncomment to ignore if not committing) ----
+# poetry.lock
+# Pipfile.lock
+# requirements.txt.lock
+
+# ---- Private docs (non-public notes live here and are ignored) ----
+Arachne/docs/private/
+Arachne/docs/private/**
+
+# ---- Generated docs/artifacts (optional) ----
+Arachne/docs/**/generated/
+Arachne/docs/**/diagrams/*.png
