@@ -21,8 +21,8 @@ Git commands
 - git push -u origin feature/m3-scheduler
 - Open PR early; keep commits small and focused
 
-Status: Planned
-Owner: Core Maintainers
+Status: Complete [DONE]
+Owner: Core Maintainers (Lead: doubletap-dave)
 Duration: 5–7 days
 
 Overview
@@ -47,51 +47,51 @@ EARS Requirements
 
 Deliverables
 - src/arachne/core/scheduler.py
-  - Scheduler class and run loop
-  - Registration of graphs/subgraphs with expansion into an internal plan (nodes, edges, ports)
-  - Runnable queues and priority biasing
-  - Tick cadence control
-  - Graceful shutdown and stop semantics
-  - Runtime mutators: set_priority, set_capacity (with validation and safe application)
-  - Backpressure-aware emit routing glue between Node.emit and Edge.put/try_put
+  - Scheduler class and run loop [DONE]
+  - Registration of graphs/subgraphs with expansion into an internal plan (nodes, edges, ports) [DONE]
+  - Runnable queues and priority biasing [DONE]
+  - Tick cadence control [DONE]
+  - Graceful shutdown and stop semantics [DONE]
+  - Runtime mutators: set_priority, set_capacity (with validation and safe application) [DONE]
+  - Backpressure-aware emit routing glue between Node.emit and Edge.put/try_put [DONE]
 - src/arachne/core/runtime_plan.py (optional small helper)
-  - Flatten Subgraph into execution plan: topo order, node/edge indices, port maps
-  - Deterministic IDs for edges and addressable endpoints
+  - Flatten Subgraph into execution plan: topo order, node/edge indices, port maps [DONE - integrated into scheduler]
+  - Deterministic IDs for edges and addressable endpoints [DONE]
 - Minimal integration hooks
-  - Metrics/tracing placeholders (no-op) called at key points (loop iteration start/end, callbacks, enqueue/dequeue)
-- Tests (see Testing Strategy)
+  - Metrics/tracing placeholders (no-op) called at key points (loop iteration start/end, callbacks, enqueue/dequeue) [DONE]
+- Tests (see Testing Strategy) [DONE - comprehensive unit tests]
 
 Scheduling Model
-- Cooperative loop:
-  - Maintain two primary readiness signals:
-    1) Message-ready: input queues non-empty for a node
-    2) Tick-ready: elapsed tick interval for a node (global cadence with per-node hints)
-  - Maintain a runnable structure keyed by (priority_class, node_id) with round-robin within class
-- Priorities:
-  - Edge priority integer; map to bands (e.g., control-plane > high > normal)
-  - Node effective class derived from its highest-priority ready input; if none, normal
-  - Bias: service higher bands more frequently with a simple ratio (e.g., 4:2:1)
-- Fairness:
-  - Within a band, nodes are scheduled round-robin to avoid starvation
-  - Limit per-iteration work with a budget (e.g., max messages per node per turn) to bound tail latency
-- Backpressure handling:
-  - Node.emit → Edge.put returns PutResult: OK, BLOCKED, DROPPED, COALESCED
-  - On BLOCKED: mark producing node as yield-required; give consumers a chance; requeue producer later
-  - Avoid busy waits by tracking edges that caused BLOCKED and revisiting when downstream consumption occurs
+- Cooperative loop: [DONE]
+  - Maintain two primary readiness signals: [DONE]
+    1) Message-ready: input queues non-empty for a node [DONE]
+    2) Tick-ready: elapsed tick interval for a node (global cadence with per-node hints) [DONE]
+  - Maintain a runnable structure keyed by (priority_class, node_id) with round-robin within class [DONE]
+- Priorities: [DONE]
+  - Edge priority integer; map to bands (e.g., control-plane > high > normal) [DONE]
+  - Node effective class derived from its highest-priority ready input; if none, normal [DONE]
+  - Bias: service higher bands more frequently with a simple ratio (e.g., 4:2:1) [DONE]
+- Fairness: [DONE]
+  - Within a band, nodes are scheduled round-robin to avoid starvation [DONE]
+  - Limit per-iteration work with a budget (e.g., max messages per node per turn) to bound tail latency [DONE]
+- Backpressure handling: [DONE]
+  - Node.emit → Edge.put returns PutResult: OK, BLOCKED, DROPPED, COALESCED [DONE]
+  - On BLOCKED: mark producing node as yield-required; give consumers a chance; requeue producer later [DONE]
+  - Avoid busy waits by tracking edges that caused BLOCKED and revisiting when downstream consumption occurs [DONE]
 
 Lifecycle and Semantics
 - start():
   - Expand subgraphs, allocate runtime plan
   - Initialize nodes: on_start in topo order (producers first); catch exceptions
   - Prime tick timers
-- run():
-  - Loop until shutdown flag set and all outstanding work quiesces (subject to policy)
+- run(): [DONE]
+  - Loop until shutdown flag set and all outstanding work quiesces (subject to policy) [DONE]
   - Each iteration:
-    - Pull next node from runnable queues according to priority bands and fairness
-    - If message-ready: pop one (or small batch) from input edges and invoke on_message
-    - Else if tick-ready: invoke on_tick
-    - Track work done; update metrics intents
-  - Idle strategy: brief sleep/yield when no work (configurable)
+    - Pull next node from runnable queues according to priority bands and fairness [DONE]
+    - If message-ready: pop one (or small batch) from input edges and invoke on_message [DONE]
+    - Else if tick-ready: invoke on_tick [DONE]
+    - Track work done; update metrics intents [DONE]
+  - Idle strategy: brief sleep/yield when no work (configurable) [DONE]
 - shutdown():
   - Stop accepting new external inputs (if applicable)
   - Drain policy:
@@ -100,18 +100,18 @@ Lifecycle and Semantics
   - on_stop in reverse topo order (consumers first)
 
 Public APIs
-- register(unit: Node | Subgraph) -> None
-  - Accept a Node or Subgraph; multiple calls allowed before run()
-  - Validate names and conflicts across registrations
-- run() -> None
-  - Blocking call that runs until shutdown requested
-  - Optional parameters via constructor: tick_interval, max_batch_per_node, idle_sleep_ms
-- shutdown() -> None
-  - Signals loop to exit; run() returns after graceful stop
-- set_priority(edge_id: str, priority: int) -> None
-  - Validate edge exists; adjust band assignment atomically
-- set_capacity(edge_id: str, capacity: int) -> None
-  - Validate and apply to the underlying Edge safely (may require temporary lock)
+- register(unit: Node | Subgraph) -> None [DONE]
+  - Accept a Node or Subgraph; multiple calls allowed before run() [DONE]
+  - Validate names and conflicts across registrations [DONE]
+- run() -> None [DONE]
+  - Blocking call that runs until shutdown requested [DONE]
+  - Optional parameters via constructor: tick_interval, max_batch_per_node, idle_sleep_ms [DONE]
+- shutdown() -> None [DONE]
+  - Signals loop to exit; run() returns after graceful stop [DONE]
+- set_priority(edge_id: str, priority: int) -> None [DONE]
+  - Validate edge exists; adjust band assignment atomically [DONE]
+- set_capacity(edge_id: str, capacity: int) -> None [DONE]
+  - Validate and apply to the underlying Edge safely (may require temporary lock) [DONE]
 
 Configuration
 - SchedulerConfig
@@ -215,9 +215,9 @@ Traceability
 - Fulfills EARS requirements for lifecycle orchestration, priorities, backpressure cooperation, fairness, and graceful shutdown.
 
 Checklist
-- [ ] scheduler.py: run loop, readiness detection, lifecycle calls
-- [ ] Priority bands and fairness ratio implemented
-- [ ] Backpressure-aware emit routing
-- [ ] Shutdown semantics with reverse topo on_stop
-- [ ] Runtime mutators (priority, capacity) with validation
-- [ ] Unit/integration tests and coverage ≥90% for scheduler
+- [x] scheduler.py: run loop, readiness detection, lifecycle calls
+- [x] Priority bands and fairness ratio implemented
+- [x] Backpressure-aware emit routing
+- [x] Shutdown semantics with reverse topo on_stop
+- [x] Runtime mutators (priority, capacity) with validation
+- [x] Unit/integration tests and coverage ≥90% for scheduler
