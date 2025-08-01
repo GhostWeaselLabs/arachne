@@ -91,48 +91,44 @@ Observability: Lifecycle events and message processing automatically logged
 
 from __future__ import annotations
 
-from typing import Any, Dict
+from typing import Any
 
 from arachne.core.message import Message
 from arachne.core.node import Node
-from arachne.core.ports import PortSpec
+from arachne.core.ports import Port, PortSpec
 
 
 class {class_name}(Node):
     """TODO: Brief description of {class_name} functionality."""
     
-    def name(self) -> str:
-        """Return the node name."""
-        return "{snake_case(class_name)}"
+    def __init__(self, name: str = "{snake_case(class_name)}") -> None:
+        """Initialize the node with ports."""
+        # TODO: Define input and output ports
+        input_ports = []  # Add Port instances for inputs
+        output_ports = []  # Add Port instances for outputs
+        
+        super().__init__(name=name, inputs=input_ports, outputs=output_ports)
     
-    def inputs(self) -> Dict[str, PortSpec]:
-        """Define input ports."""
-        return {inputs_dict}
-    
-    def outputs(self) -> Dict[str, PortSpec]:
-        """Define output ports."""
-        return {outputs_dict}
-    
-    async def on_start(self) -> None:
+    def on_start(self) -> None:
         """Initialize node when starting."""
         # TODO: Add initialization logic
         pass
     
-    async def on_message(self, port: str, message: Message) -> None:
+    def on_message(self, port: str, message: Message) -> None:
         """Process incoming message."""
         # TODO: Add message processing logic
         # Example:
         # if port == "input_port":
         #     result = self.process_data(message.payload)
-        #     await self.emit("output_port", Message.create(result))
+        #     self.emit("output_port", Message.create(result))
         pass
     
-    async def on_tick(self) -> None:
+    def on_tick(self) -> None:
         """Handle periodic tick."""
         # TODO: Add tick processing logic if needed
         pass
     
-    async def on_stop(self) -> None:
+    def on_stop(self) -> None:
         """Clean up when stopping."""
         # TODO: Add cleanup logic
         pass
@@ -170,34 +166,32 @@ class Test{class_name}:
     def test_node_creation(self):
         """Test basic node instantiation."""
         node = {class_name}()
-        assert node.name() == "{snake_case(class_name)}"
+        assert node.name == "{snake_case(class_name)}"
     
     def test_port_definitions(self):
         """Test input and output port definitions."""
         node = {class_name}()
         
-        inputs = node.inputs()
-        outputs = node.outputs()
+        inputs = node.inputs
+        outputs = node.outputs
         
-        assert isinstance(inputs, dict)
-        assert isinstance(outputs, dict)
+        assert isinstance(inputs, list)
+        assert isinstance(outputs, list)
         
         # TODO: Add specific port validation tests
-        # assert "expected_input" in inputs
-        # assert "expected_output" in outputs
+        # assert any(p.name == "expected_input" for p in inputs)
+        # assert any(p.name == "expected_output" for p in outputs)
     
-    @pytest.mark.asyncio
-    async def test_lifecycle_hooks(self):
+    def test_lifecycle_hooks(self):
         """Test node lifecycle hooks can be called."""
         node = {class_name}()
         
         # Should not raise exceptions
-        await node.on_start()
-        await node.on_tick()
-        await node.on_stop()
+        node.on_start()
+        node.on_tick()
+        node.on_stop()
     
-    @pytest.mark.asyncio 
-    async def test_message_processing(self):
+    def test_message_processing(self):
         """Test basic message processing."""
         node = {class_name}()
         
@@ -205,7 +199,7 @@ class Test{class_name}:
         message = Message.create({{"test": "data"}})
         
         # Should not raise exceptions
-        await node.on_message("test_port", message)
+        node.on_message("test_port", message)
         
         # TODO: Add specific message processing tests
         # result = await node.process_data(message.payload)

@@ -33,7 +33,7 @@ Exposed Ports: TODO - Document input/output port behavior
 
 from __future__ import annotations
 
-from typing import Dict
+from typing import Any
 
 from arachne.core.subgraph import Subgraph
 from arachne.core.ports import PortSpec
@@ -44,9 +44,9 @@ from arachne.core.ports import PortSpec
 class {class_name}(Subgraph):
     """TODO: Brief description of {class_name} functionality."""
     
-    def __init__(self):
+    def __init__(self, name: str = "{snake_case(class_name)}"):
         """Initialize the subgraph."""
-        super().__init__()
+        super().__init__(name=name)
         self._setup_nodes()
         self._setup_connections()
         self._setup_exposed_ports()
@@ -55,8 +55,10 @@ class {class_name}(Subgraph):
         """Add nodes to the subgraph."""
         # TODO: Add your nodes here
         # Example:
-        # self.add_node("processor", YourNode())
-        # self.add_node("validator", AnotherNode())
+        # node1 = YourNode("processor")
+        # self.add_node(node1)
+        # node2 = AnotherNode("validator")
+        # self.add_node(node2)
         pass
     
     def _setup_connections(self) -> None:
@@ -64,10 +66,9 @@ class {class_name}(Subgraph):
         # TODO: Wire your nodes together
         # Example:
         # self.connect(
-        #     "processor", "output",
-        #     "validator", "input",
-        #     capacity=100,
-        #     policy="block"
+        #     ("processor", "output"),
+        #     ("validator", "input"),
+        #     capacity=100
         # )
         pass
     
@@ -78,10 +79,6 @@ class {class_name}(Subgraph):
         # self.expose_input("data_in", "processor", "input")
         # self.expose_output("results", "validator", "output")
         pass
-    
-    def name(self) -> str:
-        """Return the subgraph name."""
-        return "{snake_case(class_name)}"
     
     def validate_composition(self) -> None:
         """Validate the subgraph composition."""
@@ -135,7 +132,7 @@ class Test{class_name}:
     def test_subgraph_creation(self):
         """Test basic subgraph instantiation."""
         subgraph = {class_name}()
-        assert subgraph.name() == "{snake_case(class_name)}"
+        assert subgraph.name == "{snake_case(class_name)}"
     
     def test_subgraph_validation(self):
         """Test subgraph composition validation."""
