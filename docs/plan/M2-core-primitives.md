@@ -22,7 +22,7 @@ Git commands
 - git push -u origin feature/m2-core-primitives
 - Open PR early; keep commits small and focused
 
-Status: Planned [DONE] [PASS]
+Status: Completed [DONE] [PASS]
 Owner: Core Maintainers
 Duration: 3–5 days
 
