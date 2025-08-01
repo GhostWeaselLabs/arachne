@@ -29,7 +29,26 @@ def parse_ports(port_str: str) -> Dict[str, str]:
         return {}
     
     ports = {}
-    for port_def in port_str.split(','):
+    # Handle complex types with nested brackets by being more careful about splitting
+    port_defs = []
+    current_def = ""
+    bracket_depth = 0
+    
+    for char in port_str:
+        if char in '[{(':
+            bracket_depth += 1
+        elif char in ']})':
+            bracket_depth -= 1
+        elif char == ',' and bracket_depth == 0:
+            port_defs.append(current_def.strip())
+            current_def = ""
+            continue
+        current_def += char
+    
+    if current_def.strip():
+        port_defs.append(current_def.strip())
+    
+    for port_def in port_defs:
         port_def = port_def.strip()
         if ':' not in port_def:
             raise ValueError(f"Invalid port definition: {port_def}. Expected format: name:type")

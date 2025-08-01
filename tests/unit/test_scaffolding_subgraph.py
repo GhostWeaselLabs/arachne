@@ -131,7 +131,7 @@ class TestGenerateSubgraphTestTemplate:
         # Should have commented out scheduler test
         assert "# TODO: Add scheduler integration test (deferred to M6/M7)" in template
         assert "# async def test_scheduler_integration(self):" in template
-        assert "# from arachne.core.scheduler import Scheduler" in template
+        assert "from arachne.core.scheduler import Scheduler" in template
     
     def test_validation_exception_handling(self):
         """Test that validation exception handling is included."""
