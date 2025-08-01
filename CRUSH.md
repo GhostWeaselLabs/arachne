@@ -7,6 +7,7 @@ Build/lint/type/test
 - Autoformat: uv run black .
 - Types (src only): uv run mypy src
 - Tests (quiet + coverage): uv run pytest
+- If tools missing: uv add --dev ruff black mypy pytest pytest-cov
 - Run single test file:: uv run pytest tests/unit/test_smoke.py::test_import_arachne_package -q
 - Run single test node: uv run pytest -k "name" -q
 - Coverage XML (CI parity): uv run pytest --cov=src --cov-report=xml:coverage.xml

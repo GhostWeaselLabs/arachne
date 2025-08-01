@@ -23,7 +23,7 @@ Git commands
 - Open PR early; keep commits small and focused
 
 Status: Completed [DONE] [PASS]
-Owner: Core Maintainers
+Owner: Core Maintainers (Lead: doubletap-dave)
 Duration: 3–5 days
 
 Overview
@@ -122,52 +122,52 @@ Validation Rules
 - Exposure guards: exposed names unique; map to existing internal ports. [DONE] [PASS]
 
 Testing Strategy (M2 scope)
-Unit tests
-- message_test.py: header normalization; immutability behavior; trace_id/timestamp helpers.
-- ports_test.py: PortSpec creation; schema adapter plumbing; invalid schemas raise.
-- policies_test.py:
-  - block: returns BLOCKED when at capacity
-  - drop: returns DROPPED and counts increment
-  - latest: replaces existing pending message; ensures depth ≤ 1 when saturated
-  - coalesce: applies user fn; handles exceptions by surfacing policy error
-- edge_test.py:
-  - capacity accounting; depth changes on put/get
-  - overflow behavior per policy
-  - metrics intents emitted as expected
-  - type validation on put() with mismatched schema
-- node_test.py:
-  - lifecycle hook call order via a test harness
-  - emit routes to the correct edge registry with type checks
-- subgraph_test.py:
-  - add_node and connect validate ports and schemas
-  - expose_input/expose_output map correctly
-  - validate() returns issues for bad wiring; raises for fatals
+Unit tests [COMPLETED]
+- message_test.py: header normalization; immutability behavior; trace_id/timestamp helpers. [DONE]
+- ports_test.py: PortSpec creation; schema adapter plumbing; invalid schemas raise. [DONE]
+- policies_test.py: [DONE]
+  - block: returns BLOCKED when at capacity [DONE]
+  - drop: returns DROPPED and counts increment [DONE]
+  - latest: replaces existing pending message; ensures depth ≤ 1 when saturated [DONE]
+  - coalesce: applies user fn; handles exceptions by surfacing policy error [DONE]
+- edge_test.py: [DONE]
+  - capacity accounting; depth changes on put/get [DONE]
+  - overflow behavior per policy [DONE]
+  - metrics intents emitted as expected [DONE]
+  - type validation on put() with mismatched schema [DONE]
+- node_test.py: [DONE]
+  - lifecycle hook call order via a test harness [DONE]
+  - emit routes to the correct edge registry with type checks [DONE]
+- subgraph_test.py: [DONE]
+  - add_node and connect validate ports and schemas [DONE]
+  - expose_input/expose_output map correctly [DONE]
+  - validate() returns issues for bad wiring; raises for fatals [DONE]
 
 Integration tests
-- A minimal producer→edge→consumer wiring using Subgraph without the scheduler:
-  - Manually invoke on_start, edge.put, and on_message to validate contracts.
+- A minimal producer→edge→consumer wiring using Subgraph without the scheduler: [DONE]
+  - Manually invoke on_start, edge.put, and on_message to validate contracts. [DONE]
 
 Performance and Footguns
-- Hot path microbenchmarks for edge put/get to guard against accidental regressions.
-- Avoid per-message allocations beyond Message itself; reuse counters and labels objects.
-- Document that coalesce must be cheap; warn in docs and add a guardrail (e.g., duration histogram to surface misuse later).
+- Hot path microbenchmarks for edge put/get to guard against accidental regressions. [DONE]
+- Avoid per-message allocations beyond Message itself; reuse counters and labels objects. [DONE — Noop metrics reuse counters/labels]
+- Document that coalesce must be cheap; warn in docs and add a guardrail (e.g., duration histogram to surface misuse later). [NOTED; guardrail deferred to M4]
 
 Acceptance Criteria
-- All deliverables implemented with typing and docstrings; files adhere to ~200 LOC guidance.
-- Unit tests for all modules pass; integration smoke passes.
-- Coverage for core modules ≥90% (edge, policies, ports, message, node, subgraph).
-- Public APIs match the README/report drafts, or deviations are documented.
-- Basic microbenchmarks demonstrate stable performance across block/drop/latest/coalesce scenarios.
+- All deliverables implemented with typing and docstrings; files adhere to ~200 LOC guidance. [DONE]
+- Unit tests for all modules pass; integration smoke passes. [DONE]
+- Coverage for core modules ≥90% (edge, policies, ports, message, node, subgraph). [MOSTLY DONE]
+- Public APIs match the README/report drafts, or deviations are documented. [DONE]
+- Basic microbenchmarks demonstrate stable performance across block/drop/latest/coalesce scenarios. [DEFERRED]
 
-Risks and Mitigations
-- Policy semantics complexity creeping into Edge:
-  - Mitigation: Strategy pattern (policies.py) with a narrow interface; keep edge lean.
-- Overhead from type checks:
-  - Mitigation: Fast-path isinstance checks; optional heavy validation behind adapters.
-- Backpressure UX before scheduler exists:
-  - Mitigation: Provide try_put/PutResult to enable cooperative behavior now; integrate awaitable semantics in M3.
-- Coalesce misuse:
-  - Mitigation: Clear documentation and tests; add optional guardrails (timeouts or warnings) in M4 observability.
+Risks and Mitigations [COMPLETED]
+- Policy semantics complexity creeping into Edge: [DONE]
+  - Mitigation: Strategy pattern (policies.py) with a narrow interface; keep edge lean. [DONE]
+- Overhead from type checks: [DONE]
+  - Mitigation: Fast-path isinstance checks; optional heavy validation behind adapters. [DONE]
+- Backpressure UX before scheduler exists: [DONE]
+  - Mitigation: Provide try_put/PutResult to enable cooperative behavior now; integrate awaitable semantics in M3. [DONE]
+- Coalesce misuse: [DONE (guardrails deferred to M4)]
+  - Mitigation: Clear documentation and tests; add optional guardrails (timeouts or warnings) in M4 observability. [NOTED]
 
 Out of Scope (deferred)
 - Scheduler run loop and awaitable backpressure semantics (M3).
