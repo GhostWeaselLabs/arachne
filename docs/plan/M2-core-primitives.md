@@ -83,9 +83,9 @@ Public API Sketches (non-normative)
 - PortSpec(name: str, schema: type | TypedDict | PydanticModelLike, policy: Policy)
 - Policy: Block | Drop | Latest | Coalesce(fn)
 - Edge(spec: PortSpec, capacity: int = 1024)
-  - put(msg: Message) -> PutResult
-  - get() -> Message | None
-  - depth() -> int
+  - try_put(msg: Message, policy) -> PutResult
+  - try_get() -> Message | None
+  - depth() -> int [DONE] [PASS]
 - Node
   - name() -> str
   - inputs() -> dict[str, PortSpec]
