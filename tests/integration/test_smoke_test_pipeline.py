@@ -11,7 +11,7 @@ class TestSmokeTestPipeline:
     def test_subgraph_creation(self):
         """Test basic subgraph instantiation."""
         subgraph = SmokeTestPipeline()
-        assert subgraph.name() == "smoke_test_pipeline"
+        assert subgraph.name == "smoke_test_pipeline"
     
     def test_subgraph_validation(self):
         """Test subgraph composition validation."""

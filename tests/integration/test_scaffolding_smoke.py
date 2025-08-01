@@ -97,13 +97,13 @@ class TestScaffoldingSmoke:
                 
                 # Should be able to instantiate
                 node = ImportTestNode()
-                assert node.name() == "import_test_node"
+                assert node.name == "import_test_node"
                 
-                # Should have proper port methods
+                # Should have proper port attributes
                 assert hasattr(node, 'inputs')
                 assert hasattr(node, 'outputs')
-                assert callable(node.inputs)
-                assert callable(node.outputs)
+                assert isinstance(node.inputs, list)
+                assert isinstance(node.outputs, list)
                 
             finally:
                 sys.path.remove(temp_dir)
@@ -129,7 +129,7 @@ class TestScaffoldingSmoke:
                 
                 # Should be able to instantiate
                 subgraph = ImportTestPipeline()
-                assert subgraph.name() == "import_test_pipeline"
+                assert subgraph.name == "import_test_pipeline"
                 
                 # Should have validation method
                 assert hasattr(subgraph, 'validate_composition')

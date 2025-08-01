@@ -12,34 +12,32 @@ class TestTestNode:
     def test_node_creation(self):
         """Test basic node instantiation."""
         node = TestNode()
-        assert node.name() == "test_node"
+        assert node.name == "test_node"
     
     def test_port_definitions(self):
         """Test input and output port definitions."""
         node = TestNode()
         
-        inputs = node.inputs()
-        outputs = node.outputs()
+        inputs = node.inputs
+        outputs = node.outputs
         
-        assert isinstance(inputs, dict)
-        assert isinstance(outputs, dict)
+        assert isinstance(inputs, list)
+        assert isinstance(outputs, list)
         
         # TODO: Add specific port validation tests
-        # assert "expected_input" in inputs
-        # assert "expected_output" in outputs
+        # assert any(p.name == "expected_input" for p in inputs)
+        # assert any(p.name == "expected_output" for p in outputs)
     
-    @pytest.mark.asyncio
-    async def test_lifecycle_hooks(self):
+    def test_lifecycle_hooks(self):
         """Test node lifecycle hooks can be called."""
         node = TestNode()
         
         # Should not raise exceptions
-        await node.on_start()
-        await node.on_tick()
-        await node.on_stop()
+        node.on_start()
+        node.on_tick()
+        node.on_stop()
     
-    @pytest.mark.asyncio 
-    async def test_message_processing(self):
+    def test_message_processing(self):
         """Test basic message processing."""
         node = TestNode()
         
@@ -47,7 +45,7 @@ class TestTestNode:
         message = Message.create({"test": "data"})
         
         # Should not raise exceptions
-        await node.on_message("test_port", message)
+        node.on_message("test_port", message)
         
         # TODO: Add specific message processing tests
         # result = await node.process_data(message.payload)
