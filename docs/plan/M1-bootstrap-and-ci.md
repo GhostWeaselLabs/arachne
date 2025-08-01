@@ -34,6 +34,7 @@ Deliverables
   - .editorconfig [DONE]
   - .gitignore (Python + uv caches) [DONE]
 - Documentation:
+<<<<<<< HEAD
   - README.md (quickstart/dev loop) [UPDATED]
   - CHANGELOG.md (Keep a Changelog format, SemVer) [UPDATED]
   - LICENSE (BSD 3-Clause) [ADDED]

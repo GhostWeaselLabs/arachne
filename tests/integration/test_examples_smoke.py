@@ -29,7 +29,7 @@ def test_minimal_producer_edge_consumer_manual_wiring() -> None:
 
     p.on_start()
     c.on_start()
-    assert edge.try_put(1)  # default Latest
+    assert edge.try_put(1)
     assert edge.try_put(2)
     m = edge.try_get()
     assert isinstance(m, int)
