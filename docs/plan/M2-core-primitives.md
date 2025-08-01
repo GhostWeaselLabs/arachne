@@ -94,10 +94,10 @@ Public API Sketches (non-normative)
   - on_message(port: str, msg: Message) -> None
   - on_tick() -> None
   - on_stop() -> None
-  - emit(port: str, msg: Message) -> None
+  - emit(port: str, msg: Message) -> None [DONE] [PASS]
 - Subgraph
   - add_node(node: Node) -> None
-  - connect(src: (str, str), dst: (str, str), capacity: int = 1024, policy: Policy | None = None) -> str
+  - connect(src: (str, str), dst: (str, str), capacity: int = 1024, policy: Policy | None = None) -> str [DONE] [PASS]
   - expose_input(name: str, target: (str, str)) -> None
   - expose_output(name: str, source: (str, str)) -> None
   - validate() -> list[Issue]
