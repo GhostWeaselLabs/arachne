@@ -17,7 +17,7 @@ Key principles
 1) Before You File
 
 1. Check the docs
-   - README and docs/plan for intended behavior.
+   - README and docs/plan/ for intended behavior.
    - docs/support/TROUBLESHOOTING.md for known issues and fixes.
 
 2. Search existing issues/discussions

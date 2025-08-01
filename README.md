@@ -41,43 +41,53 @@ Prereqs
 
 1) Initialize environment
 ```
-uv init
 uv lock
 uv sync
 ```
 
-2) Run examples
+2) Dev loop
 ```
-uv run python -m examples.hello_graph.main
+# Lint
+uv run ruff check .
+
+# Format check
+uv run black --check .
+
+# Type-check
+uv run mypy src
+
+# Tests with coverage
+uv run pytest
 ```
 
-3) Project layout (typical)
+3) Run an example (placeholder)
+```
+# Examples will be added in later milestones; the package scaffolding is present.
+# For now, integration tests include a minimal smoke scenario.
+```
+
+4) Project layout (M1 scaffold)
 ```
 src/arachne/
+  __init__.py
   core/
-    node.py           # Node base class
-    edge.py           # Bounded edges with policies
-    subgraph.py       # Composition and contracts
-    scheduler.py      # Orchestration and priorities
-    message.py        # Message type and headers
-    ports.py          # Port specifications and typing
+    __init__.py
   observability/
-    logging.py        # Structured logs
-    metrics.py        # Metrics export (Prometheus)
-    tracing.py        # Optional trace hooks
+    __init__.py
   utils/
-    ids.py            # Correlation IDs
-    time.py           # Time helpers
-    validation.py     # Contract validation
+    __init__.py
 examples/
-  hello_graph/
-    producer.py
-    consumer.py
-    main.py
+  __init__.py
 tests/
   unit/
+    test_smoke.py
   integration/
+    test_examples_smoke.py
 pyproject.toml
+ruff.toml
+mypy.ini
+.editorconfig
+.github/workflows/ci.yml
 ```
 
 ---
@@ -280,7 +290,7 @@ Contributing
 - Follow SemVer and add entries to CHANGELOG for notable changes.
 
 License
-- MIT (recommended) or your organization’s standard OSS license.
+- BSD 3-Clause (recommended) or your organization’s standard OSS license.
 
 ---
 

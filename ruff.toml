@@ -1,0 +1,37 @@
+# Ruff configuration for Arachne (M1 quality gates)
+
+line-length = 100
+target-version = "py311"
+
+extend-exclude = [
+  "build",
+  "dist",
+  ".venv",
+  ".uv",
+  ".mypy_cache",
+  ".ruff_cache",
+  ".pytest_cache",
+  "docs/**/generated",
+]
+
+[lint]
+# Rule sets:
+# E/F: pycodestyle/pyflakes
+# I: isort (import sorting)
+# UP: pyupgrade (py311-targeted modernization)
+# B: flake8-bugbear (common bug patterns)
+select = ["E", "F", "I", "UP", "B"]
+
+# Compatibility with Black's slicing rules, etc.
+ignore = ["E203"]
+
+[lint.isort]
+known-first-party = ["arachne"]
+combine-as-imports = true
+force-sort-within-sections = true
+
+[format]
+# Keep in sync with Black for stable diffs
+line-ending = "auto"
+docstring-code-format = true
+preview = true

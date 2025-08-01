@@ -7,16 +7,16 @@ and this project adheres to Semantic Versioning (https://semver.org/spec/v2.0.0.
 
 Owner: GhostWeasel (Lead: doubletap-dave)
 
-## [Unreleased] — 2025-08-01
+## [Unreleased]
 
 ### Added
-- Smart .gitignore for Python/uv/tooling caches, editor settings, diagnostics bundles, and private notes patterns.
-- Documentation guidance to keep public docs (plan/contributing/support) visible while excluding private notes under `Arachne/docs/private/`.
-- Initial documentation scaffolding for governance (M0), roadmap, contributing, releasing, and support.
-- Privacy‑first support materials and issue templates.
+- M1 scaffold: `pyproject.toml` with uv-managed workflow; tooling configs for ruff, black, mypy, pytest/coverage.
+- Repository layout: `src/arachne/` package skeletons, `tests/unit` and `tests/integration` smoke tests, `examples/` package placeholder.
+- CI: GitHub Actions workflow to run lint, format check, type check, and tests with coverage gate (≥80%).
+- Documentation updates in README for dev loop with uv; BSD 3-Clause `LICENSE`.
 
 ### Changed
-- README now links to docs and SUPPORT policy with privacy‑first reporting.
+- README Quickstart aligned to M1: dev loop commands (ruff, black, mypy, pytest) and scaffolded layout.
 
 ### Deprecated
 - N/A
@@ -72,4 +72,4 @@ References
 
 - Governance and Overview (M0): docs/plan/M0-governance-and-overview.md
 - Releasing Guide: docs/contributing/RELEASING.md
-- Post‑v1 Roadmap: docs/plan/post-v1-roadmap.md
+- Post‑v1 Roadmap: docs/plan/99-post-v1-roadmap.md
