@@ -115,3 +115,10 @@ class Subgraph:
 
     def node_names(self) -> list[str]:
         return list(self.nodes.keys())
+
+    def inputs_of(self, node_name: str) -> dict[str, Edge[object]]:
+        result: dict[str, Edge[object]] = {}
+        for e in self.edges:
+            if e.target_node == node_name:
+                result[e.target_port.name] = e
+        return result

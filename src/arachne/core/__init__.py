@@ -5,6 +5,7 @@ from .message import Message, MessageType
 from .node import Node
 from .policies import BackpressureStrategy, RetryPolicy, RoutingPolicy
 from .ports import Port, PortDirection
+from .scheduler import Scheduler, SchedulerConfig
 from .subgraph import Subgraph
 
 __all__ = [
@@ -18,4 +19,6 @@ __all__ = [
     "Edge",
     "Node",
     "Subgraph",
+    "Scheduler",
+    "SchedulerConfig",
 ]
