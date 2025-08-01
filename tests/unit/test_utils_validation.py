@@ -156,7 +156,11 @@ class TestValidatePorts:
         """Test validation when node has no inputs method."""
         node = Mock()
         node.__class__.__name__ = "TestNode"
-        # No inputs method
+        # Remove inputs and outputs methods to simulate missing methods
+        if hasattr(node, 'inputs'):
+            delattr(node, 'inputs')
+        if hasattr(node, 'outputs'):
+            delattr(node, 'outputs')
         
         issues = validate_ports(node)
         assert len(issues) == 0  # Should handle gracefully
@@ -264,7 +268,10 @@ class TestValidateGraph:
         edge = Mock()
         edge.capacity = 0  # Invalid - should be positive
         
-        subgraph = self.create_mock_subgraph(edges=[edge])
+        subgraph = self.create_mock_subgraph(
+            nodes=[],  # Empty nodes list to avoid iteration issues
+            edges=[edge]
+        )
         
         issues = validate_graph(subgraph)
         
@@ -275,15 +282,18 @@ class TestValidateGraph:
     def test_invalid_exposed_port_names(self):
         """Test validation with invalid exposed port names."""
         subgraph = self.create_mock_subgraph(
+            nodes=[],  # Empty nodes list to avoid iteration issues
+            edges=[],  # Empty edges list to avoid iteration issues
             exposed_inputs=["", "  ", "valid_input"],
             exposed_outputs=["valid_output", ""]
         )
         
         issues = validate_graph(subgraph)
         
-        # Should find warning issues for invalid port names
+        # Should find warning issues for invalid port names  
+        # "" and "  " should both trigger warnings (3 total: 2 inputs + 1 output)
         warning_issues = [issue for issue in issues if issue.is_warning()]
-        assert len(warning_issues) >= 2  # At least 2 invalid names
+        assert len(warning_issues) == 3  # Exactly 3 invalid names
     
     def test_exception_handling(self):
         """Test that exceptions during validation are caught."""
