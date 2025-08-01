@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-import time
 from collections import deque
 from dataclasses import dataclass, field
+import time
 from typing import Generic, TypeVar
 
 from ..observability.logging import get_logger, with_context
-from ..observability.metrics import Metrics, NoopMetrics, get_metrics
+from ..observability.metrics import Metrics, get_metrics
 from .policies import Coalesce, Latest, Policy, PutResult
 from .ports import Port, PortSpec
 
@@ -35,9 +35,12 @@ class Edge(Generic[T]):
 
     def _init_metrics(self) -> None:
         """Initialize metric handles with proper labels."""
-        edge_id = f"{self.source_node}:{self.source_port.name}->{self.target_node}:{self.target_port.name}"
+        edge_id = (
+            f"{self.source_node}:{self.source_port.name}->"
+            f"{self.target_node}:{self.target_port.name}"
+        )
         edge_labels = {"edge_id": edge_id}
-        
+
         self._enq = self._metrics.counter("edge_enqueued_total", edge_labels)
         self._deq = self._metrics.counter("edge_dequeued_total", edge_labels)
         self._drops = self._metrics.counter("edge_dropped_total", edge_labels)
@@ -53,21 +56,24 @@ class Edge(Generic[T]):
 
     def _edge_id(self) -> str:
         """Get the edge identifier for logging."""
-        return f"{self.source_node}:{self.source_port.name}->{self.target_node}:{self.target_port.name}"
+        return (
+            f"{self.source_node}:{self.source_port.name}->"
+            f"{self.target_node}:{self.target_port.name}"
+        )
 
     def _coalesce(self, fn: Coalesce, new_item: T) -> None:
         """Apply coalesce policy to merge messages."""
         logger = get_logger()
-        
+
         if self._q:
             old = self._q.pop()
             try:
                 merged = fn.fn(old, new_item)
                 self._q.append(merged)  # type: ignore[arg-type]
-                
+
                 with with_context(edge_id=self._edge_id()):
                     logger.debug("edge.coalesce", "Messages coalesced successfully")
-                    
+
             except Exception as e:
                 # If coalesce fails, log error and use new item
                 with with_context(edge_id=self._edge_id()):
@@ -80,17 +86,17 @@ class Edge(Generic[T]):
         """Attempt to put an item into the edge queue."""
         logger = get_logger()
         start_time = time.perf_counter()
-        
+
         # Validate item against spec
         if self.spec and not self.spec.validate(item):
             with with_context(edge_id=self._edge_id()):
                 logger.warn("edge.validation_failed", "Item does not conform to PortSpec schema")
             raise TypeError("item does not conform to PortSpec schema")
-        
+
         # Use Latest as default non-blocking policy
         pol = policy or Latest()
         res = pol.on_enqueue(self.capacity, len(self._q), item)
-        
+
         # Process the result
         with with_context(edge_id=self._edge_id()):
             if res == PutResult.OK:
@@ -98,7 +104,7 @@ class Edge(Generic[T]):
                 if self._enq:
                     self._enq.inc(1)
                 logger.debug("edge.enqueue", f"Item enqueued, depth={len(self._q)}")
-                
+
             elif res == PutResult.REPLACED:
                 if self._q:
                     self._q.pop()
@@ -106,18 +112,18 @@ class Edge(Generic[T]):
                 if self._enq:
                     self._enq.inc(1)
                 logger.debug("edge.replace", f"Item replaced, depth={len(self._q)}")
-                
+
             elif res == PutResult.DROPPED:
                 if self._drops:
                     self._drops.inc(1)
                 logger.debug("edge.drop", "Item dropped due to capacity limit")
-                
+
             elif res == PutResult.COALESCED and isinstance(pol, Coalesce):
                 self._coalesce(pol, item)
                 if self._enq:
                     self._enq.inc(1)
                 logger.debug("edge.coalesce", f"Item coalesced, depth={len(self._q)}")
-                
+
             elif res == PutResult.BLOCKED:
                 # Record blocked time
                 blocked_duration = time.perf_counter() - start_time
@@ -132,20 +138,20 @@ class Edge(Generic[T]):
     def try_get(self) -> T | None:
         """Attempt to get an item from the edge queue."""
         logger = get_logger()
-        
+
         if not self._q:
             return None
-        
+
         item = self._q.popleft()
-        
+
         # Update metrics
         if self._deq:
             self._deq.inc(1)
-        
+
         # Log dequeue
         with with_context(edge_id=self._edge_id()):
             logger.debug("edge.dequeue", f"Item dequeued, depth={len(self._q)}")
-        
+
         # Update depth gauge
         self.depth()
         return item

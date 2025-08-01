@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-import json
-import sys
-import time
 from contextvars import ContextVar
 from dataclasses import dataclass, field
 from enum import Enum
+import json
+import sys
+import time
 from typing import Any, TextIO
 
 
@@ -44,14 +44,16 @@ class Logger:
     def _should_log(self, level: LogLevel) -> bool:
         return self._level_order[level] >= self._level_order[self._config.level]
 
-    def _build_record(self, level: LogLevel, event: str, message: str, **fields: Any) -> dict[str, Any]:
+    def _build_record(
+        self, level: LogLevel, event: str, message: str, **fields: Any
+    ) -> dict[str, Any]:
         record = {
             "ts": time.time(),
             "level": level.value,
             "event": event,
             "message": message,
         }
-        
+
         # Add context from contextvars
         if trace_id := _trace_id.get():
             record["trace_id"] = trace_id
@@ -61,23 +63,23 @@ class Logger:
             record["edge_id"] = edge
         if port := _port_context.get():
             record["port"] = port
-            
+
         # Add extra fields from config
         record.update(self._config.extra_fields)
-        
+
         # Add fields from call
         record.update(fields)
-        
+
         return record
 
     def _emit(self, record: dict[str, Any]) -> None:
         if self._config.json:
-            line = json.dumps(record, separators=(',', ':'))
+            line = json.dumps(record, separators=(",", ":"))
         else:
             # Simple key=value format for non-JSON mode
             parts = [f"{k}={v}" for k, v in record.items()]
             line = " ".join(parts)
-        
+
         print(line, file=self._config.stream)
 
     def debug(self, event: str, message: str, **fields: Any) -> None:
@@ -111,13 +113,17 @@ def get_logger() -> Logger:
     return _global_logger
 
 
-def configure(level: str | LogLevel, stream: TextIO | None = None, extra: dict[str, Any] | None = None) -> None:
+def configure(
+    level: str | LogLevel,
+    stream: TextIO | None = None,
+    extra: dict[str, Any] | None = None,
+) -> None:
     """Configure the global logger."""
     global _global_config, _global_logger
-    
+
     if isinstance(level, str):
         level = LogLevel(level.upper())
-    
+
     _global_config = LogConfig(
         level=level,
         stream=stream or _global_config.stream,
@@ -128,7 +134,7 @@ def configure(level: str | LogLevel, stream: TextIO | None = None, extra: dict[s
 
 class LogContext:
     """Context manager for enriching logs with additional fields."""
-    
+
     def __init__(self, **fields: Any) -> None:
         self._fields = fields
         self._tokens: dict[str, Any] = {}
@@ -170,4 +176,4 @@ def set_trace_id(trace_id: str) -> None:
 
 def get_trace_id() -> str | None:
     """Get the current trace ID."""
-    return _trace_id.get() 
+    return _trace_id.get()

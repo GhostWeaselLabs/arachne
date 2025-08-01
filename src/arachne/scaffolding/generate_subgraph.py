@@ -7,303 +7,109 @@ Generates subgraph class skeletons with wiring stubs and tests.
 from __future__ import annotations
 
 import argparse
-import sys
 from pathlib import Path
+import sys
+
+from .parsers.ports import snake_case
+from .templates.subgraph import generate_subgraph_template, generate_subgraph_test_template
 
 
-def snake_case(name: str) -> str:
-    """Convert PascalCase to snake_case."""
-    result = []
-    for i, char in enumerate(name):
-        if char.isupper() and i > 0:
-            result.append('_')
-        result.append(char.lower())
-    return ''.join(result)
+def create_directories(target_path: Path) -> None:
+    """Create necessary directories for the target path."""
+    target_path.mkdir(parents=True, exist_ok=True)
 
 
-def generate_subgraph_template(class_name: str) -> str:
-    """Generate subgraph class template."""
-    
-    template = f'''"""Generated {class_name} subgraph.
+def write_file(path: Path, content: str, force: bool = False) -> bool:
+    """Write content to file, checking for existing files unless force=True."""
+    if path.exists() and not force:
+        print(f"Error: {path} already exists. Use --force to overwrite.")
+        return False
 
-Purpose: TODO - Describe what this subgraph does
-Composition: TODO - Document the nodes and their connections
-Exposed Ports: TODO - Document input/output port behavior
-"""
-
-from __future__ import annotations
-
-from typing import Any
-
-from arachne.core.subgraph import Subgraph
-from arachne.core.ports import PortSpec
-# TODO: Import your node classes here
-# from arachne.nodes.your_node import YourNode
-
-
-class {class_name}(Subgraph):
-    """TODO: Brief description of {class_name} functionality."""
-    
-    def __init__(self, name: str = "{snake_case(class_name)}"):
-        """Initialize the subgraph."""
-        super().__init__(name=name)
-        self._setup_nodes()
-        self._setup_connections()
-        self._setup_exposed_ports()
-    
-    def _setup_nodes(self) -> None:
-        """Add nodes to the subgraph."""
-        # TODO: Add your nodes here
-        # Example:
-        # node1 = YourNode("processor")
-        # self.add_node(node1)
-        # node2 = AnotherNode("validator")
-        # self.add_node(node2)
-        pass
-    
-    def _setup_connections(self) -> None:
-        """Connect nodes with edges."""
-        # TODO: Wire your nodes together
-        # Example:
-        # self.connect(
-        #     ("processor", "output"),
-        #     ("validator", "input"),
-        #     capacity=100
-        # )
-        pass
-    
-    def _setup_exposed_ports(self) -> None:
-        """Expose input and output ports."""
-        # TODO: Expose ports to make them available externally
-        # Example:
-        # self.expose_input("data_in", "processor", "input")
-        # self.expose_output("results", "validator", "output")
-        pass
-    
-    def validate_composition(self) -> None:
-        """Validate the subgraph composition."""
-        # Run basic validation
-        from arachne.utils.validation import validate_graph
-        issues = validate_graph(self)
-        
-        # Report any issues
-        errors = [issue for issue in issues if issue.is_error()]
-        warnings = [issue for issue in issues if issue.is_warning()]
-        
-        if warnings:
-            print(f"Warnings in {{self.name()}}:")
-            for warning in warnings:
-                print(f"  - {{warning.message}} ({{warning.location}})")
-        
-        if errors:
-            print(f"Errors in {{self.name()}}:")
-            for error in errors:
-                print(f"  - {{error.message}} ({{error.location}})")
-            raise ValueError(f"Subgraph {{self.name()}} has validation errors")
-        
-        print(f"Subgraph {{self.name()}} validation passed")
-
-
-# Example usage (disabled by default)
-if __name__ == "__main__":
-    # This is for development/testing only
-    # In production, subgraphs are used within schedulers
-    subgraph = {class_name}()
-    subgraph.validate_composition()
-    print(f"Created {{subgraph.name()}} subgraph")
-'''
-    
-    return template
-
-
-def generate_subgraph_test_template(class_name: str, module_name: str) -> str:
-    """Generate integration test template."""
-    
-    template = f'''"""Integration tests for {class_name} subgraph."""
-
-import pytest
-
-from {module_name} import {class_name}
-
-
-class Test{class_name}:
-    """Test suite for {class_name}."""
-    
-    def test_subgraph_creation(self):
-        """Test basic subgraph instantiation."""
-        subgraph = {class_name}()
-        assert subgraph.name == "{snake_case(class_name)}"
-    
-    def test_subgraph_validation(self):
-        """Test subgraph composition validation."""
-        subgraph = {class_name}()
-        
-        # Should not raise exceptions for basic validation
-        # TODO: Update this test once nodes are added
-        try:
-            subgraph.validate_composition()
-        except ValueError:
-            # Expected if no nodes are added yet
-            pass
-    
-    def test_node_composition(self):
-        """Test that nodes are properly added."""
-        subgraph = {class_name}()
-        
-        # TODO: Add tests for specific nodes once they're added
-        # assert "processor" in subgraph._nodes
-        # assert "validator" in subgraph._nodes
-        pass
-    
-    def test_port_exposure(self):
-        """Test that ports are properly exposed.""" 
-        subgraph = {class_name}()
-        
-        # TODO: Add tests for exposed ports once they're defined
-        # inputs = subgraph.exposed_inputs()
-        # outputs = subgraph.exposed_outputs()
-        # assert "data_in" in inputs
-        # assert "results" in outputs
-        pass
-    
-    def test_edge_connections(self):
-        """Test that edges are properly connected."""
-        subgraph = {class_name}()
-        
-        # TODO: Add tests for edge connections once they're defined
-        # edges = subgraph._edges
-        # assert len(edges) > 0
-        pass
-    
-    # TODO: Add scheduler integration test (deferred to M6/M7)
-    # @pytest.mark.asyncio
-    # async def test_scheduler_integration(self):
-    #     """Test subgraph execution with scheduler.""" 
-    #     from arachne.core.scheduler import Scheduler
-    #     
-    #     subgraph = {class_name}()
-    #     scheduler = Scheduler()
-    #     scheduler.add_subgraph(subgraph)
-    #     
-    #     # Run for a short time
-    #     await scheduler.start()
-    #     await asyncio.sleep(0.1)
-    #     await scheduler.stop()
-'''
-    
-    return template
+    with open(path, "w") as f:
+        f.write(content)
+    print(f"Generated: {path}")
+    return True
 
 
 def create_subgraph_files(
     name: str,
     package: str,
     base_dir: str,
-    include_tests: bool,
-    force: bool
-) -> None:
-    """Create subgraph files with templates."""
-    
-    # Convert package path to directory
-    package_parts = package.split('.')
-    src_dir = Path(base_dir) / '/'.join(package_parts)
-    src_dir.mkdir(parents=True, exist_ok=True)
-    
-    # Generate file paths
-    module_name = snake_case(name)
-    subgraph_file = src_dir / f"{module_name}.py"
-    
-    # Check if files exist
-    if subgraph_file.exists() and not force:
-        print(f"Error: {subgraph_file} already exists. Use --force to overwrite.")
-        sys.exit(1)
-    
+    include_tests: bool = False,
+    force: bool = False,
+) -> bool:
+    """Generate subgraph files and optionally test files."""
+    # Create package directory structure
+    package_parts = package.split(".")
+    target_path = Path(base_dir)
+    package_dir = target_path
+    for part in package_parts:
+        package_dir = package_dir / part
+
+    create_directories(package_dir)
+
+    # Generate __init__.py files for package structure
+    current_dir = target_path
+    for part in package_parts:
+        current_dir = current_dir / part
+        init_file = current_dir / "__init__.py"
+        if not init_file.exists():
+            init_file.write_text('"""Package initialization."""\n')
+
     # Generate subgraph file
+    subgraph_filename = f"{snake_case(name)}.py"
+    subgraph_path = package_dir / subgraph_filename
     subgraph_content = generate_subgraph_template(name)
-    with open(subgraph_file, 'w') as f:
-        f.write(subgraph_content)
-    
-    print(f"Created subgraph: {subgraph_file}")
-    
+
+    if not write_file(subgraph_path, subgraph_content, force):
+        return False
+
     # Generate test file if requested
     if include_tests:
-        test_dir = Path("tests/integration")
+        test_dir = Path(base_dir).parent / "tests" / "integration"
         test_dir.mkdir(parents=True, exist_ok=True)
-        test_file = test_dir / f"test_{module_name}.py"
-        
-        if test_file.exists() and not force:
-            print(f"Warning: {test_file} already exists. Skipping test creation.")
-        else:
-            test_content = generate_subgraph_test_template(name, package + '.' + module_name)
-            with open(test_file, 'w') as f:
-                f.write(test_content)
-            print(f"Created test: {test_file}")
+
+        test_filename = f"test_{snake_case(name)}.py"
+        test_path = test_dir / test_filename
+        test_content = generate_subgraph_test_template(name)
+
+        if not write_file(test_path, test_content, force):
+            return False
+
+    return True
 
 
-def main():
+def main() -> None:
     """Main CLI entry point."""
-    parser = argparse.ArgumentParser(
-        description="Generate Arachne subgraph skeleton with wiring stubs and tests",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-Examples:
-  # Basic subgraph
-  python -m arachne.scaffolding.generate_subgraph --name DataPipeline
-  
-  # Custom package and directory with tests
-  python -m arachne.scaffolding.generate_subgraph --name MarketPipeline \\
-    --package myapp.subgraphs --dir custom_src --include-tests
-        """
-    )
-    
-    parser.add_argument(
-        "--name",
-        required=True,
-        help="PascalCase class name for the subgraph"
-    )
-    parser.add_argument(
-        "--package",
-        default="arachne.subgraphs",
-        help="Dot-separated package path (default: arachne.subgraphs)"
-    )
-    parser.add_argument(
-        "--dir",
-        default="src",
-        help="Base directory for generated files (default: src)"
-    )
-    parser.add_argument(
-        "--force",
-        action="store_true",
-        help="Overwrite existing files"
-    )
-    parser.add_argument(
-        "--include-tests",
-        action="store_true",
-        help="Generate integration test file"
-    )
-    
+    parser = argparse.ArgumentParser(description="Generate Arachne subgraph templates")
+    parser.add_argument("--name", required=True, help="Subgraph class name (PascalCase)")
+    parser.add_argument("--package", default="subgraphs", help="Package path (dot-separated)")
+    parser.add_argument("--dir", default="src/arachne", help="Target directory")
+    parser.add_argument("--force", action="store_true", help="Overwrite existing files")
+    parser.add_argument("--include-tests", action="store_true", help="Generate test files")
+
     args = parser.parse_args()
-    
-    try:
-        # Validate class name
-        if not args.name.isidentifier() or not args.name[0].isupper():
-            print("Error: Name must be a valid PascalCase identifier")
-            sys.exit(1)
-        
-        # Create files
-        create_subgraph_files(
-            args.name,
-            args.package,
-            args.dir,
-            args.include_tests,
-            args.force
-        )
-        
-        print(f"Successfully generated {args.name} subgraph")
-        
-    except Exception as e:
-        print(f"Error: {e}")
+
+    # Generate files
+    Path(args.dir).mkdir(parents=True, exist_ok=True)
+    success = create_subgraph_files(
+        name=args.name,
+        package=args.package,
+        base_dir=args.dir,
+        include_tests=args.include_tests,
+        force=args.force,
+    )
+
+    if not success:
         sys.exit(1)
+
+    print(f"Created subgraph: {Path(args.dir) / args.package.replace('.', '/') / (snake_case(args.name) + '.py')}")
+    if args.include_tests:
+        print(
+            f"Created test: {(Path(args.dir).parent / 'tests' / 'integration' / ('test_' + snake_case(args.name) + '.py'))}"
+        )
+    print(f"Successfully generated {args.name} subgraph in {args.package}")
 
 
 if __name__ == "__main__":
-    main() 
+    main()

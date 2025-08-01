@@ -21,19 +21,15 @@ class TestTracingConfig:
     def test_default_config(self) -> None:
         """Test default tracing configuration."""
         config = TracingConfig()
-        
+
         assert config.enabled is False
         assert config.provider == "noop"
         assert config.sample_rate == 0.0
 
     def test_custom_config(self) -> None:
         """Test custom tracing configuration."""
-        config = TracingConfig(
-            enabled=True,
-            provider="opentelemetry",
-            sample_rate=0.1
-        )
-        
+        config = TracingConfig(enabled=True, provider="opentelemetry", sample_rate=0.1)
+
         assert config.enabled is True
         assert config.provider == "opentelemetry"
         assert config.sample_rate == 0.1
@@ -44,9 +40,9 @@ class TestNoopTracer:
         """Test no-op tracer when disabled."""
         config = TracingConfig(enabled=False)
         tracer = NoopTracer(config)
-        
+
         assert tracer.is_enabled() is False
-        
+
         span = tracer.start_span("test.operation")
         assert span.name == "test.operation"
         assert span.trace_id == ""
@@ -56,13 +52,13 @@ class TestNoopTracer:
         """Test no-op span operations."""
         config = TracingConfig(enabled=False)
         tracer = NoopTracer(config)
-        
+
         span = tracer.start_span("test.operation", {"key": "value"})
-        
+
         # Should not raise exceptions
         span.set_attribute("test", "value")
         span.finish()
-        
+
         assert span.is_finished() is False  # NoopSpan always returns False
 
 
@@ -71,14 +67,14 @@ class TestInMemoryTracer:
         """Test in-memory tracer when disabled."""
         config = TracingConfig(enabled=False)
         tracer = InMemoryTracer(config)
-        
+
         assert tracer.is_enabled() is False
-        
+
         span = tracer.start_span("test.operation")
         assert span.name == "test.operation"
         assert span.trace_id == ""
         assert span.span_id == ""
-        
+
         # Should not record spans when disabled
         assert len(tracer.get_spans()) == 0
 
@@ -86,16 +82,16 @@ class TestInMemoryTracer:
         """Test in-memory tracer when enabled."""
         config = TracingConfig(enabled=True)
         tracer = InMemoryTracer(config)
-        
+
         assert tracer.is_enabled() is True
-        
+
         span = tracer.start_span("test.operation", {"key": "value"})
-        
+
         assert span.name == "test.operation"
         assert span.trace_id != ""
         assert span.span_id != ""
         assert span.attributes == {"key": "value"}
-        
+
         # Should record the span
         spans = tracer.get_spans()
         assert len(spans) == 1
@@ -105,17 +101,17 @@ class TestInMemoryTracer:
         """Test span lifecycle operations."""
         config = TracingConfig(enabled=True)
         tracer = InMemoryTracer(config)
-        
+
         span = tracer.start_span("test.operation")
-        
+
         assert span.is_finished() is False
-        
+
         span.set_attribute("duration", 0.123)
         assert span.attributes["duration"] == 0.123
-        
+
         span.finish()
         assert span.is_finished() is True
-        
+
         # Setting attributes after finish should be ignored
         span.set_attribute("after_finish", "ignored")
         assert "after_finish" not in span.attributes
@@ -124,12 +120,12 @@ class TestInMemoryTracer:
         """Test clearing recorded spans."""
         config = TracingConfig(enabled=True)
         tracer = InMemoryTracer(config)
-        
+
         tracer.start_span("span1")
         tracer.start_span("span2")
-        
+
         assert len(tracer.get_spans()) == 2
-        
+
         tracer.clear_spans()
         assert len(tracer.get_spans()) == 0
 
@@ -139,7 +135,7 @@ class TestGlobalTracing:
         """Test default global tracer is no-op."""
         # Reset to default
         configure_tracing(TracingConfig())
-        
+
         tracer = get_tracer()
         assert isinstance(tracer, NoopTracer)
         assert not tracer.is_enabled()
@@ -148,7 +144,7 @@ class TestGlobalTracing:
         """Test configuring in-memory tracer."""
         config = TracingConfig(enabled=True, provider="inmemory")
         configure_tracing(config)
-        
+
         tracer = get_tracer()
         assert isinstance(tracer, InMemoryTracer)
         assert tracer.is_enabled()
@@ -158,7 +154,7 @@ class TestGlobalTracing:
         # Disabled by default
         configure_tracing(TracingConfig(enabled=False))
         assert not is_tracing_enabled()
-        
+
         # Enable tracing
         configure_tracing(TracingConfig(enabled=True, provider="inmemory"))
         assert is_tracing_enabled()
@@ -169,18 +165,18 @@ class TestStartSpanContextManager:
         """Test start_span context manager."""
         config = TracingConfig(enabled=True, provider="inmemory")
         configure_tracing(config)
-        
+
         tracer = get_tracer()
         assert isinstance(tracer, InMemoryTracer)
-        
+
         with start_span("test.operation", {"key": "value"}) as span:
             assert span.name == "test.operation"
             assert span.attributes == {"key": "value"}
             assert not span.is_finished()
-        
+
         # Span should be finished after context exit
         assert span.is_finished()
-        
+
         # Should be recorded
         spans = tracer.get_spans()
         assert len(spans) == 1
@@ -190,17 +186,17 @@ class TestStartSpanContextManager:
         """Test start_span context manager with exception."""
         config = TracingConfig(enabled=True, provider="inmemory")
         configure_tracing(config)
-        
+
         tracer = get_tracer()
         assert isinstance(tracer, InMemoryTracer)
-        
+
         with pytest.raises(ValueError):
             with start_span("error.operation") as span:
                 raise ValueError("Test error")
-        
+
         # Span should still be finished
         assert span.is_finished()
-        
+
         # Should still be recorded
         spans = tracer.get_spans()
         assert len(spans) == 1
@@ -208,7 +204,7 @@ class TestStartSpanContextManager:
     def test_start_span_noop(self) -> None:
         """Test start_span with no-op tracer."""
         configure_tracing(TracingConfig(enabled=False))
-        
+
         with start_span("test.operation") as span:
             assert span.name == "test.operation"
             assert span.trace_id == ""
@@ -219,7 +215,7 @@ class TestTraceIdHelpers:
     def test_set_get_trace_id(self) -> None:
         """Test trace ID context helpers."""
         test_trace_id = "test-trace-123"
-        
+
         set_trace_id(test_trace_id)
         assert get_trace_id() == test_trace_id
 
@@ -227,11 +223,11 @@ class TestTraceIdHelpers:
         """Test span ID context helper."""
         # Initially should be None
         assert get_span_id() is None
-        
+
         # After starting a span, should have span ID
         config = TracingConfig(enabled=True, provider="inmemory")
         configure_tracing(config)
-        
+
         with start_span("test.operation") as span:
             # Context should be set during span
             current_span_id = get_span_id()
@@ -241,7 +237,7 @@ class TestTraceIdHelpers:
         """Test trace ID generation."""
         trace_id1 = generate_trace_id()
         trace_id2 = generate_trace_id()
-        
+
         assert trace_id1 != trace_id2
         assert len(trace_id1) > 0
         assert len(trace_id2) > 0
@@ -250,15 +246,15 @@ class TestTraceIdHelpers:
         """Test trace context propagation."""
         config = TracingConfig(enabled=True, provider="inmemory")
         configure_tracing(config)
-        
+
         # Set initial trace ID
         set_trace_id("parent-trace-123")
-        
+
         with start_span("parent.operation") as parent_span:
             # Should use the set trace ID
             assert parent_span.trace_id == "parent-trace-123"
             assert get_trace_id() == "parent-trace-123"
-            
+
             with start_span("child.operation") as child_span:
                 # Child should inherit parent's trace ID
                 assert child_span.trace_id == "parent-trace-123"
@@ -270,20 +266,20 @@ class TestTracingIntegration:
         """Test nested span creation."""
         config = TracingConfig(enabled=True, provider="inmemory")
         configure_tracing(config)
-        
+
         tracer = get_tracer()
         assert isinstance(tracer, InMemoryTracer)
-        
+
         with start_span("outer.operation"):
             with start_span("inner.operation"):
                 pass
-        
+
         spans = tracer.get_spans()
         assert len(spans) == 2
-        
+
         # Both spans should have the same trace ID
         assert spans[0].trace_id == spans[1].trace_id
-        
+
         # But different span IDs
         assert spans[0].span_id != spans[1].span_id
 
@@ -291,11 +287,11 @@ class TestTracingIntegration:
         """Test span attribute setting."""
         config = TracingConfig(enabled=True, provider="inmemory")
         configure_tracing(config)
-        
+
         with start_span("test.operation", {"initial": "value"}) as span:
             span.set_attribute("runtime", "added")
             span.set_attribute("count", 42)
-        
+
         assert span.attributes["initial"] == "value"
         assert span.attributes["runtime"] == "added"
         assert span.attributes["count"] == 42
@@ -304,23 +300,23 @@ class TestTracingIntegration:
         """Test multiple independent traces."""
         config = TracingConfig(enabled=True, provider="inmemory")
         configure_tracing(config)
-        
+
         tracer = get_tracer()
         assert isinstance(tracer, InMemoryTracer)
-        
+
         # First trace
         set_trace_id("trace-1")
         with start_span("operation.1"):
             pass
-        
+
         # Second trace
         set_trace_id("trace-2")
         with start_span("operation.2"):
             pass
-        
+
         spans = tracer.get_spans()
         assert len(spans) == 2
-        
+
         # Should have different trace IDs
         trace_ids = {span.trace_id for span in spans}
         assert len(trace_ids) == 2
@@ -329,4 +325,4 @@ class TestTracingIntegration:
 
 
 if __name__ == "__main__":
-    pytest.main([__file__]) 
+    pytest.main([__file__])

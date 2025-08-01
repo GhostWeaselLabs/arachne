@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import time
 from collections.abc import Iterable
 from dataclasses import dataclass, field
+import time
 from typing import TYPE_CHECKING, Any
 
 from ..observability.logging import get_logger, with_context
@@ -33,7 +33,7 @@ class Node:
     def _init_metrics(self) -> None:
         """Initialize metric handles with proper labels."""
         node_labels = {"node": self.name}
-        
+
         self._messages_total = self._metrics.counter("node_messages_total", node_labels)
         self._errors_total = self._metrics.counter("node_errors_total", node_labels)
         self._tick_duration = self._metrics.histogram("node_tick_duration_seconds", node_labels)
@@ -58,41 +58,45 @@ class Node:
     def on_message(self, port: str, msg: Message) -> None:
         """Node message processing hook."""
         logger = get_logger()
-        
+
         # Set trace context from message
         trace_id = msg.get_trace_id()
         if trace_id:
             set_trace_id(trace_id)
-        
+
         # Create span for message processing
         with start_span("node.on_message", {"node": self.name, "port": port, "trace_id": trace_id}):
             with with_context(node=self.name, port=port, trace_id=trace_id):
                 try:
                     # Time the message processing
                     start_time = time.perf_counter()
-                    
+
                     # Call the actual implementation (subclasses should override)
                     self._handle_message(port, msg)
-                    
+
                     # Record success metrics
                     duration = time.perf_counter() - start_time
                     if self._messages_total:
                         self._messages_total.inc(1)
-                    
-                    logger.debug("node.message_processed", 
-                               f"Message processed in {duration:.6f}s", 
-                               duration=duration)
-                    
+
+                    logger.debug(
+                        "node.message_processed",
+                        f"Message processed in {duration:.6f}s",
+                        duration=duration,
+                    )
+
                 except Exception as e:
                     # Record error metrics and log
                     if self._errors_total:
                         self._errors_total.inc(1)
-                    
-                    logger.error("node.message_error", 
-                               f"Error processing message: {e}",
-                               error_type=type(e).__name__,
-                               error_msg=str(e))
-                    
+
+                    logger.error(
+                        "node.message_error",
+                        f"Error processing message: {e}",
+                        error_type=type(e).__name__,
+                        error_msg=str(e),
+                    )
+
                     # Re-raise to let scheduler handle according to error policy
                     raise
 
@@ -103,7 +107,7 @@ class Node:
     def on_tick(self) -> None:
         """Node tick processing hook."""
         logger = get_logger()
-        
+
         with start_span("node.on_tick", {"node": self.name}):
             with with_context(node=self.name):
                 try:
@@ -111,19 +115,21 @@ class Node:
                     with time_block("node_tick_duration_seconds", {"node": self.name}):
                         # Call the actual implementation (subclasses should override)
                         self._handle_tick()
-                    
+
                     logger.debug("node.tick_processed", "Tick processed successfully")
-                    
+
                 except Exception as e:
                     # Record error metrics and log
                     if self._errors_total:
                         self._errors_total.inc(1)
-                    
-                    logger.error("node.tick_error", 
-                               f"Error processing tick: {e}",
-                               error_type=type(e).__name__,
-                               error_msg=str(e))
-                    
+
+                    logger.error(
+                        "node.tick_error",
+                        f"Error processing tick: {e}",
+                        error_type=type(e).__name__,
+                        error_msg=str(e),
+                    )
+
                     # Re-raise to let scheduler handle according to error policy
                     raise
 
@@ -141,28 +147,29 @@ class Node:
     def emit(self, port: str, msg: Message) -> Message:
         """Emit a message through an output port."""
         logger = get_logger()
-        
+
         # Validate message type
         if msg.type not in (MessageType.DATA, MessageType.CONTROL, MessageType.ERROR):
             raise ValueError("invalid message type")
-        
+
         # Validate port exists
         if port not in {p.name for p in self.outputs}:
             raise KeyError(f"unknown output port: {port}")
-        
+
         # Ensure trace ID propagation
         current_trace_id = get_trace_id()
         if current_trace_id and not msg.get_trace_id():
             msg = msg.with_headers(trace_id=current_trace_id)
-        
+
         with with_context(node=self.name, port=port, trace_id=msg.get_trace_id()):
-            logger.debug("node.emit", f"Emitting {msg.type.value} message", 
-                        message_type=msg.type.value)
-        
+            logger.debug(
+                "node.emit", f"Emitting {msg.type.value} message", message_type=msg.type.value
+            )
+
         # If connected to scheduler, use backpressure-aware emission
         if self._scheduler is not None:
             self._scheduler._handle_node_emit(self, port, msg)
-        
+
         return msg
 
     def _set_scheduler(self, scheduler: Scheduler) -> None:
