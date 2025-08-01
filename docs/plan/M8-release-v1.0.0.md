@@ -1,5 +1,26 @@
 # Milestone M8: Release v1.0.0
 
+## EARS Tasks and Git Workflow
+
+Branch name: feature/m8-release-1-0-0
+
+EARS loop
+- Explore: finalize scope, gates, and release workflow
+- Analyze: verify docs/examples, changelog, versioning, policies
+- Implement: release CI, packaging, signing, notes, migration guide
+- Specify checks: dry-run to test index; post-publish smoke; downstream compatibility
+- Commit after each major step
+
+Git commands
+- git checkout -b feature/m8-release-1-0-0
+- git add -A && git commit -m "chore(release): bump version and finalize pyproject metadata"
+- git add -A && git commit -m "chore(release): CI workflow for build, test, and publish on tag"
+- git add -A && git commit -m "docs(release): changelog, release notes, migration and deprecation policy"
+- git add -A && git commit -m "chore(release): signing and integrity checks; test publish flow"
+- git add -A && git commit -m "chore(release): downstream smoke and docs link validation"
+- git push -u origin feature/m8-release-1-0-0
+- Open PR early; keep commits small and focused
+
 Status: Planned
 Owner: Core Maintainers
 Duration: 2–4 days

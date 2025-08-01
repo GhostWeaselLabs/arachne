@@ -1,5 +1,26 @@
 # Milestone M5: Utilities and Scaffolding
 
+## EARS Tasks and Git Workflow
+
+Branch name: feature/m5-utilities-scaffolding
+
+EARS loop
+- Explore: identify id/time/validation helpers and scaffolding CLI needs
+- Analyze: finalize templates and validation contracts
+- Implement: utils (ids, time, validation) and generators (node, subgraph)
+- Specify checks: unit tests for utils; e2e generation smoke tests
+- Commit after each major step
+
+Git commands
+- git checkout -b feature/m5-utilities-scaffolding
+- git add -A && git commit -m "feat(utils): add ids and time helpers"
+- git add -A && git commit -m "feat(utils): add validation helpers for ports/graphs"
+- git add -A && git commit -m "feat(scaffold): generate_node CLI with templates and tests"
+- git add -A && git commit -m "feat(scaffold): generate_subgraph CLI with templates and tests"
+- git add -A && git commit -m "test(utils,scaffold): unit and generation smoke tests"
+- git push -u origin feature/m5-utilities-scaffolding
+- Open PR early; keep commits small and focused
+
 Status: Planned
 Owner: Core Maintainers
 Duration: 2–4 days

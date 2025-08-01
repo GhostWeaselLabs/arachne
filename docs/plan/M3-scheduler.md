@@ -1,5 +1,26 @@
 # Milestone M3: Scheduler
 
+## EARS Tasks and Git Workflow
+
+Branch name: feature/m3-scheduler
+
+EARS loop
+- Explore: review readiness signals, priority bands, backpressure cooperation
+- Analyze: design runnable queues, tick cadence, and BLOCKED handling
+- Implement: scheduler.py run loop, runtime_plan, mutators
+- Specify checks: unit/integration tests for fairness, priorities, shutdown, backpressure
+- Commit after each major step
+
+Git commands
+- git checkout -b feature/m3-scheduler
+- git add -A && git commit -m "feat(scheduler): add Scheduler skeleton and registration"
+- git add -A && git commit -m "feat(scheduler): implement runnable queues and priority bands"
+- git add -A && git commit -m "feat(scheduler): cooperative loop with tick cadence and backpressure"
+- git add -A && git commit -m "feat(scheduler): runtime mutators and graceful shutdown"
+- git add -A && git commit -m "test(scheduler): fairness, priority bias, shutdown semantics"
+- git push -u origin feature/m3-scheduler
+- Open PR early; keep commits small and focused
+
 Status: Planned
 Owner: Core Maintainers
 Duration: 5–7 days

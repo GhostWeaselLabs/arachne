@@ -1,5 +1,26 @@
 # Milestone M6: Examples and Documentation
 
+## EARS Tasks and Git Workflow
+
+Branch name: feature/m6-examples-docs
+
+EARS loop
+- Explore: outline hello_graph and pipeline_demo; doc pages and cross-links
+- Analyze: choose policies/priorities to demonstrate behaviors
+- Implement: examples modules and docs (quickstart, api, patterns, troubleshooting, observability)
+- Specify checks: example smoke tests; doctest/lint of snippets
+- Commit after each major step
+
+Git commands
+- git checkout -b feature/m6-examples-docs
+- git add -A && git commit -m "feat(examples): add hello_graph runnable example"
+- git add -A && git commit -m "feat(examples): add pipeline_demo with policies and priorities"
+- git add -A && git commit -m "docs: quickstart and api overview"
+- git add -A && git commit -m "docs: patterns, troubleshooting, observability guides"
+- git add -A && git commit -m "test(examples,docs): smoke runs and snippet validation"
+- git push -u origin feature/m6-examples-docs
+- Open PR early; keep commits small and focused
+
 Status: Planned
 Owner: Core Maintainers
 Duration: 3–5 days
