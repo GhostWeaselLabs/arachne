@@ -115,11 +115,11 @@ Metrics and Observability Hooks
 - Wire to no-op by default; real exporters arrive in M4. [DONE] [PASS]
 
 Validation Rules
-- Port existence: src node has output port; dst node has input port.
-- Schema compatibility: exact type match or allowed adapter (e.g., subclass/isinstance for basic types).
-- Capacity validation: capacity > 0; policy is defined.
-- Unique naming: node names unique; edge IDs unique and deterministic from endpoints.
-- Exposure guards: exposed names unique; map to existing internal ports.
+- Port existence: src node has output port; dst node has input port. [DONE] [PASS]
+- Schema compatibility: exact type match or allowed adapter (e.g., subclass/isinstance for basic types). [DONE]
+- Capacity validation: capacity > 0; policy is defined. [DONE] [PASS]
+- Unique naming: node names unique; edge IDs unique and deterministic from endpoints. [DONE] [PASS]
+- Exposure guards: exposed names unique; map to existing internal ports. [DONE] [PASS]
 
 Testing Strategy (M2 scope)
 Unit tests
