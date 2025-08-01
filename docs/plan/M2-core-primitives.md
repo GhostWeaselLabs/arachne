@@ -98,9 +98,9 @@ Public API Sketches (non-normative)
 - Subgraph
   - add_node(node: Node) -> None
   - connect(src: (str, str), dst: (str, str), capacity: int = 1024, policy: Policy | None = None) -> str [DONE] [PASS]
-  - expose_input(name: str, target: (str, str)) -> None
-  - expose_output(name: str, source: (str, str)) -> None
-  - validate() -> list[Issue]
+  - expose_input(name: str, target: (str, str)) -> None [DONE] [PASS]
+  - expose_output(name: str, source: (str, str)) -> None [DONE] [PASS]
+  - validate() -> list[Issue] [DONE] [PASS]
 
 Metrics and Observability Hooks
 - Define minimal metrics interface (protocol) but do not depend on exporters yet:
