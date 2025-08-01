@@ -147,8 +147,15 @@ class LogContext:
 
     def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
         # Reset context variables
-        for token in self._tokens.values():
-            token.var.set(token.old_value)
+        for var_name, token in self._tokens.items():
+            if var_name == "trace_id":
+                _trace_id.reset(token)
+            elif var_name == "node":
+                _node_context.reset(token)
+            elif var_name == "edge_id":
+                _edge_context.reset(token)
+            elif var_name == "port":
+                _port_context.reset(token)
 
 
 def with_context(**fields: Any) -> LogContext:
