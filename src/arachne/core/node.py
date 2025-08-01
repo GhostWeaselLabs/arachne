@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections.abc import Iterable
 from dataclasses import dataclass, field
 
+from ..observability.metrics import Metrics, NoopMetrics
 from .message import Message, MessageType
 from .ports import Port, PortDirection, PortSpec
 
@@ -12,6 +13,7 @@ class Node:
     name: str
     inputs: list[Port] = field(default_factory=list)
     outputs: list[Port] = field(default_factory=list)
+    _metrics: Metrics = field(default_factory=NoopMetrics, init=False, repr=False)
 
     @classmethod
     def with_ports(cls, name: str, input_names: Iterable[str], output_names: Iterable[str]) -> Node:
@@ -40,4 +42,5 @@ class Node:
             raise ValueError("invalid message type")
         if port not in {p.name for p in self.outputs}:
             raise KeyError(f"unknown output port: {port}")
+        self._metrics.counter("messages_processed_total", {"node": self.name}).inc(1)
         return msg

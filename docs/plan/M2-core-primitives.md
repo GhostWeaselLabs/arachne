@@ -103,16 +103,16 @@ Public API Sketches (non-normative)
   - validate() -> list[Issue] [DONE] [PASS]
 
 Metrics and Observability Hooks
-- Define minimal metrics interface (protocol) but do not depend on exporters yet:
-  - counter(name, labels).inc(n)
-  - gauge(name, labels).set(v)
-  - histogram(name, labels).observe(v)
-- Edge emits intents:
-  - enqueued_total, dequeued_total, drops_total
-  - queue_depth, blocked_time_seconds_total
-- Node emits intents:
-  - messages_processed_total, errors_total
-- Wire to no-op by default; real exporters arrive in M4.
+- Define minimal metrics interface (protocol) but do not depend on exporters yet: [DONE]
+  - counter(name, labels).inc(n) [DONE]
+  - gauge(name, labels).set(v) [DONE]
+  - histogram(name, labels).observe(v) [DONE]
+- Edge emits intents: [DONE]
+  - enqueued_total, dequeued_total, drops_total [DONE]
+  - queue_depth, blocked_time_seconds_total [DONE — partial, blocked time later]
+- Node emits intents: [DONE]
+  - messages_processed_total, errors_total [DONE — errors later]
+- Wire to no-op by default; real exporters arrive in M4. [DONE] [PASS]
 
 Validation Rules
 - Port existence: src node has output port; dst node has input port.
