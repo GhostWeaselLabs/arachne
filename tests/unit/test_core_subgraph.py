@@ -1,4 +1,4 @@
-from arachne.core import Subgraph, Node
+from arachne.core import Node, Subgraph
 
 
 def test_subgraph_connect_and_expose() -> None:
@@ -22,4 +22,4 @@ def test_expose_duplicate_names() -> None:
     except ValueError:
         pass
     else:
-        assert False
+        raise AssertionError()

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Optional, Protocol, TypeGuard
+from typing import Any, Protocol
 
 
 class PortDirection(str, Enum):
@@ -32,8 +32,8 @@ class PortSpec:
 class Port:
     name: str
     direction: PortDirection
-    index: Optional[int] = None
-    spec: Optional[PortSpec] = None
+    index: int | None = None
+    spec: PortSpec | None = None
 
     def is_input(self) -> bool:
         return self.direction == PortDirection.INPUT

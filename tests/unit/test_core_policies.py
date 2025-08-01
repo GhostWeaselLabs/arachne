@@ -1,5 +1,5 @@
 from arachne.core import RoutingPolicy
-from arachne.core.policies import Block, Drop, Latest, PutResult, Coalesce
+from arachne.core.policies import Block, Coalesce, Drop, Latest, PutResult
 
 
 class Dummy:

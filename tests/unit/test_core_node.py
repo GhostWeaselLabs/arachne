@@ -1,4 +1,4 @@
-from arachne.core import Node, Message, MessageType
+from arachne.core import Message, MessageType, Node
 
 
 def test_node_with_ports_and_handle() -> None:
@@ -16,4 +16,4 @@ def test_node_emit_unknown_port() -> None:
     except KeyError:
         pass
     else:
-        assert False
+        raise AssertionError()

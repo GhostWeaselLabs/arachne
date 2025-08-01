@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Protocol, TypeVar
+from typing import Protocol, TypeVar, runtime_checkable
 
-T = TypeVar("T")
+T_contra = TypeVar("T_contra", contravariant=True)
 
 
 class PutResult(Enum):
@@ -15,32 +16,32 @@ class PutResult(Enum):
     COALESCED = auto()
 
 
-class Policy(Protocol[T]):
-    def on_enqueue(self, capacity: int, size: int, item: T) -> PutResult: ...
+class Policy(Protocol[T_contra]):
+    def on_enqueue(self, capacity: int, size: int, item: T_contra) -> PutResult: ...
 
 
-class Block:
-    def on_enqueue(self, capacity: int, size: int, item: T) -> PutResult:
+class Block(Policy[object]):
+    def on_enqueue(self, capacity: int, size: int, item: object) -> PutResult:
         return PutResult.BLOCKED if size >= capacity else PutResult.OK
 
 
-class Drop:
-    def on_enqueue(self, capacity: int, size: int, item: T) -> PutResult:
+class Drop(Policy[object]):
+    def on_enqueue(self, capacity: int, size: int, item: object) -> PutResult:
         return PutResult.DROPPED if size >= capacity else PutResult.OK
 
 
-class Latest:
-    def on_enqueue(self, capacity: int, size: int, item: T) -> PutResult:
+class Latest(Policy[object]):
+    def on_enqueue(self, capacity: int, size: int, item: object) -> PutResult:
         if size >= capacity:
             return PutResult.REPLACED
         return PutResult.OK
 
 
 @dataclass(frozen=True, slots=True)
-class Coalesce:
-    fn: callable[[T, T], T]
+class Coalesce(Policy[object]):
+    fn: Callable[[object, object], object]
 
-    def on_enqueue(self, capacity: int, size: int, item: T) -> PutResult:
+    def on_enqueue(self, capacity: int, size: int, item: object) -> PutResult:
         if size >= capacity:
             return PutResult.COALESCED
         return PutResult.OK
@@ -56,6 +57,7 @@ class BackpressureStrategy(Enum):
     BLOCK = 1
 
 
+@runtime_checkable
 class Routable(Protocol):
     def route_key(self) -> str: ...
 
@@ -65,7 +67,6 @@ class RoutingPolicy:
     key: str = "default"
 
     def select(self, item: Routable | object) -> str:
-        try:
-            return item.route_key()  # type: ignore[no-any-return]
-        except Exception:
-            return self.key
+        if isinstance(item, Routable):
+            return item.route_key()
+        return self.key

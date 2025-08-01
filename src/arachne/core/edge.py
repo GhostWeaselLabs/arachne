@@ -2,9 +2,8 @@ from __future__ import annotations
 
 from collections import deque
 from dataclasses import dataclass, field
-from typing import Deque, Generic, Optional, TypeVar
+from typing import Generic, TypeVar
 
-from .message import Message
 from .policies import Coalesce, Latest, Policy, PutResult
 from .ports import Port, PortSpec
 
@@ -18,17 +17,17 @@ class Edge(Generic[T]):
     target_node: str
     target_port: Port
     capacity: int = 1024
-    spec: Optional[PortSpec] = None
-    _q: Deque[T] = field(default_factory=deque, init=False, repr=False)
+    spec: PortSpec | None = None
+    _q: deque[T] = field(default_factory=deque, init=False, repr=False)
 
     def depth(self) -> int:
         return len(self._q)
 
-    def _coalesce(self, fn: Coalesce[T], new_item: T) -> None:
+    def _coalesce(self, fn: Coalesce, new_item: T) -> None:
         if self._q:
             old = self._q.pop()
             merged = fn.fn(old, new_item)
-            self._q.append(merged)
+            self._q.append(merged)  # type: ignore[arg-type]
         else:
             self._q.append(new_item)
 
@@ -47,7 +46,7 @@ class Edge(Generic[T]):
             self._coalesce(pol, item)
         return res
 
-    def try_get(self) -> Optional[T]:
+    def try_get(self) -> T | None:
         if not self._q:
             return None
         return self._q.popleft()

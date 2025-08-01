@@ -1,5 +1,5 @@
 from arachne.core import Edge, Port, PortDirection
-from arachne.core.policies import Block, Drop, Latest, PutResult, Coalesce
+from arachne.core.policies import Block, Coalesce, Drop, Latest, PutResult
 from arachne.core.ports import PortSpec
 
 
@@ -51,4 +51,4 @@ def test_schema_validation() -> None:
     except TypeError:
         pass
     else:
-        assert False, "expected TypeError"
+        raise AssertionError("expected TypeError")

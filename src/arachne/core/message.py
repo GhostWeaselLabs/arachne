@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Mapping, Optional
+from typing import Any
 
 
 class MessageType(str, Enum):
@@ -15,7 +16,7 @@ class MessageType(str, Enum):
 class Message:
     type: MessageType
     payload: Any
-    metadata: Optional[Mapping[str, Any]] = None
+    metadata: Mapping[str, Any] | None = None
 
     def is_control(self) -> bool:
         return self.type == MessageType.CONTROL

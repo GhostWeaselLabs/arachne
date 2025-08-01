@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from .message import Message, MessageType
-from .ports import Port, PortDirection
-from .policies import BackpressureStrategy, RetryPolicy, RoutingPolicy
 from .edge import Edge
+from .message import Message, MessageType
 from .node import Node
+from .policies import BackpressureStrategy, RetryPolicy, RoutingPolicy
+from .ports import Port, PortDirection
 from .subgraph import Subgraph
 
 __all__ = [
