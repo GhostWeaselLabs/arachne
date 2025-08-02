@@ -120,30 +120,19 @@ jobs:
           uv sync
 
       - name: Run example entrypoints (smoke)
-        if: ${{ steps.detect_examples.outputs.run_snippets == 'true' }}
         run: |
-          set -e
-          echo "Running hello_graph (short smoke)..."
-          uv run python - << 'PY'
-          import sys
-          from examples.hello_graph import main as m
-          if hasattr(m, "main"):
-              try:
-                  m.main()
-              except SystemExit:
-                  pass
-              except Exception as e:
-                  print(f"hello_graph run non-fatal error: {e}", file=sys.stderr)
-          PY
-          echo "Running pipeline_demo (import smoke)..."
-          uv run python - << 'PY'
-          import importlib, sys
-          try:
-              importlib.import_module("examples.pipeline_demo.main")
-          except Exception as e:
-              print(f"pipeline_demo import error: {e}", file=sys.stderr)
-              sys.exit(1)
-          PY
+          set -euo pipefail
+          echo "Running hello_graph via module form..."
+          if ! uv run python -m examples.hello_graph.main; then
+            echo "::error::hello_graph failed when running as module (-m). Check examples/hello_graph/main.py for regressions."
+            exit 1
+          fi
+          echo "Running pipeline_demo via module form (import smoke)..."
+          if ! uv run python -m examples.pipeline_demo.main; then
+            echo "::error::pipeline_demo failed when running as module (-m). Check examples/pipeline_demo/main.py for regressions."
+            exit 1
+          fi
+          echo "All docs snippet smokes completed successfully."
 
   docs-build:
     name: Build MkDocs site
