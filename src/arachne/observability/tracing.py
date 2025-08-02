@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-import uuid
+from collections.abc import Iterator
 from contextlib import contextmanager
 from contextvars import ContextVar
 from dataclasses import dataclass
-from typing import Any, Iterator
-
+from typing import Any
+import uuid
 
 # Context variables for tracing
 _current_trace_id: ContextVar[str | None] = ContextVar("current_trace_id", default=None)
@@ -21,8 +21,14 @@ class TracingConfig:
 
 class Span:
     """Represents a tracing span."""
-    
-    def __init__(self, name: str, trace_id: str, span_id: str, attributes: dict[str, Any] | None = None) -> None:
+
+    def __init__(
+        self,
+        name: str,
+        trace_id: str,
+        span_id: str,
+        attributes: dict[str, Any] | None = None,
+    ) -> None:
         self.name = name
         self.trace_id = trace_id
         self.span_id = span_id
@@ -45,7 +51,7 @@ class Span:
 
 class NoopSpan(Span):
     """No-op span implementation."""
-    
+
     def __init__(self, name: str) -> None:
         super().__init__(name, "", "")
 
@@ -58,7 +64,7 @@ class NoopSpan(Span):
 
 class Tracer:
     """Base tracer interface."""
-    
+
     def __init__(self, config: TracingConfig) -> None:
         self._config = config
 
@@ -73,14 +79,14 @@ class Tracer:
 
 class NoopTracer(Tracer):
     """No-op tracer implementation."""
-    
+
     def start_span(self, name: str, attributes: dict[str, Any] | None = None) -> Span:
         return NoopSpan(name)
 
 
 class InMemoryTracer(Tracer):
     """In-memory tracer for testing and development."""
-    
+
     def __init__(self, config: TracingConfig) -> None:
         super().__init__(config)
         self.spans: list[Span] = []
@@ -88,11 +94,11 @@ class InMemoryTracer(Tracer):
     def start_span(self, name: str, attributes: dict[str, Any] | None = None) -> Span:
         if not self._config.enabled:
             return NoopSpan(name)
-        
+
         # Get or generate trace ID
         trace_id = _current_trace_id.get() or self._generate_trace_id()
         span_id = self._generate_span_id()
-        
+
         span = Span(name, trace_id, span_id, attributes)
         self.spans.append(span)
         return span
@@ -126,7 +132,7 @@ def get_tracer() -> Tracer:
 def configure_tracing(config: TracingConfig) -> None:
     """Configure the global tracer."""
     global _global_tracer
-    
+
     if config.provider == "inmemory":
         _global_tracer = InMemoryTracer(config)
     else:
@@ -138,19 +144,19 @@ def start_span(name: str, attributes: dict[str, Any] | None = None) -> Iterator[
     """Context manager that creates and manages a span."""
     tracer = get_tracer()
     span = tracer.start_span(name, attributes)
-    
+
     # Set span context
     old_trace_id = _current_trace_id.get()
     old_span_id = _current_span_id.get()
-    
+
     trace_token = _current_trace_id.set(span.trace_id) if span.trace_id else None
     span_token = _current_span_id.set(span.span_id) if span.span_id else None
-    
+
     try:
         yield span
     finally:
         span.finish()
-        
+
         # Restore context
         if trace_token:
             _current_trace_id.set(old_trace_id)
@@ -180,4 +186,4 @@ def generate_trace_id() -> str:
 
 def is_tracing_enabled() -> bool:
     """Check if tracing is currently enabled."""
-    return get_tracer().is_enabled() 
+    return get_tracer().is_enabled()

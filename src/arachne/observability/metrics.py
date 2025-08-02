@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-import time
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterator, Mapping, Sequence
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from typing import Any, Iterator, Protocol
+import time
+from typing import Protocol
 
 
 class Counter(Protocol):
@@ -94,12 +94,17 @@ class PrometheusGauge:
 
 
 class PrometheusHistogram:
-    def __init__(self, name: str, labels: Mapping[str, str] | None = None, buckets: Sequence[float] | None = None) -> None:
+    def __init__(
+        self,
+        name: str,
+        labels: Mapping[str, str] | None = None,
+        buckets: Sequence[float] | None = None,
+    ) -> None:
         self._name = name
         self._labels = labels or {}
         self._buckets = buckets or DEFAULT_LATENCY_BUCKETS
         self._bucket_counts = {bucket: 0 for bucket in self._buckets}
-        self._bucket_counts[float('inf')] = 0
+        self._bucket_counts[float("inf")] = 0
         self._sum = 0.0
         self._count = 0
 
@@ -107,11 +112,11 @@ class PrometheusHistogram:
         value = float(v)
         self._sum += value
         self._count += 1
-        
+
         for bucket in self._buckets:
             if value <= bucket:
                 self._bucket_counts[bucket] += 1
-        self._bucket_counts[float('inf')] += 1
+        self._bucket_counts[float("inf")] += 1
 
     @property
     def sum(self) -> float:
@@ -142,28 +147,32 @@ class PrometheusMetrics:
     def counter(self, name: str, labels: Mapping[str, str] | None = None) -> Counter:
         full_name = f"{self._config.namespace}_{name}"
         key = self._metric_key(full_name, labels)
-        
+
         if key not in self._counters:
             self._counters[key] = PrometheusCounter(full_name, labels)
-        
+
         return self._counters[key]
 
     def gauge(self, name: str, labels: Mapping[str, str] | None = None) -> Gauge:
         full_name = f"{self._config.namespace}_{name}"
         key = self._metric_key(full_name, labels)
-        
+
         if key not in self._gauges:
             self._gauges[key] = PrometheusGauge(full_name, labels)
-        
+
         return self._gauges[key]
 
     def histogram(self, name: str, labels: Mapping[str, str] | None = None) -> Histogram:
         full_name = f"{self._config.namespace}_{name}"
         key = self._metric_key(full_name, labels)
-        
+
         if key not in self._histograms:
-            self._histograms[key] = PrometheusHistogram(full_name, labels, self._config.default_buckets)
-        
+            self._histograms[key] = PrometheusHistogram(
+                full_name,
+                labels,
+                self._config.default_buckets,
+            )
+
         return self._histograms[key]
 
     def get_all_counters(self) -> dict[str, PrometheusCounter]:

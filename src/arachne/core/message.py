@@ -26,10 +26,11 @@ class Message:
         if not self.headers.get("trace_id"):
             # We need to work around frozen dataclass limitation
             object.__setattr__(self, "headers", {**self.headers, "trace_id": generate_trace_id()})
-        
+
         # Ensure timestamp is present
         if not self.headers.get("timestamp"):
             import time
+
             object.__setattr__(self, "headers", {**self.headers, "timestamp": time.time()})
 
     def is_control(self) -> bool:
@@ -53,8 +54,5 @@ class Message:
         """Create a new message with additional headers."""
         updated_headers = {**self.headers, **new_headers}
         return Message(
-            type=self.type,
-            payload=self.payload,
-            metadata=self.metadata,
-            headers=updated_headers
+            type=self.type, payload=self.payload, metadata=self.metadata, headers=updated_headers
         )

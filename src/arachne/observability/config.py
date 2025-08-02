@@ -11,16 +11,16 @@ from .tracing import TracingConfig, configure_tracing
 @dataclass
 class ObservabilityConfig:
     """Complete observability configuration."""
-    
+
     # Logging configuration
     log_level: LogLevel = LogLevel.INFO
     log_json: bool = True
     log_stream: TextIO | None = None
-    
+
     # Metrics configuration
     metrics_enabled: bool = False
     metrics_namespace: str = "arachne"
-    
+
     # Tracing configuration
     tracing_enabled: bool = False
     tracing_provider: str = "noop"
@@ -29,26 +29,22 @@ class ObservabilityConfig:
 
 def configure_observability(config: ObservabilityConfig) -> None:
     """Configure all observability components."""
-    
+
     # Configure logging
     configure_logging(
-        level=config.log_level,
-        stream=config.log_stream,
-        extra={"json": config.log_json}
+        level=config.log_level, stream=config.log_stream, extra={"json": config.log_json}
     )
-    
+
     # Configure metrics
     if config.metrics_enabled:
         prometheus_config = PrometheusConfig(namespace=config.metrics_namespace)
         prometheus_metrics = PrometheusMetrics(prometheus_config)
         configure_metrics(prometheus_metrics)
-    
+
     # Configure tracing
     if config.tracing_enabled:
         tracing_config = TracingConfig(
-            enabled=True,
-            provider=config.tracing_provider,
-            sample_rate=config.tracing_sample_rate
+            enabled=True, provider=config.tracing_provider, sample_rate=config.tracing_sample_rate
         )
         configure_tracing(tracing_config)
 
@@ -65,7 +61,7 @@ def get_development_config() -> ObservabilityConfig:
         metrics_enabled=True,
         tracing_enabled=True,
         tracing_provider="inmemory",
-        tracing_sample_rate=1.0
+        tracing_sample_rate=1.0,
     )
 
 
@@ -76,5 +72,5 @@ def get_production_config() -> ObservabilityConfig:
         metrics_enabled=True,
         tracing_enabled=True,
         tracing_provider="opentelemetry",
-        tracing_sample_rate=0.1
-    ) 
+        tracing_sample_rate=0.1,
+    )
