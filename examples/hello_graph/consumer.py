@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from arachne.core.message import Message
-from arachne.core.ports import Port, PortDirection, PortSpec
 from arachne.core.node import Node
+from arachne.core.ports import Port, PortDirection, PortSpec
 
 
 class Consumer(Node):

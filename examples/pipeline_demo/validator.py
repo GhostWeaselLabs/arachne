@@ -15,7 +15,9 @@ class Validator(Node):
         self.seen: int = 0
         self.valid: int = 0
         self.inputs = [Port(name="in", direction=PortDirection.INPUT, spec=PortSpec("in", dict))]
-        self.outputs = [Port(name="out", direction=PortDirection.OUTPUT, spec=PortSpec("out", dict))]
+        self.outputs = [
+            Port(name="out", direction=PortDirection.OUTPUT, spec=PortSpec("out", dict))
+        ]
 
     def _handle_message(self, port: str, msg: Message[Any]) -> None:
         if port != "in":

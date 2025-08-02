@@ -49,6 +49,7 @@ class Coalesce(Policy[object]):
 
 # Convenience factory functions expected by examples
 
+
 def block() -> Block:
     return Block()
 

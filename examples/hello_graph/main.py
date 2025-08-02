@@ -21,7 +21,8 @@ def build_graph(max_count: int = 5) -> tuple[Subgraph, Consumer]:
     # Connect producer->consumer with capacity and policy
     sg.connect(("producer", "output"), ("consumer", "in"), capacity=16)
 
-    # Validation step (placeholder: Subgraph.validate returns list; raise_if_error to be implemented)
+    # Validation step (placeholder): Subgraph.validate returns list;
+    # raise_if_error to be implemented
     return sg, consumer
 
 

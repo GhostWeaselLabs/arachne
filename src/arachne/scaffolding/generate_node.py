@@ -21,8 +21,10 @@ from .templates.node import (
 
 # Temporary legacy wrapper for backward compatibility; deprecate before 1.0
 
+
 def generate_test_template(name: str, module: str) -> str:  # pragma: no cover
     from .templates.node import generate_test_template as _gen
+
     return _gen(name, module)
 
 
@@ -135,7 +137,7 @@ def main() -> None:
     if not success:
         sys.exit(1)
 
-    node_path = Path(args.dir) / args.package.replace('.', '/') / f"{snake_case(args.name)}.py"
+    node_path = Path(args.dir) / args.package.replace(".", "/") / f"{snake_case(args.name)}.py"
     print(f"Created node: {node_path}")
     if args.include_tests:
         test_path = Path(args.dir).parent / "tests" / "unit" / f"test_{snake_case(args.name)}.py"

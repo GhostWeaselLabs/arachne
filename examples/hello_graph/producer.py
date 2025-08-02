@@ -4,6 +4,7 @@ Producer Node
 Emits a bounded sequence of integers on tick intervals.
 Demonstrates tick-based message generation and emit() usage.
 """
+
 from __future__ import annotations
 
 from arachne.core.message import Message, MessageType
