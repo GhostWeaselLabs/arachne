@@ -10,13 +10,20 @@ import argparse
 from pathlib import Path
 import sys
 
-from .parsers.ports import parse_ports
+from .parsers.ports import (
+    parse_ports,
+    snake_case,  # re-export for tests
+)
 from .templates.node import (
     generate_node_template,
     generate_node_test_template,
-    generate_test_template,
 )
-from .parsers.ports import snake_case  # re-export for tests
+
+# Temporary legacy wrapper for backward compatibility; deprecate before 1.0
+
+def generate_test_template(name: str, module: str) -> str:  # pragma: no cover
+    from .templates.node import generate_test_template as _gen
+    return _gen(name, module)
 
 
 def create_directories(target_path: Path) -> None:

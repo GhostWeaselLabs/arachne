@@ -2,16 +2,17 @@
 
 from __future__ import annotations
 
-from typing import Any
+# Import core types - will need to check these exist
+from typing import TYPE_CHECKING, Any, Any as _Any, TypeAlias
 
 from .issue import Issue
 
-# Import core types - will need to check these exist
-try:
-    from arachne.core.node import Node
-except ImportError:
-    # Fallback for development/testing
-    Node = Any
+if TYPE_CHECKING:
+    from arachne.core.node import Node as _Node
+else:
+    _Node = _Any  # type: ignore[assignment]
+
+Node: TypeAlias = _Node
 
 
 def validate_ports(node: Node) -> list[Issue]:

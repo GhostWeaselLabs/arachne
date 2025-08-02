@@ -1,8 +1,8 @@
 """Validation utilities for Arachne graphs and components."""
 
-from .graph import validate_connection, validate_graph
+from .graph import validate_graph
 from .issue import Issue
-from .ports import validate_ports
+from .ports import validate_connection, validate_ports
 from .schema import PydanticAdapter, SchemaValidator
 
 __all__ = [

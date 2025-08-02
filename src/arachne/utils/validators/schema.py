@@ -32,10 +32,10 @@ class PydanticAdapter:
 
     def __init__(self) -> None:
         try:
-            import pydantic
+            import pydantic  # type: ignore[import-not-found]
 
             self._pydantic = pydantic
-        except ImportError:
+        except Exception:
             self._pydantic = None
 
     def validate_payload(self, model: Any, payload: Any) -> Issue | None:

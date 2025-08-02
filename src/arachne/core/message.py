@@ -44,11 +44,16 @@ class Message:
 
     def get_trace_id(self) -> str:
         """Get the trace ID from headers."""
-        return self.headers.get("trace_id", "")
+        value = self.headers.get("trace_id", "")
+        return str(value) if value is not None else ""
 
     def get_timestamp(self) -> float:
         """Get the timestamp from headers."""
-        return self.headers.get("timestamp", 0.0)
+        value = self.headers.get("timestamp", 0.0)
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return 0.0
 
     def with_headers(self, **new_headers: Any) -> Message:
         """Create a new message with additional headers."""

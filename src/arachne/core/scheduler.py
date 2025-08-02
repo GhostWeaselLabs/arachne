@@ -218,8 +218,8 @@ class Scheduler:
         if self._running:
             # Runtime mutation
             if edge_id in self._plan.edges:
-                old_priority = self._plan.edges[edge_id].priority
-                self._plan.edges[edge_id].priority = priority
+                old_priority = self._plan.edges[edge_id].priority_band
+                self._plan.edges[edge_id].priority_band = priority
                 logger.info(
                     "scheduler.priority_changed",
                     f"Edge priority changed: {edge_id}",
@@ -253,8 +253,8 @@ class Scheduler:
         if self._running:
             # Runtime mutation
             if edge_id in self._plan.edges:
-                old_capacity = self._plan.edges[edge_id].capacity
-                self._plan.edges[edge_id].capacity = capacity
+                old_capacity = self._plan.edges[edge_id].edge.capacity
+                self._plan.edges[edge_id].edge.capacity = capacity
                 logger.info(
                     "scheduler.capacity_changed",
                     f"Edge capacity changed: {edge_id}",
@@ -304,7 +304,7 @@ class Scheduler:
         """Check if the scheduler is currently running."""
         return self._running
 
-    def get_stats(self) -> dict[str, int]:
+    def get_stats(self) -> dict[str, int | str]:
         """Get basic scheduler statistics."""
         if not self._running:
             return {"status": "stopped"}

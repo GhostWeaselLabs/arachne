@@ -7,18 +7,22 @@ optional Pydantic adapter support.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Protocol, runtime_checkable
 
 # Import core types - will need to check these exist
-try:
-    from arachne.core.node import Node
-    from arachne.core.ports import PortSpec
-    from arachne.core.subgraph import Subgraph
-except ImportError:
-    # Fallback for development/testing
-    PortSpec = Any
-    Node = Any
-    Subgraph = Any
+from typing import TYPE_CHECKING, Any, Any as _Any, Protocol, TypeAlias, runtime_checkable
+
+if TYPE_CHECKING:
+    from arachne.core.node import Node as _Node
+    from arachne.core.ports import PortSpec as _PortSpec
+    from arachne.core.subgraph import Subgraph as _Subgraph
+else:
+    _Node = _Any  # type: ignore[assignment]
+    _PortSpec = _Any  # type: ignore[assignment]
+    _Subgraph = _Any  # type: ignore[assignment]
+
+Node: TypeAlias = _Node
+PortSpec: TypeAlias = _PortSpec
+Subgraph: TypeAlias = _Subgraph
 
 
 @dataclass
@@ -230,10 +234,10 @@ class PydanticAdapter:
 
     def __init__(self) -> None:
         try:
-            import pydantic
+            import pydantic  # type: ignore[import-not-found]
 
             self._pydantic = pydantic
-        except ImportError:
+        except Exception:
             self._pydantic = None
 
     def validate_payload(self, model: Any, payload: Any) -> Issue | None:
