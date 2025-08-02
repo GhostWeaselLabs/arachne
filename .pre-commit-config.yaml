@@ -47,8 +47,7 @@ repos:
     hooks:
       - id: docs-no-bare-fences
         name: "docs: no bare code fences"
-        entry: |
-          bash -c 'grep -RIn --exclude-dir=site --exclude-dir=.git -E "^```[[:space:]]*$" docs && echo "ERROR: Bare code fence without language in docs/" 1>&2 && exit 1 || true'
+        entry: python3 scripts/check_bare_fences.py
         language: system
         files: ^docs/.*\.md$
       - id: docs-no-triple-dash
