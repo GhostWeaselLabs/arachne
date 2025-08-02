@@ -46,6 +46,7 @@ class Edge(Generic[T]):
     - spec: optional PortSpec used to validate payload types
 
     """
+
     source_node: str
     source_port: Port
     target_node: str

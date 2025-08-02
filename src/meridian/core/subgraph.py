@@ -19,6 +19,7 @@ class ValidationIssue(NamedTuple):
       message:
         Human-readable description of the validation problem.
     """
+
     level: str
     code: str
     message: str
@@ -45,6 +46,7 @@ class Subgraph:
     - Node names must be unique within the subgraph.
     - Edge identifiers (src:port->dst:port) must be unique.
     """
+
     name: str
     nodes: dict[str, Node] = field(default_factory=dict)
     edges: list[Edge[object]] = field(default_factory=list)

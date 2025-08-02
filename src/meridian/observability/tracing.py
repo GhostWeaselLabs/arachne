@@ -29,6 +29,7 @@ class TracingConfig:
         Fraction (0.0–1.0) indicating the portion of operations sampled.
         Note: Sampling behavior depends on the provider implementation.
     """
+
     enabled: bool = False
     provider: str = "noop"  # "opentelemetry" | "noop"
     sample_rate: float = 0.0

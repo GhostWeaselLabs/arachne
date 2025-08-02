@@ -29,6 +29,7 @@ class MessageType(str, Enum):
         from DATA.
       - Emission and handling of ERROR should be explicit in application code.
     """
+
     DATA = "DATA"
     CONTROL = "CONTROL"
     ERROR = "ERROR"
@@ -62,6 +63,7 @@ class Message:
       - Use with_headers(...) to derive a new message with additional/overridden headers.
 
     """
+
     type: MessageType
     payload: Any
     metadata: Mapping[str, Any] | None = None

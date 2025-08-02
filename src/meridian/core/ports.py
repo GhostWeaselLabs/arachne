@@ -15,12 +15,14 @@ class PortDirection(str, Enum):
     OUTPUT:
       Emits messages produced by the node to downstream edges.
     """
+
     INPUT = "INPUT"
     OUTPUT = "OUTPUT"
 
 
 class SchemaValidator(Protocol):
     """Callable protocol for validating a value against a schema."""
+
     def __call__(self, value: Any) -> bool: ...
 
 
@@ -48,6 +50,7 @@ class PortSpec:
       - PortSpec validation is a lightweight type check and does not perform deep schema
         validation. For richer validation, adapt at the application boundary.
     """
+
     name: str
     schema: type[Any] | tuple[type[Any], ...] | None = None
     policy: str | None = None
@@ -82,6 +85,7 @@ class Port:
       - When provided, spec.validate(value) can be used to guard payload types.
 
     """
+
     name: str
     direction: PortDirection
     index: int | None = None

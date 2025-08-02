@@ -133,7 +133,7 @@ explicit_package_bases = true
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 # Enforce 80% coverage in local and CI runs to keep quality consistent.
-addopts = "-q --cov=src --cov-report=term-missing --cov-fail-under=80"
+addopts = "-q -p no:cov --cov=src --cov-report=term-missing --cov-fail-under=80"
 pythonpath = ["src", "."]
 markers = [
   "unit: unit tests",

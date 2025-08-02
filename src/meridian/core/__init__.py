@@ -1,5 +1,5 @@
 """
-Arachne core public API.
+Meridian core public API.
 
 This package exposes the primary runtime building blocks:
 - Message and MessageType: immutable envelopes for data/control/error.
@@ -9,7 +9,6 @@ This package exposes the primary runtime building blocks:
 - Subgraph: composable collection of nodes and edges.
 - Scheduler and SchedulerConfig: cooperative graph scheduler.
 - Policies and strategies: backpressure/routing/retry controls.
-"""Core package for Meridian runtime.
 
 Typical usage:
     from meridian.core import Node, Edge, Subgraph, Scheduler, Message, MessageType

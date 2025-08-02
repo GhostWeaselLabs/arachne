@@ -27,6 +27,7 @@ class PutResult(Enum):
     COALESCED:
       Item merged with an existing one via a coalescing function to reduce queue pressure.
     """
+
     OK = auto()
     BLOCKED = auto()
     DROPPED = auto()
@@ -49,6 +50,7 @@ class Policy(Protocol[T_contra]):
     Returns:
       PutResult indicating whether to enqueue, block, drop, replace, or coalesce.
     """
+
     def on_enqueue(self, capacity: int, size: int, item: T_contra) -> PutResult: ...
 
 
@@ -62,6 +64,7 @@ class Block(Policy[object]):
 
     Suitable when lossless delivery is required and producers can wait.
     """
+
     def on_enqueue(self, capacity: int, size: int, item: object) -> PutResult:
         return PutResult.BLOCKED if size >= capacity else PutResult.OK
 
@@ -77,6 +80,7 @@ class Drop(Policy[object]):
     Suitable for telemetry or low-importance streams where freshness matters
     but occasional loss is acceptable.
     """
+
     def on_enqueue(self, capacity: int, size: int, item: object) -> PutResult:
         return PutResult.DROPPED if size >= capacity else PutResult.OK
 
@@ -91,6 +95,7 @@ class Latest(Policy[object]):
 
     Suitable for single-slot state or UI-like consumers that only need the newest value.
     """
+
     def on_enqueue(self, capacity: int, size: int, item: object) -> PutResult:
         if size >= capacity:
             return PutResult.REPLACED
@@ -111,6 +116,7 @@ class Coalesce(Policy[object]):
 
     Suitable for batchable workloads where combining items mitigates pressure.
     """
+
     fn: Callable[[object, object], object]
 
     def on_enqueue(self, capacity: int, size: int, item: object) -> PutResult:
@@ -152,6 +158,7 @@ class RetryPolicy(Enum):
     SIMPLE:
       Apply a simple retry strategy (implementation-defined by the runtime).
     """
+
     NONE = 0
     SIMPLE = 1
 
@@ -166,6 +173,7 @@ class BackpressureStrategy(Enum):
     BLOCK:
       Prefer blocking/yielding the producer when capacity is reached.
     """
+
     DROP = 0
     BLOCK = 1
 
@@ -178,6 +186,7 @@ class Routable(Protocol):
     route_key() -> str
       Returns a string used for partitioning or consistent routing.
     """
+
     def route_key(self) -> str: ...
 
 
@@ -194,6 +203,7 @@ class RoutingPolicy:
       - If the item implements Routable, its route_key() is used.
       - Otherwise, the default key is returned.
     """
+
     key: str = "default"
 
     def select(self, item: Routable | object) -> str:

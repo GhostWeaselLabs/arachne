@@ -9,16 +9,19 @@ from typing import Protocol
 
 class Counter(Protocol):
     """A monotonically increasing counter metric."""
+
     def inc(self, n: int = 1) -> None: ...
 
 
 class Gauge(Protocol):
     """A numerical gauge metric representing the latest value."""
+
     def set(self, v: int | float) -> None: ...
 
 
 class Histogram(Protocol):
     """A histogram metric for recording observations into buckets."""
+
     def observe(self, v: int | float) -> None: ...
 
 
@@ -29,6 +32,7 @@ class Metrics(Protocol):
     Implementations should create or fetch metric instruments with a stable name and optional
     label set. Returned instruments must be safe to reuse across calls with the same name/labels.
     """
+
     def counter(self, name: str, labels: Mapping[str, str] | None = None) -> Counter: ...
     def gauge(self, name: str, labels: Mapping[str, str] | None = None) -> Gauge: ...
     def histogram(self, name: str, labels: Mapping[str, str] | None = None) -> Histogram: ...
@@ -37,6 +41,7 @@ class Metrics(Protocol):
 @dataclass(frozen=True, slots=True)
 class NoopCounter:
     """No-op Counter implementation used when metrics are disabled."""
+
     def inc(self, n: int = 1) -> None:
         return None
 
@@ -44,6 +49,7 @@ class NoopCounter:
 @dataclass(frozen=True, slots=True)
 class NoopGauge:
     """No-op Gauge implementation used when metrics are disabled."""
+
     def set(self, v: int | float) -> None:
         return None
 
@@ -51,6 +57,7 @@ class NoopGauge:
 @dataclass(frozen=True, slots=True)
 class NoopHistogram:
     """No-op Histogram implementation used when metrics are disabled."""
+
     def observe(self, v: int | float) -> None:
         return None
 
@@ -58,6 +65,7 @@ class NoopHistogram:
 @dataclass(frozen=True, slots=True)
 class NoopMetrics:
     """No-op Metrics provider wiring all instruments to no-op implementations."""
+
     def counter(self, name: str, labels: Mapping[str, str] | None = None) -> Counter:
         return NoopCounter()
 
@@ -83,12 +91,14 @@ class PrometheusConfig:
       default_buckets:
         Default histogram buckets used when constructing histograms without explicit buckets.
     """
+
     namespace: str = "arachne"
     default_buckets: Sequence[float] = field(default_factory=lambda: DEFAULT_LATENCY_BUCKETS)
 
 
 class PrometheusCounter:
     """Simple in-memory counter for demonstration/test usage."""
+
     def __init__(self, name: str, labels: Mapping[str, str] | None = None) -> None:
         self._name = name
         self._labels = labels or {}
@@ -106,6 +116,7 @@ class PrometheusCounter:
 
 class PrometheusGauge:
     """Simple in-memory gauge for demonstration/test usage."""
+
     def __init__(self, name: str, labels: Mapping[str, str] | None = None) -> None:
         self._name = name
         self._labels = labels or {}
@@ -123,6 +134,7 @@ class PrometheusGauge:
 
 class PrometheusHistogram:
     """Simple in-memory histogram with pre-defined buckets and cumulative counts."""
+
     def __init__(
         self,
         name: str,
@@ -175,6 +187,7 @@ class PrometheusMetrics:
     Note:
       - This adapter does not expose a /metrics endpoint; it is a local accumulator only.
     """
+
     def __init__(self, config: PrometheusConfig | None = None) -> None:
         self._config = config or PrometheusConfig()
         self._counters: dict[str, PrometheusCounter] = {}
