@@ -5,7 +5,7 @@ import json
 
 import pytest
 
-from src.arachne.observability.logging import (
+from arachne.observability.logging import (
     LogConfig,
     Logger,
     LogLevel,

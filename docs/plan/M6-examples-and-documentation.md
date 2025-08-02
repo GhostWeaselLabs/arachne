@@ -1,187 +1,158 @@
-# Milestone M6: Examples and Documentation
+# Milestone M6: Examples and Documentation (EARS-aligned)
 
-## EARS Tasks and Git Workflow
-
-Branch name: feature/m6-examples-docs
-
-EARS loop
-- Explore: outline hello_graph and pipeline_demo; doc pages and cross-links
-- Analyze: choose policies/priorities to demonstrate behaviors
-- Implement: examples modules and docs (quickstart, api, patterns, troubleshooting, observability)
-- Specify checks: example smoke tests; doctest/lint of snippets
-- Commit after each major step
-
-Git commands
-- git checkout -b feature/m6-examples-docs
-- git add -A && git commit -m "feat(examples): add hello_graph runnable example"
-- git add -A && git commit -m "feat(examples): add pipeline_demo with policies and priorities"
-- git add -A && git commit -m "docs: quickstart and api overview"
-- git add -A && git commit -m "docs: patterns, troubleshooting, observability guides"
-- git add -A && git commit -m "test(examples,docs): smoke runs and snippet validation"
-- git push -u origin feature/m6-examples-docs
-- Open PR early; keep commits small and focused
-
-Status: Planned
+Status: In Progress
 Owner: Core Maintainers
 Duration: 3–5 days
+Branch: feature/m6-examples-docs
 
-Overview
-Deliver runnable examples that demonstrate core runtime capabilities and produce end-to-end documentation covering quickstart, API reference, patterns, and troubleshooting. Examples must run with uv and showcase backpressure, overflow policies, and control-plane priorities. Documentation should be concise, modular, and aligned with SRP/DRY, with code listings staying within ~200 LOC/file guidance.
+## 1) Purpose
+Deliver runnable, composable examples and concise documentation that demonstrate core runtime behaviors: lifecycle, composition, backpressure and overflow policies, control‑plane priority, and observability. Adhere to SRP/DRY and small‑file guidance (~200 LOC/file).
 
-EARS Requirements
-- The system shall provide runnable examples that can be executed with uv run.
-- The system shall include a minimal hello_graph example (producer → consumer) validating end-to-end execution.
-- The system shall include a pipeline_demo example showing validator → transformer → sink with backpressure and multiple overflow policies.
-- Where control-plane edges exist, the system shall demonstrate priority preemption (e.g., kill switch).
-- The system shall provide documentation for quickstart, API reference, patterns, and troubleshooting.
-- When a user follows the quickstart, the examples shall run without additional configuration.
-- If an example encounters misconfiguration (e.g., mismatched port types), the system shall present clear validation errors and remediation steps in the docs.
-- While reading docs, users shall find concise, copy-pastable commands for common workflows (init, run, test).
+## 2) Standards Alignment
+- Modularity: ≤ ~200 LOC/file; single‑responsibility modules; avoid hidden coupling.
+- SRP/DRY: Factor shared helpers; reuse patterns; eliminate duplication across examples/docs.
+- Composability: Favor subgraphs and clear port contracts; validate wiring before run.
+- Docs style: Concise pages with copy‑paste commands; cross‑link milestones; EARS‑framed requirements.
+- EARS usage: Use Ubiquitous/Event/Unwanted/State/Complex patterns for example specs.
+- Observability: JSON logs by default; metrics interface; tracing optional; no sensitive payloads in logs.
 
-Deliverables
-Examples
+## 3) EARS Requirements
+- Ubiquitous: The system shall provide runnable examples executable with uv run.
+- Ubiquitous: The system shall include hello_graph (producer → consumer) validating end‑to‑end execution.
+- Ubiquitous: The system shall include pipeline_demo (validator → transformer → sink) showing backpressure and multiple overflow policies.
+- Complex: Where control‑plane edges exist, the system shall demonstrate priority preemption (e.g., kill switch).
+- Ubiquitous: The system shall provide documentation for quickstart, API, patterns, troubleshooting, and observability.
+- Event‑driven: When a user follows the quickstart, the examples shall run without additional configuration.
+- Unwanted: If misconfiguration occurs (e.g., mismatched port types), validation errors shall be clear with remediation steps.
+- State‑driven: While reading docs, users shall find concise, copy‑pastable commands for common workflows (init, run, test).
+
+## 4) Deliverables
+### Examples
 - examples/hello_graph/
   - producer.py: emits a bounded sequence of integers.
-  - consumer.py: prints payloads and optionally counts them.
+  - consumer.py: prints or counts messages.
   - main.py: builds a subgraph, connects ports, runs scheduler.
 - examples/pipeline_demo/
-  - validator.py: checks schema-type and drops/flags invalid items.
-  - transformer.py: transforms payloads (e.g., add fields, normalize).
-  - sink.py: simulates I/O (slow consumer) to trigger backpressure.
-  - control.py: publishes a kill-switch control-plane message.
-  - main.py: wires nodes; configures edges with different policies (block, latest, coalesce) and priorities.
-- Optional: examples/metrics_tracing_smoke/
-  - Demonstrates enabling metrics adapter and tracing hooks (guarded by optional dependencies).
+  - validator.py: type/schema gate; emits valid only.
+  - transformer.py: enrich/normalize payloads.
+  - sink.py: slow consumer to trigger backpressure.
+  - control.py: kill‑switch via control‑plane edge.
+  - main.py: wiring; capacities; policies (block/latest/coalesce); priorities.
+- Optional: examples/observability_demo/
+  - metrics_tracing.py: enable metrics/tracing via flags; no‑op safe by default.
 
-Documentation
-- docs/quickstart.md
-  - Installation via uv
-  - Running examples (hello_graph first, pipeline_demo second)
-  - How to enable metrics/tracing in examples (optional)
-- docs/api.md
-  - Public API overview: Node, Edge, Subgraph, Scheduler, Message, PortSpec, Policies
-  - Reference links and signatures (kept concise; full docstrings in code)
-- docs/patterns.md
-  - Backpressure strategies: block, latest, coalesce
-  - Control-plane priority: kill switch, admin signals
-  - Subgraphs and composition
-  - Error handling patterns (retry, skip, DLQ subgraph)
-- docs/troubleshooting.md
-  - Common wiring errors and fixes
-  - Type mismatches and schema adapter usage
-  - Backpressure stalls and how to diagnose with metrics
-  - Priority misconfigurations (how to verify and fix)
-- docs/observability.md
-  - Metric catalog (summary) and recommended dashboards
-  - Logging formats and levels
-  - Tracing enablement and sampling guidance
-- README updates
-  - Link the above docs
-  - Keep a small quickstart section; refer to docs for details
+### Documentation
+- docs/quickstart.md: uv workflow; run hello_graph; run pipeline_demo; optional observability flags.
+- docs/api.md: concise API overview (Node, Edge, Subgraph, Scheduler, Message, PortSpec, Policies).
+- docs/patterns.md: backpressure strategies (block/latest/coalesce); control‑plane priority; subgraph composition; error‑handling patterns.
+- docs/troubleshooting.md: wiring errors; type mismatches; diagnosing backpressure; priority issues.
+- docs/observability.md: metric catalog (summary); logging format; tracing enablement and sampling.
+- README: links to the above; short quickstart.
 
-Example Scenarios and Key Behaviors
-hello_graph
-- Producer emits n integers on tick.
-- Consumer prints values on on_message.
-- Subgraph connect capacity configurable (default 16).
-- Demonstrates:
-  - Node lifecycle invocation
-  - Simple message pass-through
-  - End-to-end run via scheduler
+## 5) Example Authoring Template
+### File size and structure
+- ≤ ~200 LOC/file; one cohesive class/module per node or subgraph.
+- __init__.py optional; expose run entry points if needed.
+- Top‑level docstring includes: Purpose; Ports (name:type, policy); Capacity/priorities; Run command (uv run ...).
 
-pipeline_demo
-- Nodes:
-  - Validator: ensures payload shape (type or TypedDict), emits only valid messages.
-  - Transformer: mutates payload (e.g., add normalized fields).
-  - Sink: intentionally slow consumer to create backpressure.
-  - Control: sends kill switch on a control-plane edge with higher priority.
-- Edges and Policies:
-  - Validator → Transformer: capacity moderate (e.g., 64), policy=block
-  - Transformer → Sink: capacity small (e.g., 8), policy=latest or coalesce
-  - Control → Scheduler/All: capacity small, high priority
-- Demonstrates:
-  - Backpressure with a slow sink
-  - latest/coalesce behaviors under burst
-  - Priority preemption for kill switch
-  - Observability hooks visible when enabled
+### Type and policy hygiene
+- Static typing for public functions/classes.
+- Explicit PortSpec types and policies; capacity and priority set near wiring sites.
 
-Content Guidelines
-- Keep each example file ≤ ~200 LOC.
-- Provide docstrings at the top explaining purpose, ports, and policies used.
-- Use explicit typing in public methods.
-- Avoid heavy external dependencies; stick to stdlib and the runtime.
-- Provide inline comments where policies and priorities are set to teach best practices.
+### SRP/DRY
+- One node class per file; helpers local or shared; avoid duplication across examples.
 
-Commands and Runbooks
-Quickstart commands (to be included in docs/quickstart.md)
+## 6) Example Checklist
+- [x] Files ≤ ~200 LOC; SRP respected.
+- [x] Docstring with purpose, ports, capacities, policies, priorities.
+- [x] uv run command included and tested.
+- [x] Edge validates Message.payload against PortSpec.schema (Message-wrapped types supported).
+- [ ] Validation errors are clear if miswired (expand troubleshooting examples).
+- [ ] Metrics/logs visible (no‑op safe); tracing guarded by optional deps.
+- [x] Smoke tests in CI.
+
+## 7) Commands
+Quickstart
 - uv init
 - uv lock
 - uv sync
 - uv run python -m examples.hello_graph.main
 - uv run python -m examples.pipeline_demo.main
 
-Optional observability commands
-- Enable metrics adapter in code with a flag or environment variable.
-- Expose Prometheus metrics via a small adapter script (documented as optional).
-- Enable tracing if OpenTelemetry is installed; document that it’s off by default.
+Optional observability
+- Enable metrics/tracing via env flags or code switches; default to no‑op when disabled.
 
-Documentation Structure and Cross-Links
-- Each doc page has a short overview, three sections max, and links to examples.
-- Add “See also” at the bottom:
-  - quickstart.md → examples + patterns.md
-  - api.md → code docstrings + patterns.md
-  - patterns.md → troubleshooting.md
-  - troubleshooting.md → observability.md
-  - observability.md → api.md (metrics/tracing interfaces)
+## 8) EARS Template (for examples and docs)
+- Ubiquitous: The example shall <goal/behavior>.
+- Event‑driven: When <event>, the example/system shall <behavior>.
+- Unwanted: If <failure/condition>, the example/system shall <mitigation>.
+- State‑driven: While <state>, the example/system shall <policy>.
+- Complex: Where <context/adapter>, the example/system shall <behavior>.
 
-Testing Strategy
-Unit-level (docs lint)
-- Validate code snippets in docs compile via a simple doctest-like pass or copy into tests/docs_snippets_test.py.
-- Ensure example modules import and pass static checks (mypy relaxed as needed for examples).
+## 9) Example Specs (EARS)
+### hello_graph
+- Ubiquitous: The example shall demonstrate producer→consumer message flow and node lifecycle.
+- Event‑driven: When producer ticks, it shall emit an integer Message to the output port.
+- Event‑driven: When consumer receives a Message, it shall record/print the payload.
+- State‑driven: While the edge capacity is not exceeded, enqueue operations shall succeed with policy=block.
+- Unwanted: If the consumer raises, the runtime shall log a structured error and continue per default node error policy.
 
-Integration-level (example runs)
-- hello_graph: run the example entry point; assert the expected number of outputs printed or captured.
-- pipeline_demo:
-  - Start run; after a burst, assert:
-    - Backpressure occurs (via metrics or observed processing latency).
-    - latest or coalesce behaviors manifest (e.g., count drops or confirm coalesced outputs).
-  - Send kill switch and assert a graceful shutdown path.
-- Observability smoke:
-  - With metrics enabled, assert key counters increased (edge enqueued/dequeued, node messages).
-  - With tracing enabled (if available), ensure no exceptions and optional span creation.
+### pipeline_demo
+- Ubiquitous: The example shall demonstrate validation, transformation, and backpressure under varied overflow policies.
+- Event‑driven: When validator receives input, it shall drop or flag invalid payloads and emit valid ones only.
+- State‑driven: While the sink is slow, the Transformer→Sink edge with policy=latest shall retain only the newest message beyond capacity.
+- Event‑driven: When a kill‑switch control‑plane message is emitted, the scheduler shall prioritize its processing and initiate graceful shutdown.
+- Unwanted: If an edge reaches capacity with policy=coalesce, the example shall coalesce burst messages via a supplied function and expose behavior via logs/metrics.
 
-Acceptance Criteria
-- hello_graph and pipeline_demo run via uv out of the box on a clean clone.
-- Docs are complete, concise, and cross-linked: quickstart, api, patterns, troubleshooting, observability.
-- Examples illustrate backpressure and priorities clearly with small, readable files.
-- Troubleshooting addresses common user errors with actionable guidance.
-- Observability doc shows how to enable metrics and tracing, including sample dashboards/alerts.
-- CI executes example smoke tests and validates docs snippets compile.
-- Coverage impact remains acceptable; examples may be excluded from coverage totals if necessary.
+### observability_demo (optional)
+- Ubiquitous: The example shall demonstrate enabling metrics and optional tracing with minimal overhead.
+- Event‑driven: When nodes process messages, counters and histograms shall update; tracing spans shall be created only if enabled.
+- Unwanted: If tracing is not installed, the example shall run with a no‑op provider without errors.
 
-Risks and Mitigations
-- Examples drift from API surface as it evolves:
-  - Mitigation: Add CI that imports and runs example entry points; include minimal assertions.
-- Overly complex examples obscure learning:
-  - Mitigation: Keep hello_graph trivial; reserve complexity for pipeline_demo; add comments.
-- Optional observability dependencies confuse users:
-  - Mitigation: Default to no-op; clearly label optional installs; guard code paths with feature flags.
+### subgraph_composition_mini
+- Ubiquitous: The example shall demonstrate composing two subgraphs into a larger graph with exposed ports.
+- Event‑driven: When subgraph A emits, subgraph B shall receive via exposed connectors with validated PortSpec types.
+- Unwanted: If port types mismatch, validation shall fail with a clear Issue and location.
 
-Out of Scope (Deferred)
-- Distributed examples or multi-process demos.
-- Live UI dashboards; provide metric names and suggested panels instead.
-- Advanced schema adapters beyond simple Pydantic notes.
+## 10) Documentation Structure and Cross‑Links
+- quickstart.md → examples; patterns.md
+- api.md → code docstrings; patterns.md
+- patterns.md → troubleshooting.md
+- troubleshooting.md → observability.md
+- observability.md → api.md (metrics/tracing)
 
-Traceability
-- Implements Technical Blueprint Implementation Plan M6.
-- Satisfies EARS requirements for runnable examples, documentation breadth, backpressure/priority demonstrations, and troubleshooting guidance.
+## 11) Testing and Acceptance
+Docs lint and snippets
+- [ ] Validate code blocks/snippets compile/run in CI.
 
-Checklist
-- [ ] hello_graph implemented, runs with uv
-- [ ] pipeline_demo implemented: validator, transformer, sink, control-plane kill switch
-- [ ] quickstart.md written and tested (commands work)
-- [ ] api.md concise overview of public APIs
-- [ ] patterns.md covers backpressure, priority, composition, error handling
-- [ ] troubleshooting.md common failures and fixes
-- [ ] observability.md metric catalog summary and enablement guides
-- [ ] CI executes example smoke tests and validates docs snippets
+Example smoke tests
+- [x] hello_graph: run and assert N outputs observed.
+- [x] pipeline_demo: basic smoke runs; backpressure path sketched; refine assertions next.
+- [ ] observability_demo: metrics counters increment; tracing path does not error when disabled.
+
+CI acceptance
+- [x] Examples run via uv on clean clone.
+- [ ] Snippet checks pass.
+- [x] Coverage impact acceptable.
+
+## 12) Git Workflow
+- git checkout -b feature/m6-examples-docs
+- Incremental commits per example/doc page; PR early; keep commits small.
+
+## 13) Traceability
+- Aligns with M0 governance (SRP/DRY, small modules, docs‑as‑product).
+- Implements EARS master for examples, policies, scheduler priorities, and observability.
+
+## 14) Current Status Summary
+- Examples: hello_graph and pipeline_demo stubs implemented and runnable.
+- Typing: mypy strict pass across src/; optional pydantic guarded.
+- Lint: ruff clean (auto‑fixed).
+- Tests: pytest passing locally.
+- Scaffolding: legacy generate_test_template wrapper restored (deprecated; remove pre‑1.0).
+
+## 15) Remaining TODOs
+- Write docs pages: quickstart, api, patterns, troubleshooting, observability.
+- Add observability_demo example and snippet docs.
+- Strengthen pipeline_demo assertions for backpressure and coalesce behaviors.
+- Add docs snippet CI to validate code blocks.
+- Plan removal of legacy scaffolding alias before 1.0 and update tests/docs.

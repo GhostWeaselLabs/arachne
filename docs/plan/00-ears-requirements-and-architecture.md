@@ -34,6 +34,7 @@ Legend (EARS)
 1.3 Messaging, Types, and Ports
 - Ubiquitous: The system shall define Message with payload and headers (trace_id, timestamp, schema_version, content_type, …).
 - Ubiquitous: The system shall define PortSpec with name, schema/type, and overflow policy fields.
+- Ubiquitous: Edge validation shall apply to Message.payload (or raw value) against PortSpec.schema, not the Message container type.
 - Complex: Where a schema adapter (e.g., Pydantic) is present, the system shall validate payloads according to the provided model without adding a hard dependency.
 
 1.4 Edges, Capacity, and Overflow Policies

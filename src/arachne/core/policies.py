@@ -47,6 +47,24 @@ class Coalesce(Policy[object]):
         return PutResult.OK
 
 
+# Convenience factory functions expected by examples
+
+def block() -> Block:
+    return Block()
+
+
+def drop() -> Drop:
+    return Drop()
+
+
+def latest() -> Latest:
+    return Latest()
+
+
+def coalesce(fn: Callable[[object, object], object]) -> Coalesce:
+    return Coalesce(fn)
+
+
 class RetryPolicy(Enum):
     NONE = 0
     SIMPLE = 1

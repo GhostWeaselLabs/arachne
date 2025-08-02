@@ -107,11 +107,16 @@ def main() -> None:
     if not success:
         sys.exit(1)
 
-    print(f"Created subgraph: {Path(args.dir) / args.package.replace('.', '/') / (snake_case(args.name) + '.py')}")
+    created_path = Path(args.dir) / args.package.replace(".", "/") / (snake_case(args.name) + ".py")
+    print(f"Created subgraph: {created_path}")
     if args.include_tests:
-        print(
-            f"Created test: {(Path(args.dir).parent / 'tests' / 'integration' / ('test_' + snake_case(args.name) + '.py'))}"
+        test_created = (
+            Path(args.dir).parent
+            / "tests"
+            / "integration"
+            / ("test_" + snake_case(args.name) + ".py")
         )
+        print(f"Created test: {test_created}")
     print(f"Successfully generated {args.name} subgraph in {args.package}")
 
 

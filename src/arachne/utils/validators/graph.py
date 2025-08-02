@@ -2,16 +2,17 @@
 
 from __future__ import annotations
 
-from typing import Any
+# Import core types - will need to check these exist
+from typing import TYPE_CHECKING, Any as _Any, TypeAlias
 
 from .issue import Issue
 
-# Import core types - will need to check these exist
-try:
-    from arachne.core.subgraph import Subgraph
-except ImportError:
-    # Fallback for development/testing
-    Subgraph = Any
+if TYPE_CHECKING:
+    from arachne.core.subgraph import Subgraph as _Subgraph
+else:
+    _Subgraph = _Any  # type: ignore[assignment]
+
+Subgraph: TypeAlias = _Subgraph
 
 
 def validate_graph(subgraph: Subgraph) -> list[Issue]:
