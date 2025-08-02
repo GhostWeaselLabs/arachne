@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from arachne.core.policies import block, coalesce, latest
-from arachne.core.ports import PortSpec
+# Policies imported where used within nodes; no direct use in this module
+# PortSpec usage is encapsulated within node classes; not needed here
 from arachne.core.scheduler import Scheduler
 from arachne.core.subgraph import Subgraph
 

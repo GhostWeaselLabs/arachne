@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from arachne.core.policies import block
-from arachne.core.ports import PortSpec
 from arachne.core.scheduler import Scheduler
 from arachne.core.subgraph import Subgraph
 
@@ -18,8 +16,7 @@ def build_graph(max_count: int = 5) -> tuple[Subgraph, Consumer]:
     sg.add_node(producer)
     sg.add_node(consumer, name="consumer")
 
-    out_spec = PortSpec(name="output", schema=int)
-    in_spec = PortSpec(name="in", schema=int)
+    # Port specs are defined within node classes; explicit specs here are unnecessary
 
     # Connect producer->consumer with capacity and policy
     sg.connect(("producer", "output"), ("consumer", "in"), capacity=16)

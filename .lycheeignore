@@ -1,0 +1,41 @@
+# Common exclusions for lychee link checking
+# Lines are treated as regular expressions.
+
+# Ignore localhost and loopback addresses
+^http://localhost(?::\d+)?/
+^https://localhost(?::\d+)?/
+^http://127\.0\.0\.1(?::\d+)?/
+^https://127\.0\.0\.1(?::\d+)?/
+
+# Ignore mailto links
+^mailto:
+
+# Ignore badges and dynamic shields that can be rate-limited or transient
+^https://img\.shields\.io/
+^https://badgen\.net/
+^https://badge\.fury\.io/
+^https://coveralls\.io/
+^https://codecov\.io/
+
+# GitHub Actions and Pages transient URLs
+^https://github\.com/.*?/actions/.*
+^https://github\.com/.*?/workflows/.*
+^https://github\.io/.*/_.*
+
+# Allow optional anchors to be skipped if the target page exists but anchor may change
+# (Lychee treats anchors as part of the URL; we exclude anchors globally to reduce false positives)
+# Note: This is a heuristic; we still validate the page itself.
+# To disable anchor checking entirely, uncomment the next line:
+# \#.*
+
+# Ignore analytics and tracking placeholders (commented out in mkdocs.yml, but kept here for safety)
+^https://www\.google-analytics\.com/
+^https://www\.googletagmanager\.com/
+
+# Ignore mkdocs material theme asset references (resolved at build time)
+.*/assets/images/.*
+.*/assets/javascripts/.*
+.*/assets/stylesheets/.*
+
+# Ignore common rate-limited domains
+^https://api\.github\.com/

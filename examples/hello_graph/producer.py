@@ -22,14 +22,23 @@ class ProducerNode(Node):
         self.count_emitted = 0
         self._logger = get_logger()
         # define single output port "output"
-        self.outputs = [Port(name="output", direction=PortDirection.OUTPUT, spec=PortSpec("output", int))]
+        self.outputs = [
+            Port(
+                name="output",
+                direction=PortDirection.OUTPUT,
+                spec=PortSpec("output", int),
+            )
+        ]
 
     def on_start(self) -> None:
         super().on_start()
         with with_context(node=self.name):
             self._logger.info(
                 "producer.start",
-                f"Producer starting: will emit {self.max_count} values from {self.current_value}",
+                (
+                    f"Producer starting: will emit {self.max_count} "
+                    f"values from {self.current_value}"
+                ),
                 max_count=self.max_count,
                 start_value=self.current_value,
             )
@@ -38,11 +47,16 @@ class ProducerNode(Node):
         if self.count_emitted >= self.max_count:
             with with_context(node=self.name):
                 self._logger.debug(
-                    "producer.limit_reached", f"Reached emission limit ({self.max_count}), skipping tick"
+                    "producer.limit_reached",
+                    f"Reached emission limit ({self.max_count}), skipping tick",
                 )
             return
 
-        msg = Message(type=MessageType.DATA, payload=self.current_value, metadata={"sequence": self.count_emitted})
+        msg = Message(
+            type=MessageType.DATA,
+            payload=self.current_value,
+            metadata={"sequence": self.count_emitted},
+        )
         self.emit("output", msg)
 
         with with_context(node=self.name):
@@ -60,5 +74,7 @@ class ProducerNode(Node):
         super().on_stop()
         with with_context(node=self.name):
             self._logger.info(
-                "producer.stop", f"Producer stopping: emitted {self.count_emitted} values", total_emitted=self.count_emitted
+                "producer.stop",
+                f"Producer stopping: emitted {self.count_emitted} values",
+                total_emitted=self.count_emitted,
             )
