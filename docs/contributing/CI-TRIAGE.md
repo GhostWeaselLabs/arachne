@@ -57,7 +57,9 @@ General Triage Workflow
   - Snippets: mimic the job’s uv run invocation
   - Links: run lychee locally or verify URLs by hand; respect .lycheeignore
 
+```text
 3) Apply the smallest fix that unblocks CI
+```
 - Prefer a single focused commit.
 - Avoid speculative changes; let linters/type-checkers guide fixes.
 - If flakiness is external, add to .lycheeignore or apply limited retries with clear comments.
@@ -143,20 +145,32 @@ Temporary Relaxations and Deadlines
   - Be documented in the relevant file (workflow, pyproject) with a TODO and issue link.
   - Have a tracking issue with an explicit deadline to restore the target.
 
+```text
 Local Parity Quick Commands
+```
 - Setup:
   - uv lock (first time)
   - uv sync
+```text
 - Lint/Format:
+```
   - uv run ruff check .
   - uv run black --check .
+```text
 - Types:
+```
   - uv run mypy src
+```text
 - Tests:
+```
   - uv run pytest
+```text
 - Coverage (local view):
+```
   - uv run pytest --cov=src --cov-report=term-missing
+```text
 - Docs:
+```
   - pip install mkdocs mkdocs-material mkdocs-git-revision-date-localized-plugin
   - mkdocs build --strict
 
@@ -177,6 +191,8 @@ Cross-Reference
 - CONTRIBUTING.md: Setup, development workflow, pre-commit instructions.
 - M99 Plan: Status and acceptance criteria for docs and CI stabilization.
 
+```text
 Change Log (CI Triage Doc)
+```
 - 2025-01-01: Initial version documenting owners, triage flow, common fixes, and promotion policy for link-check.
 - 2025-01-02: Added “Appendix: Link-Check Triage (Simple)” with quick steps and minimal knobs.
