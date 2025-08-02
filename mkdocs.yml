@@ -1,6 +1,7 @@
 site_name: Arachne
 site_description: Minimal, reusable graph runtime for Python
 repo_url: https://github.com/GhostWeaselLabs/arachne
+site_url: https://ghostweasellabs.github.io/arachne/
 edit_uri: edit/main/
 theme:
   name: material
@@ -47,8 +48,8 @@ extra:
       name: Website
 plugins:
   - search
-  - sitemap:
-      url: https://ghostweasellabs.github.io/arachne/
+  # - sitemap:
+  #     url: https://ghostweasellabs.github.io/arachne/
   - git-revision-date-localized:
       enable_creation_date: true
       fallback_to_build_date: true
