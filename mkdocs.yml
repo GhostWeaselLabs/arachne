@@ -1,0 +1,23 @@
+site_name: Arachne
+site_description: Minimal, reusable graph runtime for Python
+repo_url: https://example.com/arachne.git
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - content.code.copy
+nav:
+  - Home: README.md
+  - Quickstart: docs/quickstart.md
+  - API: docs/api.md
+  - Patterns: docs/patterns.md
+  - Troubleshooting: docs/troubleshooting.md
+  - Observability: docs/observability.md
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
+plugins:
+  - search
