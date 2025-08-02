@@ -102,8 +102,25 @@ class SlowConsumer(Node):
         time.sleep(0.001)
         # Record type + payload
         typ = "CTRL" if msg.is_control() else ("ERR" if msg.is_error() else "DATA")
-        assert isinstance(msg.payload, int)
-        self.received.append((typ, msg.payload))
+
+        # The runtime wraps dequeued edge payloads into Message envelopes.
+        # When a node emits a CONTROL Message via Node.emit(), the payload enqueued is a Message,
+        # which then gets wrapped again by NodeProcessor at dequeue, resulting in a nested Message payload.
+        # Handle both shapes:
+        # - DATA edges: msg.payload is an int
+        # - CONTROL edge via emit(): msg.payload is a Message whose payload is int
+        payload_val: int
+        if msg.is_control() and isinstance(msg.payload, Message):
+            # Nested CONTROL message: extract inner payload and validate
+            inner = msg.payload
+            assert inner.is_control()
+            assert isinstance(inner.payload, int)
+            payload_val = inner.payload
+        else:
+            assert isinstance(msg.payload, int)
+            payload_val = msg.payload
+
+        self.received.append((typ, payload_val))
 
 
 @pytest.mark.integration
