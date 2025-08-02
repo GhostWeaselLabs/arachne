@@ -95,15 +95,15 @@ markdown_extensions:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/GhostWeaselLabs/arachne
+      link: https://github.com/GhostWeaselLabs/meridian-runtime
       name: GitHub
     - icon: fontawesome/solid/globe
-      link: https://ghostweasellabs.github.io/arachne/
+      link: https://ghostweasellabs.github.io/meridian-runtime/
       name: Website
 plugins:
   - search
   # - sitemap:
-  #     url: https://ghostweasellabs.github.io/arachne/
+  #     url: https://ghostweasellabs.github.io/meridian-runtime/
   - git-revision-date-localized:
       enable_creation_date: true
       fallback_to_build_date: true
