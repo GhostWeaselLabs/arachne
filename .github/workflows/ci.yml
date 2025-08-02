@@ -122,16 +122,41 @@ jobs:
       - name: Run example entrypoints (smoke)
         run: |
           set -euo pipefail
+          failed=0
+
           echo "Running hello_graph via module form..."
-          if ! uv run python -m examples.hello_graph.main; then
-            echo "::error::hello_graph failed when running as module (-m). Check examples/hello_graph/main.py for regressions."
+          if ! uv run python -m examples.hello_graph.main 2>&1 | tee hello_graph.log; then
+            echo "::error::hello_graph failed when running as module (-m). See hello_graph.log for traceback. Check examples/hello_graph/main.py for regressions."
+            failed=1
+          else
+            echo "hello_graph completed successfully."
+          fi
+
+          echo "Running pipeline_demo via module form..."
+          if ! uv run python -m examples.pipeline_demo.main 2>&1 | tee pipeline_demo.log; then
+            echo "::error::pipeline_demo failed when running as module (-m). See pipeline_demo.log for traceback. Check examples/pipeline_demo/main.py for regressions."
+            failed=1
+          else
+            echo "pipeline_demo completed successfully."
+          fi
+
+          echo "## Docs Snippet Smoke Summary" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f hello_graph.log ]; then
+            echo "### hello_graph (last 50 lines)" >> "$GITHUB_STEP_SUMMARY"
+            tail -n 50 hello_graph.log >> "$GITHUB_STEP_SUMMARY" || true
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -f pipeline_demo.log ]; then
+            echo "### pipeline_demo (last 50 lines)" >> "$GITHUB_STEP_SUMMARY"
+            tail -n 50 pipeline_demo.log >> "$GITHUB_STEP_SUMMARY" || true
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if [ "$failed" -ne 0 ]; then
+            echo "::error::One or more example smokes failed. See logs and step summary above."
             exit 1
           fi
-          echo "Running pipeline_demo via module form (import smoke)..."
-          if ! uv run python -m examples.pipeline_demo.main; then
-            echo "::error::pipeline_demo failed when running as module (-m). Check examples/pipeline_demo/main.py for regressions."
-            exit 1
-          fi
+
           echo "All docs snippet smokes completed successfully."
 
   docs-build:
