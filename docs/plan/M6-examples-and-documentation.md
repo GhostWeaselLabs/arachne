@@ -1,6 +1,6 @@
 # Milestone M6: Examples and Documentation (EARS-aligned)
 
-Status: Planned
+Status: In Progress
 Owner: Core Maintainers
 Duration: 3–5 days
 Branch: feature/m6-examples-docs
@@ -63,12 +63,12 @@ Deliver runnable, composable examples and concise documentation that demonstrate
 - One node class per file; helpers local or shared; avoid duplication across examples.
 
 ## 6) Example Checklist
-- [ ] Files ≤ ~200 LOC; SRP respected.
-- [ ] Docstring with purpose, ports, capacities, policies, priorities.
-- [ ] uv run command included and tested.
-- [ ] Validation errors are clear if miswired.
+- [x] Files ≤ ~200 LOC; SRP respected.
+- [x] Docstring with purpose, ports, capacities, policies, priorities.
+- [x] uv run command included and tested.
+- [ ] Validation errors are clear if miswired (expand troubleshooting examples).
 - [ ] Metrics/logs visible (no‑op safe); tracing guarded by optional deps.
-- [ ] Smoke tests in CI.
+- [x] Smoke tests in CI.
 
 ## 7) Commands
 Quickstart
@@ -122,15 +122,17 @@ Optional observability
 
 ## 11) Testing and Acceptance
 Docs lint and snippets
-- Validate code blocks/snippets compile/run in CI.
+- [ ] Validate code blocks/snippets compile/run in CI.
 
 Example smoke tests
-- hello_graph: run and assert N outputs observed.
-- pipeline_demo: assert backpressure (drops/coalesces), priority preemption, graceful shutdown.
-- observability_demo: metrics counters increment; tracing path does not error when disabled.
+- [x] hello_graph: run and assert N outputs observed.
+- [x] pipeline_demo: basic smoke runs; backpressure path sketched; refine assertions next.
+- [ ] observability_demo: metrics counters increment; tracing path does not error when disabled.
 
 CI acceptance
-- Examples run via uv on clean clone; snippet checks pass; coverage impact acceptable.
+- [x] Examples run via uv on clean clone.
+- [ ] Snippet checks pass.
+- [x] Coverage impact acceptable.
 
 ## 12) Git Workflow
 - git checkout -b feature/m6-examples-docs
@@ -139,3 +141,17 @@ CI acceptance
 ## 13) Traceability
 - Aligns with M0 governance (SRP/DRY, small modules, docs‑as‑product).
 - Implements EARS master for examples, policies, scheduler priorities, and observability.
+
+## 14) Current Status Summary
+- Examples: hello_graph and pipeline_demo stubs implemented and runnable.
+- Typing: mypy strict pass across src/; optional pydantic guarded.
+- Lint: ruff clean (auto‑fixed).
+- Tests: pytest passing locally.
+- Scaffolding: legacy generate_test_template wrapper restored (deprecated; remove pre‑1.0).
+
+## 15) Remaining TODOs
+- Write docs pages: quickstart, api, patterns, troubleshooting, observability.
+- Add observability_demo example and snippet docs.
+- Strengthen pipeline_demo assertions for backpressure and coalesce behaviors.
+- Add docs snippet CI to validate code blocks.
+- Plan removal of legacy scaffolding alias before 1.0 and update tests/docs.
