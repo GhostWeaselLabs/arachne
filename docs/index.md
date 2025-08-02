@@ -1,3 +1,5 @@
+<!-- CI trigger: harmless comment to regenerate logs for link-check dry run -->
+
 # Meridian Runtime
 
 Minimal, reusable graph runtime for Python. Build real-time, observable dataflows from small, single‑responsibility nodes connected by typed, bounded edges.
