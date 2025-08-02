@@ -1,0 +1,63 @@
+version: 2
+updates:
+  # Keep GitHub Actions up to date
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "03:00"
+      timezone: "UTC"
+    commit-message:
+      prefix: "ci(actions)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "ci"
+    reviewers: []
+    assignees: []
+    open-pull-requests-limit: 5
+
+  # Keep Python packages up to date (project dependencies via uv/pip)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "03:15"
+      timezone: "UTC"
+    # If using requirements*.txt, Dependabot will parse them automatically.
+    # If using pyproject.toml/uv, Dependabot currently reads pinned versions from lock files if present.
+    commit-message:
+      prefix: "deps(python)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "python"
+    reviewers: []
+    assignees: []
+    versioning-strategy: increase-if-necessary
+    open-pull-requests-limit: 5
+
+  # Keep Python packages up to date for documentation build (MkDocs)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "03:30"
+      timezone: "UTC"
+    allow:
+      # Limit to docs-related packages to reduce churn
+      - dependency-name: "mkdocs"
+      - dependency-name: "mkdocs-material"
+      - dependency-name: "mkdocs-git-revision-date-localized-plugin"
+    commit-message:
+      prefix: "deps(docs)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "docs"
+    reviewers: []
+    assignees: []
+    open-pull-requests-limit: 3

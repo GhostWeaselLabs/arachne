@@ -44,18 +44,21 @@ repos:
   - repo: local
     hooks:
       - id: docs-no-bare-fences
-        name: docs: no bare code fences
-        entry: bash -c "grep -RIn --exclude-dir=site --exclude-dir=.git -E '^```[[:space:]]*$' docs && echo 'ERROR: Bare code fence without language in docs/' 1>&2 && exit 1 || true"
+        name: "docs: no bare code fences"
+        entry: |
+          bash -c 'grep -RIn --exclude-dir=site --exclude-dir=.git -E "^```[[:space:]]*$" docs && echo "ERROR: Bare code fence without language in docs/" 1>&2 && exit 1 || true'
         language: system
         files: ^docs/.*\.md$
       - id: docs-no-triple-dash
         name: "docs: forbid --- visual separators"
-        entry: bash -c "grep -RIn --exclude-dir=site --exclude-dir=.git -E '^[[:space:]]*---[[:space:]]*$' docs && echo 'ERROR: Use *** or <hr> instead of --- in docs/' 1>&2 && exit 1 || true"
+        entry: |
+          bash -c 'grep -RIn --exclude-dir=site --exclude-dir=.git -E "^[[:space:]]*---[[:space:]]*$" docs && echo "ERROR: Use *** or <hr> instead of --- in docs/" 1>&2 && exit 1 || true'
         language: system
         files: ^docs/.*\.md$
       - id: docs-lychee-internal
-        name: docs: link check (internal only)
-        entry: bash -c "lychee --no-progress --accept 200,206 --exclude-all-private --exclude-mail --include-fragments --scheme file --fail docs || exit 0"
+        name: "docs: link check (internal only)"
+        entry: |
+          bash -c 'lychee --no-progress --accept 200,206 --exclude-all-private --exclude-mail --include-fragments --scheme file --fail docs || exit 0'
         language: system
         files: ^docs/.*\.md$
         additional_dependencies: []
@@ -63,7 +66,6 @@ repos:
 # Speed: run only on changed files by default; full repo scan via:
 #   pre-commit run --all-files
 default_stages: [commit, push]
-
 # Local convenience aliases (optional):
 #   pre-commit install
 #   pre-commit install --hook-type pre-push
