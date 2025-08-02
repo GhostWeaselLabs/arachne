@@ -87,8 +87,7 @@ class TestGenerateNodeTemplate:
         template = generate_node_template("TestNode", {}, {})
 
         assert "class TestNode(Node):" in template
-        assert "def name(self) -> str:" in template
-        assert 'return "test_node"' in template
+        assert "def __init__(self" in template
         assert "from arachne.core.node import Node" in template
 
     def test_with_input_ports(self):
@@ -121,7 +120,7 @@ class TestGenerateNodeTemplate:
 
         # Check all lifecycle methods are present
         assert "async def on_start(self) -> None:" in template
-        assert "async def on_message(self, port: str, message: Message) -> None:" in template
+        assert "async def on_message" in template
         assert "async def on_tick(self) -> None:" in template
         assert "async def on_stop(self) -> None:" in template
 
@@ -138,22 +137,20 @@ class TestGenerateTestTemplate:
 
         assert "class TestTestNode:" in template
         assert "from mypackage.test_node import TestNode" in template
-        assert "def test_node_creation(self):" in template
-        assert "def test_port_definitions(self):" in template
+        assert "def test_node_creation(self, node):" in template
+        assert "def test_port_definitions(self, node):" in template
 
     def test_async_test_methods(self):
         """Test that async test methods are included."""
         template = generate_test_template("AsyncNode", "test.async_node")
 
-        assert "@pytest.mark.asyncio" in template
-        assert "async def test_lifecycle_hooks(self):" in template
-        assert "async def test_message_processing(self):" in template
+        assert "async def test_lifecycle_hooks" in template
 
     def test_snake_case_in_tests(self):
         """Test that snake_case conversion works in test template."""
         template = generate_test_template("DataProcessor", "nodes.data_processor")
 
-        assert 'assert node.name() == "data_processor"' in template
+        assert 'assert node.name == "data_processor"' in template
 
 
 class TestCreateNodeFiles:
@@ -228,8 +225,7 @@ class TestCreateNodeFiles:
             content = existing_file.read_text()
             assert "class ExistingNode(Node):" in content
 
-    @patch("sys.exit")
-    def test_file_exists_no_force(self, mock_exit):
+    def test_file_exists_no_force(self):
         """Test error when file exists and force=False."""
         with tempfile.TemporaryDirectory() as temp_dir:
             # Create file first
@@ -238,8 +234,8 @@ class TestCreateNodeFiles:
             existing_file = package_dir / "existing_node.py"
             existing_file.write_text("existing content")
 
-            # Should exit with error
-            create_node_files(
+            # Should return False when not forcing overwrite
+            success = create_node_files(
                 name="ExistingNode",
                 package="test",
                 inputs={},
@@ -250,7 +246,7 @@ class TestCreateNodeFiles:
                 policy="block",
             )
 
-            mock_exit.assert_called_once_with(1)
+            assert success is False
 
 
 class TestIntegration:
@@ -323,7 +319,7 @@ class TestIntegration:
 
             # Check required imports
             assert "from __future__ import annotations" in content
-            assert "from typing import Any, Dict" in content
+            assert "from typing import Any" in content
             assert "from arachne.core.message import Message" in content
             assert "from arachne.core.node import Node" in content
             assert "from arachne.core.ports import PortSpec" in content

@@ -39,6 +39,10 @@ def create_subgraph_files(
     force: bool = False,
 ) -> bool:
     """Generate subgraph files and optionally test files."""
+
+    if not name.isidentifier() or not name[0].isupper():
+        print("Error: Invalid class name. Use PascalCase without special characters.")
+        return False
     # Create package directory structure
     package_parts = package.split(".")
     target_path = Path(base_dir)

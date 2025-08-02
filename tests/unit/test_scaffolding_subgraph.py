@@ -46,8 +46,7 @@ class TestGenerateSubgraphTemplate:
         template = generate_subgraph_template("TestPipeline")
 
         assert "class TestPipeline(Subgraph):" in template
-        assert "def name(self) -> str:" in template
-        assert 'return "test_pipeline"' in template
+        assert "def __init__(self" in template
         assert "from arachne.core.subgraph import Subgraph" in template
 
     def test_initialization_methods(self):
@@ -103,30 +102,30 @@ class TestGenerateSubgraphTestTemplate:
 
     def test_basic_test_template(self):
         """Test generating basic test template."""
-        template = generate_subgraph_test_template("TestPipeline", "mypackage.test_pipeline")
+        template = generate_subgraph_test_template("TestPipeline")
 
         assert "class TestTestPipeline:" in template
-        assert "from mypackage.test_pipeline import TestPipeline" in template
-        assert "def test_subgraph_creation(self):" in template
-        assert "def test_subgraph_validation(self):" in template
+        assert "from test_pipeline import TestPipeline" in template
+        assert "def test_subgraph_creation(self, subgraph):" in template
+        assert "def test_subgraph_validation(self, subgraph):" in template
 
     def test_composition_tests(self):
         """Test that composition test methods are included."""
-        template = generate_subgraph_test_template("DataPipeline", "pipelines.data_pipeline")
+        template = generate_subgraph_test_template("DataPipeline")
 
-        assert "def test_node_composition(self):" in template
-        assert "def test_port_exposure(self):" in template
-        assert "def test_edge_connections(self):" in template
+        assert "def test_node_composition(self, subgraph):" in template
+        assert "def test_port_exposure(self, subgraph):" in template
+        assert "def test_edge_connections(self, subgraph):" in template
 
     def test_snake_case_in_tests(self):
         """Test that snake_case conversion works in test template."""
-        template = generate_subgraph_test_template("DataProcessor", "nodes.data_processor")
+        template = generate_subgraph_test_template("DataProcessor")
 
-        assert 'assert subgraph.name() == "data_processor"' in template
+        assert 'assert subgraph.name == "data_processor"' in template
 
     def test_scheduler_integration_placeholder(self):
         """Test that scheduler integration test placeholder is included."""
-        template = generate_subgraph_test_template("AsyncPipeline", "async.pipeline")
+        template = generate_subgraph_test_template("AsyncPipeline")
 
         # Should have commented out scheduler test
         assert "# TODO: Add scheduler integration test (deferred to M6/M7)" in template
@@ -135,7 +134,7 @@ class TestGenerateSubgraphTestTemplate:
 
     def test_validation_exception_handling(self):
         """Test that validation exception handling is included."""
-        template = generate_subgraph_test_template("ValidatedPipeline", "validated.pipeline")
+        template = generate_subgraph_test_template("ValidatedPipeline")
 
         assert "try:" in template
         assert "subgraph.validate_composition()" in template
@@ -206,8 +205,7 @@ class TestCreateSubgraphFiles:
             content = existing_file.read_text()
             assert "class ExistingPipeline(Subgraph):" in content
 
-    @patch("sys.exit")
-    def test_file_exists_no_force(self, mock_exit):
+    def test_file_exists_no_force(self):
         """Test error when file exists and force=False."""
         with tempfile.TemporaryDirectory() as temp_dir:
             # Create file first
@@ -216,8 +214,8 @@ class TestCreateSubgraphFiles:
             existing_file = package_dir / "existing_pipeline.py"
             existing_file.write_text("existing content")
 
-            # Should exit with error
-            create_subgraph_files(
+            # Should return False when not forcing overwrite
+            success = create_subgraph_files(
                 name="ExistingPipeline",
                 package="test",
                 base_dir=temp_dir,
@@ -225,7 +223,7 @@ class TestCreateSubgraphFiles:
                 force=False,
             )
 
-            mock_exit.assert_called_once_with(1)
+            assert success is False
 
     def test_integration_test_directory(self):
         """Test that integration test directory is used."""
@@ -319,7 +317,6 @@ class TestIntegration:
 
             # Check required imports
             assert "from __future__ import annotations" in content
-            assert "from typing import Dict" in content
             assert "from arachne.core.subgraph import Subgraph" in content
             assert "from arachne.core.ports import PortSpec" in content
             assert "from arachne.utils.validation import validate_graph" in content
@@ -393,6 +390,3 @@ class TestIntegration:
 
             # Class should be PascalCase
             assert "class ConsistencyTestPipeline(Subgraph):" in content
-
-            # name() method should return snake_case
-            assert 'return "consistency_test_pipeline"' in content

@@ -21,7 +21,7 @@ from .parsers.ports import snake_case  # re-export for tests
 
 def create_directories(target_path: Path) -> None:
     """Create necessary directories for the target path."""
-    target_path.parent.mkdir(parents=True, exist_ok=True)
+    target_path.mkdir(parents=True, exist_ok=True)
 
 
 def write_file(path: Path, content: str, force: bool = False) -> bool:
@@ -47,6 +47,10 @@ def create_node_files(
     policy: str | None = None,
 ) -> bool:
     """Generate node files and optionally test files."""
+
+    if not name.isidentifier() or not name[0].isupper():
+        print("Error: Invalid class name. Use PascalCase without special characters.")
+        return False
     # Create package directory structure
     package_parts = package.split(".")
     package_dir = Path(base_dir)
@@ -64,9 +68,9 @@ def create_node_files(
             init_file.write_text('"""Package initialization."""\n')
 
     # Generate node file
-    node_filename = f"{name.lower()}.py"
+    node_filename = f"{snake_case(name)}.py"
     node_path = package_dir / node_filename
-    node_content = generate_node_template(name, inputs, outputs)
+    node_content = generate_node_template(name, inputs, outputs, policy)
 
     if not write_file(node_path, node_content, force):
         return False
@@ -76,7 +80,7 @@ def create_node_files(
         test_dir = Path(base_dir).parent / "tests" / "unit"
         test_dir.mkdir(parents=True, exist_ok=True)
 
-        test_filename = f"test_{name.lower()}.py"
+        test_filename = f"test_{snake_case(name)}.py"
         test_path = test_dir / test_filename
         test_content = generate_node_test_template(name, inputs, outputs)
 
@@ -96,6 +100,7 @@ def main() -> None:
     parser.add_argument("--dir", default="src/arachne", help="Target directory")
     parser.add_argument("--force", action="store_true", help="Overwrite existing files")
     parser.add_argument("--include-tests", action="store_true", help="Generate test files")
+    parser.add_argument("--policy", default=None, help="Default overflow policy")
 
     args = parser.parse_args()
 
@@ -117,11 +122,17 @@ def main() -> None:
         base_dir=args.dir,
         include_tests=args.include_tests,
         force=args.force,
+        policy=args.policy,
     )
 
     if not success:
         sys.exit(1)
 
+    node_path = Path(args.dir) / args.package.replace('.', '/') / f"{snake_case(args.name)}.py"
+    print(f"Created node: {node_path}")
+    if args.include_tests:
+        test_path = Path(args.dir).parent / "tests" / "unit" / f"test_{snake_case(args.name)}.py"
+        print(f"Created test: {test_path}")
     print(f"Successfully generated {args.name} node in {args.package}")
 
 
