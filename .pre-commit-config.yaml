@@ -46,10 +46,10 @@ repos:
       - id: docs-no-bare-fences
         name: docs: no bare code fences
         entry: |
-          bash -c '
-            if grep -RIn --exclude-dir=site --exclude-dir=.git -E "^```\\s*$" docs; then
-              echo "ERROR: Bare code fence without language in docs/";
-              exit 1;
+          bash -eu -c '
+            if grep -RIn --exclude-dir=site --exclude-dir=.git -E "^```[[:space:]]*$" docs; then
+              echo "ERROR: Bare code fence without language in docs/" 1>&2
+              exit 1
             fi
           '
         language: system
@@ -57,10 +57,10 @@ repos:
       - id: docs-no-triple-dash
         name: docs: forbid '---' visual separators
         entry: |
-          bash -c '
+          bash -eu -c '
             if grep -RIn --exclude-dir=site --exclude-dir=.git -E "^[[:space:]]*---[[:space:]]*$" docs; then
-              echo "ERROR: Use *** or <hr> instead of --- in docs/";
-              exit 1;
+              echo "ERROR: Use *** or <hr> instead of --- in docs/" 1>&2
+              exit 1
             fi
           '
         language: system
@@ -68,7 +68,7 @@ repos:
       - id: docs-lychee-internal
         name: docs: link check (internal only)
         entry: |
-          bash -c '
+          bash -eu -c '
             lychee --no-progress --accept 200,206 --exclude-all-private --exclude-mail --include-fragments --scheme file --fail docs || exit 1
           '
         language: system
