@@ -107,6 +107,22 @@ Link Checker (lychee)
   - Prefer local links that work in both GitHub and MkDocs (e.g., ./quickstart.md).
   - Avoid ../docs patterns in page bodies.
 
+Appendix: Link-Check Triage (Simple)
+- Goal: Fix or quarantine broken links quickly with minimal knobs.
+- Quick Steps:
+  1) Open “Check links (lychee)” job → read the step summary.
+  2) If the URL is yours (docs/internal): fix the link or heading/anchor; keep it relative (./page.md#anchor).
+  3) If the URL is external and flaky: add a precise pattern to .lycheeignore with a short comment (why it flakes).
+  4) Re-run CI. If still failing, raise a small PR with the fix and link to the failing log.
+- Minimal Knobs:
+  - Prefer editing the broken URL over changing lychee args.
+  - Only ignore domains you don’t control and that are consistently flaky.
+  - Keep ignores specific (domain + path if possible), not broad wildcards.
+- Local check:
+  - lychee --no-progress --include-fragments --exclude-file .lycheeignore docs .
+- Done when:
+  - CI is green and the link works locally (or is narrowly ignored with justification).
+
 Caching and Concurrency
 - Caching
   - actions/setup-python with cache: "pip" is enabled.
@@ -163,3 +179,4 @@ Cross-Reference
 
 Change Log (CI Triage Doc)
 - 2025-01-01: Initial version documenting owners, triage flow, common fixes, and promotion policy for link-check.
+- 2025-01-02: Added “Appendix: Link-Check Triage (Simple)” with quick steps and minimal knobs.

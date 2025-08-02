@@ -142,13 +142,13 @@ jobs:
 
           echo "## Docs Snippet Smoke Summary" >> "$GITHUB_STEP_SUMMARY"
           if [ -f hello_graph.log ]; then
-            echo "### hello_graph (last 50 lines)" >> "$GITHUB_STEP_SUMMARY"
-            tail -n 50 hello_graph.log >> "$GITHUB_STEP_SUMMARY" || true
+            echo "### hello_graph (last 100 lines)" >> "$GITHUB_STEP_SUMMARY"
+            tail -n 100 hello_graph.log >> "$GITHUB_STEP_SUMMARY" || true
             echo "" >> "$GITHUB_STEP_SUMMARY"
           fi
           if [ -f pipeline_demo.log ]; then
-            echo "### pipeline_demo (last 50 lines)" >> "$GITHUB_STEP_SUMMARY"
-            tail -n 50 pipeline_demo.log >> "$GITHUB_STEP_SUMMARY" || true
+            echo "### pipeline_demo (last 100 lines)" >> "$GITHUB_STEP_SUMMARY"
+            tail -n 100 pipeline_demo.log >> "$GITHUB_STEP_SUMMARY" || true
             echo "" >> "$GITHUB_STEP_SUMMARY"
           fi
 
@@ -178,7 +178,6 @@ jobs:
 
   link-check:
     name: Check links (lychee)
-    # Note: kept non-blocking while stabilizing (monitor for 3–5 green runs, then make required)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -208,9 +207,10 @@ jobs:
             --no-progress
             --accept 200,206,429
             --max-redirects 5
-            --timeout 20
-            --retry-wait-time 2
-            --max-retries 2
+            --timeout 25
+            --retry-wait-time 3
+            --max-retries 3
+            --include-fragments
             --exclude-all-private
             --exclude-file .lycheeignore
             --scheme https
@@ -235,17 +235,17 @@ jobs:
         run: |
           echo "## Link Check Summary" >> $GITHUB_STEP_SUMMARY
           if [ -f lychee-report.md ]; then
-            bad_count=$(grep -cE '^.*(Error|BROKEN).*' lychee-report.md || true)
+            bad_count=$(grep -cE '^.*(Error|BROKEN|404|Anchor not found).*' lychee-report.md || true)
             echo "- Broken link count (approx): ${bad_count}" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "### First 50 lines of report" >> $GITHUB_STEP_SUMMARY
-            head -n 50 lychee-report.md >> $GITHUB_STEP_SUMMARY
+            echo "### First 100 lines of report" >> $GITHUB_STEP_SUMMARY
+            head -n 100 lychee-report.md >> $GITHUB_STEP_SUMMARY
           else
             echo "- Report file not found (lychee may have failed before writing output)" >> $GITHUB_STEP_SUMMARY
           fi
 
       - name: Fail if lychee reported issues
-        if: ${{ failure() }}
+        if: ${{ steps.lychee.outcome == 'failure' }}
         run: |
           echo "::error::Link-check failed. See lychee output above, the lychee-report artifact, and the summary for details."
           exit 1
