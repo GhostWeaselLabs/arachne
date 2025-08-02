@@ -2,6 +2,10 @@
 
 Owner: GhostWeasel (Lead: doubletap-dave)
 
+[![CI](https://github.com/GhostWeaselLabs/arachne/actions/workflows/ci.yml/badge.svg)](https://github.com/GhostWeaselLabs/arachne/actions/workflows/ci.yml)
+[![Docs](https://img.shields.io/badge/docs-site-brightgreen)](https://ghostweasellabs.github.io/arachne/)
+[![Docs Deploy](https://github.com/GhostWeaselLabs/arachne/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/GhostWeaselLabs/arachne/actions/workflows/gh-pages.yml)
+
 Arachne is a lightweight, framework-agnostic graph runtime for building real‑time dataflows in Python. Model your application as small, single‑responsibility nodes connected by typed edges with bounded queues. Arachne’s scheduler enforces backpressure, supports control‑plane priorities (e.g., kill switch), and emits rich observability signals by design.
 
 Key features
@@ -20,18 +24,19 @@ Use cases
 
 ---
 
-## Documentation Map
+## Documentation
 
-- Governance and Overview (M0): docs/plan/M0-governance-and-overview.md
-- Post‑v1 Roadmap: docs/plan/99-post-v1-roadmap.md
-- Contributing Guide: docs/contributing/CONTRIBUTING.md
-- Releasing Guide: docs/contributing/RELEASING.md
-- How to Report Issues: docs/support/HOW-TO-REPORT-ISSUES.md
-- Troubleshooting: docs/support/TROUBLESHOOTING.md
-- Issue Templates:
-  - General: docs/support/templates/ISSUE_TEMPLATE.md
-  - Bug Report: docs/support/templates/BUG_REPORT.md
-  - Feature Request: docs/support/templates/FEATURE_REQUEST.md
+- Site: https://ghostweasellabs.github.io/arachne/ — Deployed via GitHub Pages (source: GitHub Actions)
+- Repo: https://github.com/GhostWeaselLabs/arachne
+- Quickstart: https://ghostweasellabs.github.io/arachne/docs/quickstart/
+- API: https://ghostweasellabs.github.io/arachne/docs/api/
+- Patterns: https://ghostweasellabs.github.io/arachne/docs/patterns/
+- Observability: https://ghostweasellabs.github.io/arachne/docs/observability/
+- Troubleshooting: https://ghostweasellabs.github.io/arachne/docs/troubleshooting/
+- Note: Analytics is enabled for the docs site; see mkdocs.yml for the tracking configuration.
+
+
+
 
 ## Quickstart
 
@@ -60,10 +65,9 @@ uv run mypy src
 uv run pytest
 ```
 
-3) Run an example (placeholder)
+3) Run an example
 ```
-# Examples will be added in later milestones; the package scaffolding is present.
-# For now, integration tests include a minimal smoke scenario.
+uv run python -m examples.hello_graph.main
 ```
 
 4) Project layout (M1 scaffold)

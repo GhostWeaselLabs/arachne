@@ -1,14 +1,32 @@
 site_name: Arachne
 site_description: Minimal, reusable graph runtime for Python
-repo_url: https://example.com/arachne.git
+repo_url: https://github.com/GhostWeaselLabs/arachne
+edit_uri: edit/main/
 theme:
   name: material
   features:
     - navigation.instant
     - navigation.tracking
     - content.code.copy
+    - navigation.tabs
+    - navigation.top
+    - content.action.edit
+    - content.action.view
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
 nav:
-  - Home: README.md
+  - Home: docs/index.md
   - Quickstart: docs/quickstart.md
   - API: docs/api.md
   - Patterns: docs/patterns.md
@@ -19,5 +37,22 @@ markdown_extensions:
   - codehilite
   - toc:
       permalink: true
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/GhostWeaselLabs/arachne
+      name: GitHub
+    - icon: fontawesome/solid/globe
+      link: https://ghostweasellabs.github.io/arachne/
+      name: Website
 plugins:
   - search
+  - sitemap:
+      url: https://ghostweasellabs.github.io/arachne/
+  - git-revision-date-localized:
+      enable_creation_date: true
+      fallback_to_build_date: true
+      type: timeago
+  # - google-analytics:
+  #     tracking_id: UA-XXXXXXXXX-X
+  #     anonymize_ip: true
