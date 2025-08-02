@@ -1,4 +1,4 @@
-# Arachne Bug Report Template (Privacy‑First)
+# Meridian Runtime Bug Report Template (Privacy‑First)
 # Owner: GhostWeasel (Lead: doubletap-dave)
 # Purpose: Help you file actionable bug reports while protecting sensitive data.
 
@@ -9,7 +9,7 @@
 <!-- Do NOT include secrets, tokens, or PII. -->
 - OS: (e.g., macOS 14.5 / Ubuntu 22.04 / Windows 11)
 - Python: 3.11.x
-- Arachne: x.y.z
+- Meridian: x.y.z
 - Install/Tooling: (e.g., uv version, ruff/mypy/pytest versions)
 - How installed: (pip/uv/source)
 

@@ -4,7 +4,7 @@ Owner: GhostWeasel (Lead: doubletap-dave)
 Audience: Users and contributors
 Status: Stable
 
-This guide explains how to file effective bug reports and feature requests for Arachne while protecting sensitive information. It provides step‑by‑step instructions, redaction guidance, and copy‑paste templates.
+This guide explains how to file effective bug reports and feature requests for Meridian Runtime while protecting sensitive information. It provides step‑by‑step instructions, redaction guidance, and copy‑paste templates.
 
 Key principles
 - Safety by default: avoid sharing secrets, tokens, PII, or domain data payloads.
@@ -33,7 +33,7 @@ Key principles
 
 Required
 - Summary: 1–3 sentences describing the issue or request.
-- Environment: OS, Python version (3.11+), Arachne version.
+- Environment: OS, Python version (3.11+), Meridian version.
 - Reproduction: clear steps and minimal, anonymized example (no payload contents).
 - Observed vs Expected: what happened vs what you expected.
 - Logs/errors (redacted): structured logs or error messages with sensitive data removed.
@@ -69,14 +69,14 @@ Best practices:
 
 4) Optional: Diagnostics Bundle (Planned CLI)
 
-Planned command: arachne diagnostics collect
+Planned command: meridian diagnostics collect
 - Purpose: gather anonymized runtime metadata, environment info, config checksums, recent logs, and a redacted graph/scheduler snapshot.
 - Default posture: privacy‑first. Payload contents are not included by default; sensitive fields are scrubbed.
 - Output: a timestamped archive that you can attach to your issue.
 
 Until the CLI is available:
 - Provide a manual bundle with:
-  - Environment: OS, Python, Arachne version.
+  - Environment: OS, Python, Meridian version.
   - Graph topology snapshot: node/edge counts, edge bounds and overflow policy (no payload schemas required).
   - Logs: last 200–500 lines of structured logs, redacted.
   - Config: relevant settings as key names and boolean/enum values; omit secrets or replace with CHECKSUM(...) if you need to show distinct values without exposing them.
@@ -95,7 +95,7 @@ A concise summary of the problem (1–3 sentences).
 Environment
 - OS: macOS/Linux/Windows (version)
 - Python: 3.11.x
-- Arachne: x.y.z
+- Meridian: x.y.z
 - Install/Tooling: uv version (if applicable)
 
 Reproduction Steps
@@ -196,10 +196,10 @@ A: The project is designed to avoid the need for sensitive data. We strongly pre
 10) Quick Checklist
 
 - [ ] Read TROUBLESHOOTING and search existing issues
-- [ ] Collected environment details (OS, Python, Arachne version)
+- [ ] Collected environment details (OS, Python, Meridian version)
 - [ ] Prepared minimal, sanitized reproduction
 - [ ] Redacted logs and configs (no secrets, no payload contents)
 - [ ] Wrote clear observed vs expected behavior
 - [ ] Attached optional sanitized diagnostics bundle (manual for now)
 
-Thank you for helping improve Arachne while keeping your data safe.
+Thank you for helping improve Meridian Runtime while keeping your data safe.

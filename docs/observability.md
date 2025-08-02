@@ -16,8 +16,8 @@ Enable
 
 Example: enable metrics (if a Prometheus adapter is available)
 ```python
-from arachne.observability.metrics import configure_metrics, PrometheusMetrics
+from meridian.observability.metrics import configure_metrics, PrometheusMetrics
 
 # Create and register a metrics backend (noop by default if not configured)
-configure_metrics(PrometheusMetrics(namespace="arachne"))
+configure_metrics(PrometheusMetrics(namespace="meridian"))
 ```

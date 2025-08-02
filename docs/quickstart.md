@@ -7,7 +7,7 @@ Prerequisites
 Clone and setup
 ```bash
 git clone <repo-url>
-cd Arachne
+cd meridian-runtime
 uv lock
 uv sync
 ```
@@ -20,7 +20,7 @@ uv run python -m examples.pipeline_demo.main
 
 Author your first node
 ```python
-from arachne.core import Node, Message
+from meridian.core import Node, Message
 
 class Printer(Node):
     def __init__(self):
@@ -31,8 +31,8 @@ class Printer(Node):
 
 Wire a subgraph and run
 ```python
-from arachne.core import Subgraph, Scheduler, Message, MessageType, Node
-from arachne.core.ports import Port, PortDirection, PortSpec
+from meridian.core import Subgraph, Scheduler, Message, MessageType, Node
+from meridian.core.ports import Port, PortDirection, PortSpec
 
 class Producer(Node):
     def __init__(self):

@@ -1,10 +1,10 @@
-# Arachne Troubleshooting Guide (Privacy‑First)
+# Meridian Runtime Troubleshooting Guide (Privacy‑First)
 
 Owner: GhostWeasel (Lead: doubletap-dave)
 Audience: Users and contributors
 Status: Stable
 
-This guide helps you diagnose common issues with the Arachne runtime while protecting sensitive information. It emphasizes minimal, reproducible steps and privacy‑respecting artifacts.
+This guide helps you diagnose common issues with the Meridian runtime while protecting sensitive information. It emphasizes minimal, reproducible steps and privacy‑respecting artifacts.
 
 Key principles
 - Keep it minimal: reduce to the smallest failing example.
@@ -17,7 +17,7 @@ Key principles
 
 - [ ] Verify environment
   - Python 3.11+, toolchain installed as documented.
-  - Arachne version and dependency versions noted.
+  - Meridian version and dependency versions noted.
 - [ ] Reproduce with a minimal example
   - Simplify the graph: few nodes, clear edge bounds/policies.
   - Replace real data with dummy values; remove payload contents.
@@ -202,7 +202,7 @@ Example structure (sanitized, conceptual)
 4) Safe Artifacts for Triage
 
 - Environment
-  - OS, Python, Arachne versions; tooling versions.
+  - OS, Python, Meridian versions; tooling versions.
 - Graph topology snapshot
   - Node/edge names, bounds, policies; no payload schemas required.
 - Logs (redacted)

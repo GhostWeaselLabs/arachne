@@ -1,15 +1,15 @@
-# Arachne
+# Meridian Runtime
 
 Minimal, reusable graph runtime for Python. Build real-time, observable dataflows from small, single‑responsibility nodes connected by typed, bounded edges.
 
-Arachne gives you:
+Meridian gives you:
 - A tiny, composable runtime (nodes, edges, subgraphs, scheduler)
 - Backpressure by default with configurable overflow policies
 - Control‑plane priorities (e.g., kill switch) for predictable behavior under load
 - First‑class observability (structured logs, metrics, trace hooks)
 - A clean, SRP/DRY‑friendly codebase
 
-Get the source: https://github.com/GhostWeaselLabs/arachne
+Get the source: https://github.com/GhostWeaselLabs/meridian-runtime
 
 For an overview of how this documentation is organized, see About these docs: ./ABOUT.md
 
@@ -90,7 +90,7 @@ Contribute and plan:
 ## Example layout
 
 ```text
-src/arachne/
+src/meridian/
   core/           # nodes, edges, subgraphs, scheduler
   observability/  # logs, metrics, tracing hooks
   utils/          # shared utilities
@@ -115,8 +115,8 @@ tests/
 
 ## Links
 
-- Repo: https://github.com/GhostWeaselLabs/arachne
-- Issues: https://github.com/GhostWeaselLabs/arachne/issues
-- Discussions: https://github.com/GhostWeaselLabs/arachne/discussions
+- Repo: https://github.com/GhostWeaselLabs/meridian-runtime
+- Issues: https://github.com/GhostWeaselLabs/meridian-runtime/issues
+- Discussions: https://github.com/GhostWeaselLabs/meridian-runtime/discussions
 
 Happy weaving.

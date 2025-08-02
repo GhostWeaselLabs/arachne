@@ -39,7 +39,7 @@ Meridian’s support process intentionally avoids collecting sensitive informati
 - Proprietary identifiers: share only anonymized placeholders
 
 Preferred artifacts:
-- Environment summaries (OS, Python, Arachne version)
+- Environment summaries (OS, Python, Meridian version)
 - Redacted structured logs (keep keys; redact values with <REDACTED>)
 - Graph topology summaries (node/edge counts, bounds, overflow policies)
 - Metrics snapshots (numeric counters/gauges; avoid PII in labels)
@@ -58,7 +58,7 @@ Until diagnostics tooling is available, follow the manual bundle guidance in:
 
 2) What to include (sanitized)
 - Summary: short description of the problem or request
-- Environment: OS, Python (3.11+), Arachne version, install/tooling details
+- Environment: OS, Python (3.11+), Meridian version, install/tooling details
 - Reproduction: minimal steps and small sanitized snippet (no payload contents)
 - Observed vs Expected: describe what happened vs what you expected
 - Logs/Metrics: include redacted structured logs and numeric metrics snapshots
@@ -121,4 +121,4 @@ Until diagnostics tooling is available, follow the manual bundle guidance in:
   - docs/support/templates/BUG_REPORT.md
   - docs/support/templates/FEATURE_REQUEST.md
 
-Thank you for helping improve Arachne—privacy‑first, composable, and observable by design.
+Thank you for helping improve Meridian Runtime—privacy‑first, composable, and observable by design.
