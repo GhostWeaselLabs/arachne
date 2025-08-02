@@ -85,6 +85,8 @@ jobs:
   docs-snippets:
     name: Validate docs commands
     runs-on: ubuntu-latest
+    # Only run if the repository contains an examples/ directory
+    if: ${{ hashFiles('examples/**') != '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
