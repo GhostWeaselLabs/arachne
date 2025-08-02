@@ -11,6 +11,8 @@ Arachne gives you:
 
 Get the source: https://github.com/GhostWeaselLabs/arachne
 
+For an overview of how this documentation is organized, see About these docs: ./ABOUT.md
+
 ---
 
 ## What can you build?

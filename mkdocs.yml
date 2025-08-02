@@ -50,6 +50,7 @@ nav:
       - Post‑v1 Roadmap: plan/99-post-v1-roadmap.md
       - DR Template: plan/dr/DR-TEMPLATE.md
   - Support:
+      - About these docs: ABOUT.md
       - How to Report Issues: support/HOW-TO-REPORT-ISSUES.md
       - Troubleshooting (Repo): support/TROUBLESHOOTING.md
       - Issue Templates:
