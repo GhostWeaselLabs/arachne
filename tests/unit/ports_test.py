@@ -1,4 +1,4 @@
-from arachne.core.ports import PortSpec
+from meridian.core.ports import PortSpec
 
 
 def test_portspec_creation_and_validate() -> None:

@@ -3,8 +3,8 @@ from __future__ import annotations
 import time
 from unittest.mock import patch
 
-from arachne.core import Message, MessageType, Node, Scheduler, SchedulerConfig, Subgraph
-from arachne.core.runtime_plan import PriorityBand
+from meridian.core import Message, MessageType, Node, Scheduler, SchedulerConfig, Subgraph
+from meridian.core.runtime_plan import PriorityBand
 
 
 class Producer(Node):

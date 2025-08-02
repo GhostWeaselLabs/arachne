@@ -5,7 +5,7 @@ import tempfile
 
 import pytest
 
-from arachne.scaffolding.generate_node import (
+from meridian.scaffolding.generate_node import (
     create_node_files,
     generate_node_template,
     generate_test_template,
@@ -87,7 +87,7 @@ class TestGenerateNodeTemplate:
 
         assert "class TestNode(Node):" in template
         assert "def __init__(self" in template
-        assert "from arachne.core.node import Node" in template
+        assert "from meridian.core.node import Node" in template
 
     def test_with_input_ports(self):
         """Test template generation with input ports."""
@@ -319,6 +319,6 @@ class TestIntegration:
             # Check required imports
             assert "from __future__ import annotations" in content
             assert "from typing import Any" in content
-            assert "from arachne.core.message import Message" in content
-            assert "from arachne.core.node import Node" in content
-            assert "from arachne.core.ports import PortSpec" in content
+            assert "from meridian.core.message import Message" in content
+            assert "from meridian.core.node import Node" in content
+            assert "from meridian.core.ports import PortSpec" in content

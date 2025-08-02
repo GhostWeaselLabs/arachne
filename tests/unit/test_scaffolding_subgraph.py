@@ -5,7 +5,7 @@ import tempfile
 
 import pytest
 
-from arachne.scaffolding.generate_subgraph import (
+from meridian.scaffolding.generate_subgraph import (
     create_subgraph_files,
     generate_subgraph_template,
     generate_subgraph_test_template,
@@ -46,7 +46,7 @@ class TestGenerateSubgraphTemplate:
 
         assert "class TestPipeline(Subgraph):" in template
         assert "def __init__(self" in template
-        assert "from arachne.core.subgraph import Subgraph" in template
+        assert "from meridian.core.subgraph import Subgraph" in template
 
     def test_initialization_methods(self):
         """Test that initialization methods are included."""
@@ -83,7 +83,7 @@ class TestGenerateSubgraphTemplate:
         """Test that validation integration is included."""
         template = generate_subgraph_template("ValidatedGraph")
 
-        assert "from arachne.utils.validation import validate_graph" in template
+        assert "from meridian.utils.validation import validate_graph" in template
         assert "issues = validate_graph(self)" in template
         assert "issue.is_error()" in template
         assert "issue.is_warning()" in template
@@ -129,7 +129,7 @@ class TestGenerateSubgraphTestTemplate:
         # Should have commented out scheduler test
         assert "# TODO: Add scheduler integration test (deferred to M6/M7)" in template
         assert "# async def test_scheduler_integration(self):" in template
-        assert "from arachne.core.scheduler import Scheduler" in template
+        assert "from meridian.core.scheduler import Scheduler" in template
 
     def test_validation_exception_handling(self):
         """Test that validation exception handling is included."""
@@ -316,9 +316,9 @@ class TestIntegration:
 
             # Check required imports
             assert "from __future__ import annotations" in content
-            assert "from arachne.core.subgraph import Subgraph" in content
-            assert "from arachne.core.ports import PortSpec" in content
-            assert "from arachne.utils.validation import validate_graph" in content
+            assert "from meridian.core.subgraph import Subgraph" in content
+            assert "from meridian.core.ports import PortSpec" in content
+            assert "from meridian.utils.validation import validate_graph" in content
 
     def test_generated_test_syntax(self):
         """Test that generated test code has valid Python syntax."""

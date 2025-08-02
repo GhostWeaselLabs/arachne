@@ -1,5 +1,5 @@
-from arachne.core import RoutingPolicy
-from arachne.core.policies import Block, Coalesce, Drop, Latest, PutResult
+from meridian.core import RoutingPolicy
+from meridian.core.policies import Block, Coalesce, Drop, Latest, PutResult
 
 
 class Dummy:

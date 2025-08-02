@@ -1,4 +1,4 @@
-from arachne.core import Message, MessageType, Node
+from meridian.core import Message, MessageType, Node
 
 
 def test_node_with_ports_and_handle() -> None:

@@ -1,10 +1,10 @@
-"""Unit tests for arachne.utils.validation module."""
+"""Unit tests for meridian.utils.validation module."""
 
 from unittest.mock import Mock
 
 import pytest
 
-from arachne.utils.validation import (
+from meridian.utils.validation import (
     Issue,
     PydanticAdapter,
     SchemaValidator,
