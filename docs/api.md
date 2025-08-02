@@ -6,19 +6,19 @@ Install and import
   ```bash
   uv lock
   uv sync
-  ```
+  ```bash
 - Import:
   ```python
   from meridian.core import Message, Node, Subgraph, Scheduler, PortSpec, Port, PortDirection
-  ```
+  ```python
 - Policies:
   ```python
   from meridian.core.policies import Block, Drop, Latest, Coalesce
-  ```
+  ```python
 - Observability:
   ```python
   from meridian.observability.metrics import configure_metrics, PrometheusMetrics
-  ```
+  ```python
 
 Core types
 - Message: immutable envelope with payload and headers; supports `get_trace_id()`, `with_headers(...)`
@@ -87,4 +87,4 @@ sg = Subgraph.from_nodes("hello", [Producer(), Consumer()])
 sg.connect(("producer","out"), ("consumer","in"), capacity=16, policy=Latest())
 Scheduler().register(sg)
 Scheduler().run()
-```
+```python

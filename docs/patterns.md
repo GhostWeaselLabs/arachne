@@ -49,14 +49,9 @@ Other policies
 # Default policy is Block; producers will await if the edge is full
 sg.connect(("producer","out"), ("consumer","in"), capacity=16)  # default: block
 ```
-
 - drop: drop when full
 ```python
 from meridian.core.policies import Drop
-# Under pressure, new messages are dropped; choose carefully for lossy workloads
-sg.connect(("producer","out"), ("consumer","in"), capacity=16, policy=Drop())
-```
-
 - coalesce: merge bursts via a function
 ```python
 from meridian.core.policies import Coalesce
@@ -65,12 +60,17 @@ def combine(old, new):
     return new  # or custom logic to merge items
 sg.connect(("producer","out"), ("consumer","in"), capacity=16, policy=Coalesce(combine))
 ```
+def combine(old, new):
+    # Example: prefer the newest item; implement custom aggregation as needed
+    return new  # or custom logic to merge items
+sg.connect(("producer","out"), ("consumer","in"), capacity=16, policy=Coalesce(combine))
+```
 
-See overflow semantics in ./api.md.
+See overflow semantics in ./api.md#backpressure-and-overflow.
 
 ## Control-plane priority
 
-Use higher priority edges for kill switches or coordination. Control-plane messages can preempt data-plane work for predictable behavior under load. See Scheduler priorities in ./api.md.
+Use higher priority edges for kill switches or coordination. Control-plane messages can preempt data-plane work for predictable behavior under load. See Scheduler priorities in ./api.md#scheduler.
 
 ## Subgraph composition
 
@@ -112,4 +112,4 @@ sg.connect(("upper","out"), ("printer","in"), capacity=8)
 
 - Handle exceptions in node hooks; the default policy is skip/continue and log structured errors.
 - Prefer small try/except blocks inside `_handle_message` and `_handle_tick` to localize failures.
-- Emit diagnostics through observability hooks; see ./observability.md.
+- Emit diagnostics through observability hooks; see ./observability.md#logging.
