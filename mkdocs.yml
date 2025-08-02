@@ -27,12 +27,35 @@ theme:
         icon: material/weather-sunny
         name: Switch to light mode
 nav:
-  - Home: docs/index.md
-  - Quickstart: docs/quickstart.md
-  - API: docs/api.md
-  - Patterns: docs/patterns.md
-  - Troubleshooting: docs/troubleshooting.md
-  - Observability: docs/observability.md
+  - Home: index.md
+  - Quickstart: quickstart.md
+  - API: api.md
+  - Patterns: patterns.md
+  - Troubleshooting: troubleshooting.md
+  - Observability: observability.md
+  - Contributing:
+      - Contributing Guide: contributing/CONTRIBUTING.md
+      - Releasing Guide: contributing/RELEASING.md
+  - Planning:
+      - Governance & Overview (M0): plan/M0-governance-and-overview.md
+      - Bootstrap & CI (M1): plan/M1-bootstrap-and-ci.md
+      - Core Primitives (M2): plan/M2-core-primitives.md
+      - Scheduler (M3): plan/M3-scheduler.md
+      - Observability (M4): plan/M4-observability.md
+      - Utilities & Scaffolding (M5): plan/M5-utilities-and-scaffolding.md
+      - Examples & Documentation (M6): plan/M6-examples-and-documentation.md
+      - Testing & Hardening (M7): plan/M7-testing-and-hardening.md
+      - Release v1.0.0 (M8): plan/M8-release-v1.0.0.md
+      - EARS Requirements & Architecture: plan/00-ears-requirements-and-architecture.md
+      - Post‑v1 Roadmap: plan/99-post-v1-roadmap.md
+      - DR Template: plan/dr/DR-TEMPLATE.md
+  - Support:
+      - How to Report Issues: support/HOW-TO-REPORT-ISSUES.md
+      - Troubleshooting (Repo): support/TROUBLESHOOTING.md
+      - Issue Templates:
+          - General: support/templates/ISSUE_TEMPLATE.md
+          - Bug Report: support/templates/BUG_REPORT.md
+          - Feature Request: support/templates/FEATURE_REQUEST.md
 markdown_extensions:
   - admonition
   - codehilite
