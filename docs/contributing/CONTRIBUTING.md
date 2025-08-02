@@ -223,6 +223,11 @@ Location
 
 ***
 
+Security maintenance (CodeQL & Dependabot)
+- CodeQL: We run code scanning on PRs and main. If CodeQL flags an alert on your PR, review the alert details in the Security tab and fix or justify with a link to the relevant discussion/issue. Prefer fixing in the same PR when low-risk; otherwise, open a follow-up with a short timeline.
+- Dependabot: Weekly PRs may update GitHub Actions, Python packages, or docs tooling. Review the changelog, ensure CI is green, and prefer merging patch/minor bumps. For major updates, open an issue or small PR to validate impact. Keep dependency PRs focused (one tool/stack at a time when possible).
+
+
 8) Observability, Errors, and Diagnostics
 
 - Log structure: prefer event = "node_started", node_id, graph_id, etc.
