@@ -3,10 +3,10 @@
 Status: Master Plan (authoritative source)
 Owners: Core Maintainers
 Version: 1.0 (pre-implementation)
-Scope: Arachne Graph Runtime (in‑process, single‑runtime, asyncio‑friendly)
+Scope: Meridian Runtime (in‑process, single‑runtime, asyncio‑friendly)
 
 Overview
-This document codifies the essential requirements using the EARS pattern and establishes the top‑level architecture for Arachne’s minimal, reusable graph runtime. It governs the design, implementation, testing, and operations of v1 and aligns downstream plans and milestone files.
+This document codifies the essential requirements using the EARS pattern and establishes the top‑level architecture for Meridian’s minimal, reusable graph runtime. It governs the design, implementation, testing, and operations of v1 and aligns downstream plans and milestone files.
 
 Legend (EARS)
 - Ubiquitous: “The system shall …”

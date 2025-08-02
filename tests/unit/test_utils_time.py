@@ -1,4 +1,4 @@
-"""Unit tests for arachne.utils.time module."""
+"""Unit tests for meridian.utils.time module."""
 
 from datetime import UTC, datetime
 import re
@@ -6,7 +6,7 @@ import time
 
 import pytest
 
-from arachne.utils.time import (
+from meridian.utils.time import (
     generate_monotonic_timestamp,
     generate_timestamp,
     monotonic_ns,

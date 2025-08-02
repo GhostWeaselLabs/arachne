@@ -2,19 +2,28 @@
 
 Provides validation helpers for ports, schemas, and graph wiring with
 optional Pydantic adapter support.
+
+Scope:
+- Light structural checks for nodes, ports, and subgraph wiring.
+- Optional schema validation via adapters (e.g., Pydantic) when available.
+
+Notes:
+- Prefer core runtime validations at enqueue time for payload/schema checks.
+- These utilities aim to surface common configuration issues early, not to
+  enforce deep schema semantics.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-# Import core types - will need to check these exist
+# Import core types with TYPE_CHECKING to avoid import cycles at runtime.
 from typing import TYPE_CHECKING, Any, Any as _Any, Protocol, TypeAlias, runtime_checkable
 
 if TYPE_CHECKING:
-    from arachne.core.node import Node as _Node
-    from arachne.core.ports import PortSpec as _PortSpec
-    from arachne.core.subgraph import Subgraph as _Subgraph
+    from meridian.core.node import Node as _Node
+    from meridian.core.ports import PortSpec as _PortSpec
+    from meridian.core.subgraph import Subgraph as _Subgraph
 else:
     _Node = _Any  # type: ignore[assignment]
     _PortSpec = _Any  # type: ignore[assignment]
@@ -27,18 +36,25 @@ Subgraph: TypeAlias = _Subgraph
 
 @dataclass
 class Issue:
-    """Validation issue with severity and location context."""
+    """Validation issue with severity and location context.
+
+    Attributes:
+        severity: "error" or "warning" to indicate impact.
+        message: Human-readable description of the issue.
+        location: Identifier where the issue was found (e.g., "node:Name",
+                  "node:Name:input:port", "graph:Subgraph:edge").
+    """
 
     severity: str  # "error" | "warning"
     message: str
     location: str | tuple[str, ...]  # node, port, edge identifier
 
     def is_error(self) -> bool:
-        """Check if this is an error-level issue."""
+        """Return True if this is an error-level issue."""
         return self.severity == "error"
 
     def is_warning(self) -> bool:
-        """Check if this is a warning-level issue."""
+        """Return True if this is a warning-level issue."""
         return self.severity == "warning"
 
 
@@ -47,28 +63,33 @@ class SchemaValidator(Protocol):
     """Protocol for optional schema validation adapters."""
 
     def validate_payload(self, model: Any, payload: Any) -> Issue | None:
-        """Validate payload against model schema.
+        """Validate payload against a schema/model.
 
-        Args:
-            model: Schema model (e.g., Pydantic model)
-            payload: Data to validate
+        Parameters:
+            model: Schema model (e.g., a Pydantic BaseModel subclass).
+            payload: Data to validate.
 
         Returns:
-            Issue if validation fails, None if valid
+            Issue if validation fails, None when payload is valid.
         """
         ...
 
 
 def validate_ports(node: Node) -> list[Issue]:
-    """Validate that node's declared ports are properly typed.
+    """Validate that a node's declared ports are properly typed.
 
-    Args:
-        node: Node instance to validate
+    Parameters:
+        node: Node instance to validate.
 
     Returns:
-        List of validation issues found
+        list[Issue]: Validation issues found (empty when none).
+
+    Notes:
+        - This utility targets nodes that expose callable inputs()/outputs()
+          returning dicts of {port_name -> spec}. It does not enforce deep
+          schema semantics—only basic structural checks.
     """
-    issues = []
+    issues: list[Issue] = []
 
     try:
         # Check if node has proper port declarations
@@ -92,6 +113,8 @@ def validate_ports(node: Node) -> list[Issue]:
                                 location=f"node:{node.__class__.__name__}:input:{port_name}",
                             )
                         )
+                    # Note: deeper schema checks should be delegated to runtime enqueue
+                    # validation or explicit schema adapters.
 
         if hasattr(node, "outputs") and callable(node.outputs):
             outputs = node.outputs()
@@ -113,6 +136,8 @@ def validate_ports(node: Node) -> list[Issue]:
                                 location=f"node:{node.__class__.__name__}:output:{port_name}",
                             )
                         )
+                    # Note: deeper schema checks should be delegated to runtime enqueue
+                    # validation or explicit schema adapters.
 
     except Exception as e:
         issues.append(
@@ -127,39 +152,42 @@ def validate_ports(node: Node) -> list[Issue]:
 
 
 def validate_connection(src_spec: Any, dst_spec: Any) -> Issue | None:
-    """Validate schema compatibility between connected ports.
+    """Validate schema compatibility between connected ports (shallow check).
 
-    Args:
-        src_spec: Source port specification
-        dst_spec: Destination port specification
+    Parameters:
+        src_spec: Source port specification.
+        dst_spec: Destination port specification.
 
     Returns:
-        Issue if incompatible, None if compatible
-    """
-    # Basic type compatibility check
-    # This is a simplified implementation - real validation would check
-    # schema types, but we keep it minimal for M5
+        Issue if incompatible, None if compatible.
 
+    Notes:
+        - This is intentionally shallow and only guards against missing specs.
+        - Deep schema compatibility should be enforced by runtime enqueue validation
+          or explicit schema adapters (e.g., Pydantic).
+    """
     if src_spec is None or dst_spec is None:
         return Issue(
             severity="error", message="Port specifications cannot be None", location="connection"
         )
-
-    # For now, accept any non-None connections
-    # More sophisticated schema checking would go here
     return None
 
 
 def validate_graph(subgraph: Subgraph) -> list[Issue]:
-    """Validate graph wiring and configuration.
+    """Validate subgraph wiring and configuration (shallow checks).
 
-    Args:
-        subgraph: Subgraph to validate
+    Parameters:
+        subgraph: Subgraph instance to validate.
 
     Returns:
-        List of validation issues found
+        list[Issue]: Validation issues found (empty when none).
+
+    Checks:
+        - Duplicate node names (if accessible via _nodes).
+        - Edge capacities must be positive integers (if accessible via _edges).
+        - Exposed input/output names should be non-empty strings (if accessible).
     """
-    issues = []
+    issues: list[Issue] = []
 
     try:
         # Check for unique node names
@@ -241,14 +269,18 @@ class PydanticAdapter:
             self._pydantic = None
 
     def validate_payload(self, model: Any, payload: Any) -> Issue | None:
-        """Validate payload against Pydantic model.
+        """Validate payload against a Pydantic model.
 
-        Args:
-            model: Pydantic model class
-            payload: Data to validate
+        Parameters:
+            model: Pydantic model class (BaseModel subclass).
+            payload: Data to validate.
 
         Returns:
-            Issue if validation fails, None if valid
+            Issue if validation fails, None when valid.
+
+        Behavior:
+            - If Pydantic is not available, return a warning-level Issue.
+            - Uses model.model_validate(payload) to check compatibility.
         """
         if self._pydantic is None:
             return Issue(

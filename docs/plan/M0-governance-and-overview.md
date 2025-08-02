@@ -2,10 +2,10 @@
 
 Owner: GhostWeasel (Lead: doubletap-dave)
 Status: Draft
-Audience: Contributors, maintainers, and stakeholders preparing to implement Arachne Milestones M1–M8.
+Audience: Contributors, maintainers, and stakeholders preparing to implement Meridian Runtime Milestones M1–M8.
 
 Purpose
-This document establishes the governance model, scope boundaries, quality bar, and operational practices for the Arachne runtime. It also sets non-functional requirements, decision processes, and artifact expectations that apply to all subsequent milestones.
+This document establishes the governance model, scope boundaries, quality bar, and operational practices for the Meridian Runtime. It also sets non-functional requirements, decision processes, and artifact expectations that apply to all subsequent milestones.
 
 Guiding Principles
 - Composable first: graphs, subgraphs, and clear boundaries.
@@ -135,7 +135,7 @@ Appendix B: Roles and Responsibilities
 - Users: issue reporting, diagnostics bundle opt-in, feedback on APIs and examples.
 
 Appendix C: Repository Conventions
-- src/arachne/* for runtime packages.
+- src/meridian/* for runtime packages.
 - examples/* for runnable examples and recipes.
 - docs/* for plans, support, contributing, and architecture notes.
 - tests/* for unit, integration, and property-based tests where appropriate.

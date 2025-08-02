@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from arachne.observability.tracing import (
+from meridian.observability.tracing import (
     InMemoryTracer,
     NoopTracer,
     TracingConfig,

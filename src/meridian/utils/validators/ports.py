@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Any, Any as _Any, TypeAlias
 from .issue import Issue
 
 if TYPE_CHECKING:
-    from arachne.core.node import Node as _Node
+    from meridian.core.node import Node as _Node
 else:
     _Node = _Any  # type: ignore[assignment]
 

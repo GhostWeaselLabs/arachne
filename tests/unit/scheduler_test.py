@@ -3,8 +3,8 @@ from __future__ import annotations
 import time
 from unittest.mock import patch
 
-from arachne.core import Message, MessageType, Node, Scheduler, SchedulerConfig, Subgraph
-from arachne.core.runtime_plan import PriorityBand
+from meridian.core import Message, MessageType, Node, Scheduler, SchedulerConfig, Subgraph
+from meridian.core.runtime_plan import PriorityBand
 
 
 class Producer(Node):
@@ -191,7 +191,7 @@ def test_error_handling() -> None:
     sch.register(sg)
 
     # Should not crash despite node errors
-    with patch("arachne.core.priority_queue.logger") as mock_logger:
+    with patch("meridian.core.priority_queue.logger") as mock_logger:
         sch.run()
 
         # Should have logged errors

@@ -1,8 +1,8 @@
-"""Unit tests for arachne.utils.ids module."""
+"""Unit tests for meridian.utils.ids module."""
 
 import re
 
-from arachne.utils.ids import (
+from meridian.utils.ids import (
     generate_correlation_id,
     generate_span_id,
     generate_trace_id,

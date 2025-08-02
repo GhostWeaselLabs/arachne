@@ -3,11 +3,11 @@ from __future__ import annotations
 from io import StringIO
 import time
 
-from arachne.core import Message, MessageType, Node, Scheduler, SchedulerConfig, Subgraph
-from arachne.observability.config import configure_observability, get_development_config
-from arachne.observability.logging import get_logger
-from arachne.observability.metrics import PrometheusMetrics, get_metrics
-from arachne.observability.tracing import InMemoryTracer, get_tracer
+from meridian.core import Message, MessageType, Node, Scheduler, SchedulerConfig, Subgraph
+from meridian.observability.config import configure_observability, get_development_config
+from meridian.observability.logging import get_logger
+from meridian.observability.metrics import PrometheusMetrics, get_metrics
+from meridian.observability.tracing import InMemoryTracer, get_tracer
 
 
 class ObsTestProducer(Node):

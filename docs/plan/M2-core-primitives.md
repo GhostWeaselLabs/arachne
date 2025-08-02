@@ -44,26 +44,26 @@ EARS Requirements
 - The system shall remain framework-agnostic and keep files ~200 LOC with SRP/DRY.
 
 Deliverables
-- src/arachne/core/message.py
+- src/meridian/core/message.py
   - Message dataclass: payload: Any; headers: dict[str, Any]; helpers for timestamp and trace_id.
   - Header normalization and validation helpers.
-- src/arachne/core/ports.py
+- src/meridian/core/ports.py
   - PortSpec: name, schema, policy enum or object; optional codec placeholder.
   - Schema adapters: stdlib typing, TypedDict; Pydantic integration hooks (no hard dependency).
-- src/arachne/core/policies.py
+- src/meridian/core/policies.py
   - Policy definitions: Block, Drop, Latest, Coalesce(fn).
   - Common interface: on_enqueue(queue_state, item) -> Action and metrics intent.
-- src/arachne/core/edge.py
+- src/meridian/core/edge.py
   - Edge[T]: bounded queue with capacity; typed per PortSpec.
   - Operations: put(msg), get() -> msg, try_put/try_get where appropriate.
   - Backpressure behavior for block; accounting for drops/latest/coalesce.
   - Metrics hooks: queue_depth, enq/deq counts, drops, blocked_time (interfaces only; wired in M4).
   - Introspection: id, src/dst endpoints, capacity, policy, type/schema.
-- src/arachne/core/node.py
+- src/meridian/core/node.py
   - Node base class with lifecycle hooks and emit(port, msg) helper.
   - Output registration and type checking against PortSpec.
   - Error policy placeholder (retry/skip/dead-letter) to be expanded later.
-- src/arachne/core/subgraph.py
+- src/meridian/core/subgraph.py
   - Composition: add_node, connect((node, port), (node, port), capacity, policy).
   - Expose: expose_input(name, target), expose_output(name, source).
   - Validation: unique node/edge names, port existence and type compatibility, acyclic wiring checks (best-effort).

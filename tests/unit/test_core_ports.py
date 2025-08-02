@@ -1,5 +1,5 @@
-from arachne.core import Port, PortDirection
-from arachne.core.ports import PortSpec
+from meridian.core import Port, PortDirection
+from meridian.core.ports import PortSpec
 
 
 def test_port_directions() -> None:

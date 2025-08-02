@@ -1,12 +1,12 @@
-# Arachne — A Minimal, Reusable Graph Runtime for Python
+# Meridian Runtime — A Minimal, Reusable Graph Runtime for Python
 
 Owner: GhostWeasel (Lead: doubletap-dave)
 
-[![CI](https://github.com/GhostWeaselLabs/arachne/actions/workflows/ci.yml/badge.svg)](https://github.com/GhostWeaselLabs/arachne/actions/workflows/ci.yml)
-[![Docs](https://img.shields.io/badge/docs-site-brightgreen)](https://ghostweasellabs.github.io/arachne/)
-[![Docs Deploy](https://github.com/GhostWeaselLabs/arachne/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/GhostWeaselLabs/arachne/actions/workflows/gh-pages.yml)
+[![CI](https://github.com/GhostWeaselLabs/meridian-runtime/actions/workflows/ci.yml/badge.svg)](https://github.com/GhostWeaselLabs/meridian-runtime/actions/workflows/ci.yml)
+[![Docs](https://img.shields.io/badge/docs-site-brightgreen)](https://ghostweasellabs.github.io/meridian-runtime/)
+[![Docs Deploy](https://github.com/GhostWeaselLabs/meridian-runtime/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/GhostWeaselLabs/meridian-runtime/actions/workflows/gh-pages.yml)
 
-Arachne is a lightweight, framework-agnostic graph runtime for building real‑time dataflows in Python. Model your application as small, single‑responsibility nodes connected by typed edges with bounded queues. Arachne’s scheduler enforces backpressure, supports control‑plane priorities (e.g., kill switch), and emits rich observability signals by design.
+Meridian Runtime is a lightweight, framework-agnostic graph runtime for building real‑time dataflows in Python. Model your application as small, single‑responsibility nodes connected by typed edges with bounded queues. Meridian’s scheduler enforces backpressure, supports control‑plane priorities (e.g., kill switch), and emits rich observability signals by design.
 
 Key features
 - Nodes, edges, subgraphs, scheduler — simple, composable primitives
@@ -26,13 +26,13 @@ Use cases
 
 ## Documentation
 
-- Site: https://ghostweasellabs.github.io/arachne/ — Deployed via GitHub Pages (source: GitHub Actions)
-- Repo: https://github.com/GhostWeaselLabs/arachne
-- Quickstart: https://ghostweasellabs.github.io/arachne/docs/quickstart/
-- API: https://ghostweasellabs.github.io/arachne/docs/api/
-- Patterns: https://ghostweasellabs.github.io/arachne/docs/patterns/
-- Observability: https://ghostweasellabs.github.io/arachne/docs/observability/
-- Troubleshooting: https://ghostweasellabs.github.io/arachne/docs/troubleshooting/
+- Site: https://ghostweasellabs.github.io/meridian-runtime/ — Deployed via GitHub Pages (source: GitHub Actions)
+- Repo: https://github.com/GhostWeaselLabs/meridian-runtime
+- Quickstart: https://ghostweasellabs.github.io/meridian-runtime/docs/quickstart/
+- API: https://ghostweasellabs.github.io/meridian-runtime/docs/api/
+- Patterns: https://ghostweasellabs.github.io/meridian-runtime/docs/patterns/
+- Observability: https://ghostweasellabs.github.io/meridian-runtime/docs/observability/
+- Troubleshooting: https://ghostweasellabs.github.io/meridian-runtime/docs/troubleshooting/
 - Note: Analytics is enabled for the docs site; see mkdocs.yml for the tracking configuration.
 
 
@@ -72,7 +72,7 @@ uv run python -m examples.hello_graph.main
 
 4) Project layout (M1 scaffold)
 ```
-src/arachne/
+src/meridian/
   __init__.py
   core/
     __init__.py
@@ -138,7 +138,7 @@ Observability
 
 producer.py
 ```
-from arachne.core import Node, Message
+from meridian.core import Node, Message
 
 class Producer(Node):
     def __init__(self, n=5):
@@ -160,7 +160,7 @@ class Producer(Node):
 
 consumer.py
 ```
-from arachne.core import Node
+from meridian.core import Node
 
 class Consumer(Node):
     def name(self): return "consumer"
@@ -173,7 +173,7 @@ class Consumer(Node):
 
 main.py
 ```
-from arachne.core import Subgraph, Scheduler
+from meridian.core import Subgraph, Scheduler
 from producer import Producer
 from consumer import Consumer
 
@@ -301,12 +301,12 @@ License
 ## FAQ
 
 Is a graph runtime overkill?
-- For simple, linear pipelines a small asyncio app may suffice. Arachne shines when you have multiple interacting flows, need backpressure and priorities, and value observability and reuse.
+- For simple, linear pipelines a small asyncio app may suffice. Meridian shines when you have multiple interacting flows, need backpressure and priorities, and value observability and reuse.
 
-Does Arachne require a specific web framework or broker?
+Does Meridian require a specific web framework or broker?
 - No. It is framework‑agnostic and runs in‑process. Brokers/codecs become relevant in future distributed modes.
 
-Can I use Pydantic/Pyright/MyPy with Arachne?
+Can I use Pydantic/Pyright/MyPy with Meridian?
 - Yes. Arachne encourages explicit typing and can integrate optional schema libraries. Choose what fits your project’s standards.
 
 How do I handle long‑running or blocking work?
@@ -314,4 +314,4 @@ How do I handle long‑running or blocking work?
 
 ---
 
-Happy weaving with Arachne.
+Happy building with Meridian Runtime.

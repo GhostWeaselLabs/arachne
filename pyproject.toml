@@ -3,14 +3,14 @@ requires = ["setuptools>=68", "wheel", "uv>=0.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "arachne"
+name = "meridian-runtime"
 version = "0.0.0"
 description = "A minimal, reusable graph runtime for Python with bounded edges, fairness, and observability."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "BSD-3-Clause" }
 authors = [
-  { name = "GhostWeasel", email = "devnull@example.com" },
+  { name = "GhostWeasel", email = "devnull@ghostweasel.net" },
 ]
 keywords = ["graph", "runtime", "scheduler", "asyncio", "observability", "python"]
 classifiers = [
@@ -27,8 +27,8 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Homepage = "https://example.com/arachne"
-Repository = "https://example.com/arachne.git"
+Homepage = "https://ghostweasel.net/meridian-runtime"
+Repository = "https://ghostweasel.net/meridian-runtime.git"
 Changelog = "CHANGELOG.md"
 Documentation = "docs/plan/M0-governance-and-overview.md"
 
@@ -48,7 +48,7 @@ package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["arachne*"]
+include = ["meridian*"]
 namespaces = false
 
 # ----------------------------
@@ -79,7 +79,7 @@ lint.ignore = [
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["arachne"]
+known-first-party = ["meridian"]
 
 # ----------------------------
 # Black (format)
@@ -132,7 +132,8 @@ explicit_package_bases = true
 # ----------------------------
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-q --cov=src --cov-report=term-missing --cov-fail-under=0"
+# Enforce 80% coverage in CI; local runs omit coverage flags for convenience.
+addopts = "-q"
 pythonpath = ["src", "."]
 markers = [
   "unit: unit tests",
@@ -148,8 +149,11 @@ branch = true
 parallel = true
 
 [tool.coverage.report]
+# Show which lines are missing to guide contributors toward meaningful tests.
 show_missing = true
+# Keep reporting uncovered files rather than hiding them; helps avoid blind spots.
 skip_covered = false
+# Enforce 80% coverage floor across reports; CI mirrors this threshold.
 fail_under = 80
 
 [dependency-groups]

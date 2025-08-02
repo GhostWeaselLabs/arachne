@@ -5,7 +5,7 @@ import json
 
 import pytest
 
-from arachne.observability.logging import (
+from meridian.observability.logging import (
     LogConfig,
     Logger,
     LogLevel,

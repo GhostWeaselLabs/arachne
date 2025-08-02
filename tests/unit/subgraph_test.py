@@ -1,4 +1,4 @@
-from arachne.core import Node, Subgraph
+from meridian.core import Node, Subgraph
 
 
 def test_add_connect_validate_ports_and_schemas() -> None:

@@ -17,7 +17,29 @@ from .subgraph import Subgraph
 
 @dataclass(slots=True)
 class SchedulerConfig:
-    """Configuration for the scheduler."""
+    """
+    Configuration for the cooperative scheduler.
+
+    Parameters:
+      tick_interval_ms:
+        Milliseconds used by the runtime to determine when to consider a node
+        tick-ready. The plan updates tick readiness using this interval.
+      fairness_ratio:
+        Relative weights applied to priority bands when selecting runnable nodes.
+        Tuple order corresponds to (control, high, normal).
+      max_batch_per_node:
+        Maximum number of items processed per scheduling slice for a node. Keeps
+        individual nodes from monopolizing the loop.
+      idle_sleep_ms:
+        Milliseconds to sleep when no work is available. Reduces CPU churn while idle.
+      shutdown_timeout_s:
+        Maximum allowed wall-clock seconds with no runnable work before the scheduler
+        exits the main loop and begins graceful shutdown.
+
+    Notes:
+      - These values tune responsiveness, fairness, and CPU usage. For latency-sensitive
+        workloads, consider reducing idle_sleep_ms and ensuring batch sizes are small.
+    """
 
     tick_interval_ms: int = 50
     fairness_ratio: tuple[int, int, int] = (4, 2, 1)  # control, high, normal
@@ -27,9 +49,46 @@ class SchedulerConfig:
 
 
 class Scheduler:
-    """Cooperative scheduler for graph execution."""
+    """
+    Cooperative scheduler for graph execution.
+
+    Responsibilities:
+      - Build a runtime plan from registered nodes/subgraphs.
+      - Drive node lifecycle: start → handle messages/ticks → stop.
+      - Enforce fairness via a priority scheduling queue.
+      - Apply backpressure and routing policies on emissions.
+      - Surface observability via logs, metrics, and traces.
+
+    Lifecycle:
+      1) register(Node|Subgraph) for all units
+      2) run() to start, which builds the plan and starts all nodes
+      3) main loop processes messages first, then ticks, until shutdown
+      4) shutdown() to request graceful termination, or automatic timeout
+
+    Error handling:
+      - Exceptions within node handlers are logged and re-raised to the scheduler;
+        the processor applies the runtime’s policy. The scheduler logs and continues
+        shutdown on fatal errors.
+
+    Threading and performance:
+      - Designed for cooperative execution. Avoid blocking calls inside node handlers.
+      - Keep per-iteration work bounded (max_batch_per_node) to maintain fairness.
+
+    """
 
     def __init__(self, config: SchedulerConfig | None = None) -> None:
+        """
+        Initialize the scheduler with optional configuration.
+
+        Parameters:
+          config:
+            SchedulerConfig to use. If None, defaults are applied.
+
+        Side effects:
+          - Initializes the priority queue and node processor.
+          - Prepares observability instruments (metrics).
+
+        """
         self._cfg = config or SchedulerConfig()
         self._graphs: list[Subgraph] = []
         self._running = False
@@ -51,13 +110,27 @@ class Scheduler:
         self._init_metrics()
 
     def _init_metrics(self) -> None:
-        """Initialize scheduler metrics."""
+        """Initialize scheduler metrics used to monitor loop health and load."""
         self._runnable_nodes_gauge = self._metrics.gauge("scheduler_runnable_nodes")
         self._loop_latency_histogram = self._metrics.histogram("scheduler_loop_latency_seconds")
         self._priority_applied_counter = self._metrics.counter("scheduler_priority_applied_total")
 
     def register(self, unit: Node | Subgraph) -> None:
-        """Register a node or subgraph for execution."""
+        """
+        Register a node or subgraph for execution.
+
+        Parameters:
+          unit:
+            A Node or Subgraph to be managed by this scheduler.
+
+        Raises:
+          RuntimeError:
+            If called while the scheduler is already running.
+
+        Notes:
+          - Nodes are wrapped in a single-node Subgraph internally for uniform handling.
+          - Registration is only allowed prior to run(); use runtime mutators for live changes.
+        """
         logger = get_logger()
 
         if self._running:
@@ -72,7 +145,18 @@ class Scheduler:
             logger.debug("scheduler.register_subgraph", f"Registered subgraph {unit.name}")
 
     def run(self) -> None:
-        """Run the scheduler until shutdown is requested."""
+        """
+        Run the scheduler until shutdown is requested or timeout elapses.
+
+        Behavior:
+          - Builds the runtime plan and connects nodes to the scheduler.
+          - Starts all nodes, then enters the main scheduling loop.
+          - On exit or error, performs a graceful shutdown of all nodes.
+
+        Notes:
+          - Re-entrant calls are ignored if already running.
+          - Use shutdown() to request termination from another thread/task.
+        """
         logger = get_logger()
 
         if self._running:
@@ -126,7 +210,19 @@ class Scheduler:
             logger.info("scheduler.shutdown_complete", "Scheduler shutdown complete")
 
     def _run_main_loop(self) -> None:
-        """Main scheduling loop."""
+        """
+        Main scheduling loop.
+
+        Responsibilities:
+          - Updates plan readiness (messages and ticks).
+          - Feeds the priority queue with runnable nodes according to fairness settings.
+          - Processes messages with precedence over ticks.
+          - Records loop latency and runnable node count.
+          - Applies idle sleep when no work is available to reduce CPU usage.
+
+        Termination:
+          - Exits when shutdown is requested or when shutdown timeout elapses without work.
+        """
         logger = get_logger()
         loop_start = monotonic()
         iteration_count = 0
@@ -203,13 +299,38 @@ class Scheduler:
                 )
 
     def shutdown(self) -> None:
-        """Signal scheduler to shutdown gracefully."""
+        """
+        Signal scheduler to shutdown gracefully.
+
+        Side effects:
+          - Sets an internal flag checked by the main loop to begin termination.
+          - Logs a shutdown request event.
+
+        Notes:
+          - The main loop will complete in-flight work and stop nodes before exiting.
+        """
         logger = get_logger()
         logger.info("scheduler.shutdown_requested", "Shutdown requested")
         self._shutdown = True
 
     def set_priority(self, edge_id: str, priority: PriorityBand) -> None:
-        """Set priority for an edge (runtime mutator)."""
+        """
+        Set the priority band for a specific edge at runtime or pre-runtime.
+
+        Parameters:
+          edge_id:
+            Identifier of the edge whose priority should change.
+          priority:
+            PriorityBand to apply.
+
+        Behavior:
+          - If the scheduler is running and the edge exists, applies the change immediately.
+          - If the scheduler is not running, queues the change to be applied during plan build.
+
+        Raises:
+          ValueError:
+            If the provided priority is not a PriorityBand instance.
+        """
         logger = get_logger()
 
         if not isinstance(priority, PriorityBand):
@@ -244,7 +365,23 @@ class Scheduler:
             )
 
     def set_capacity(self, edge_id: str, capacity: int) -> None:
-        """Set capacity for an edge (runtime mutator)."""
+        """
+        Set the queue capacity for a specific edge at runtime.
+
+        Parameters:
+          edge_id:
+            Identifier of the edge whose capacity should change.
+          capacity:
+            Positive integer representing the maximum queue size.
+
+        Behavior:
+          - If the scheduler is running and the edge exists, applies the change immediately.
+          - Capacity changes are not supported prior to runtime.
+
+        Raises:
+          ValueError:
+            If capacity is not a positive integer.
+        """
         logger = get_logger()
 
         if capacity <= 0:
@@ -274,7 +411,26 @@ class Scheduler:
             )
 
     def _handle_node_emit(self, node: Node, port: str, msg: Message) -> None:
-        """Handle message emission from a node (backpressure integration)."""
+        """
+        Handle message emission from a node with backpressure-aware routing.
+
+        Parameters:
+          node:
+            The emitting Node.
+          port:
+            Name of the output port used for emission.
+          msg:
+            The Message being emitted.
+
+        Behavior:
+          - Looks up outgoing edges from the given node/port.
+          - Applies a stricter policy (Block) for CONTROL messages by default.
+          - Invokes edge.try_put(msg, policy) and logs the result.
+          - Future: may yield cooperatively on BLOCKED to implement backpressure.
+
+        Notes:
+          - This is invoked by Node.emit() when a scheduler is attached.
+        """
         logger = get_logger()
 
         # Find the edge for this node/port combination
@@ -301,11 +457,20 @@ class Scheduler:
                     )
 
     def is_running(self) -> bool:
-        """Check if the scheduler is currently running."""
+        """Return True if the scheduler main loop is active."""
         return self._running
 
     def get_stats(self) -> dict[str, int | str]:
-        """Get basic scheduler statistics."""
+        """
+        Get basic scheduler statistics.
+
+        Returns:
+          A dictionary containing:
+            - status: "running" or "stopped"
+            - nodes_count: number of nodes in the plan (when running)
+            - edges_count: number of edges in the plan (when running)
+            - runnable_nodes: count of nodes currently runnable (when running)
+        """
         if not self._running:
             return {"status": "stopped"}
 

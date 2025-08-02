@@ -1,10 +1,10 @@
-# Arachne Support Policy
+# Meridian Runtime Support Policy
 
 Owner: GhostWeasel (Lead: doubletap-dave)  
 Status: Stable  
 Audience: Users and contributors
 
-Arachne is built to be operable and supportable with a strong bias toward privacy and safety. This document describes how to get help, how to report issues, and what to expect from maintainers.
+Meridian Runtime is built to be operable and supportable with a strong bias toward privacy and safety. This document describes how to get help, how to report issues, and what to expect from maintainers.
 
 -------------------------------------------------------------------------------
 
@@ -32,14 +32,14 @@ Arachne is built to be operable and supportable with a strong bias toward privac
 
 ## Privacy‑First Support
 
-Arachne’s support process intentionally avoids collecting sensitive information. Please do not share:
+Meridian’s support process intentionally avoids collecting sensitive information. Please do not share:
 - Secrets: API keys, tokens, passwords, private URLs
 - PII: names, emails, phone numbers, addresses, IDs
 - Payload contents: message bodies or domain data
 - Proprietary identifiers: share only anonymized placeholders
 
 Preferred artifacts:
-- Environment summaries (OS, Python, Arachne version)
+- Environment summaries (OS, Python, Meridian version)
 - Redacted structured logs (keep keys; redact values with <REDACTED>)
 - Graph topology summaries (node/edge counts, bounds, overflow policies)
 - Metrics snapshots (numeric counters/gauges; avoid PII in labels)
@@ -58,7 +58,7 @@ Until diagnostics tooling is available, follow the manual bundle guidance in:
 
 2) What to include (sanitized)
 - Summary: short description of the problem or request
-- Environment: OS, Python (3.11+), Arachne version, install/tooling details
+- Environment: OS, Python (3.11+), Meridian version, install/tooling details
 - Reproduction: minimal steps and small sanitized snippet (no payload contents)
 - Observed vs Expected: describe what happened vs what you expected
 - Logs/Metrics: include redacted structured logs and numeric metrics snapshots
@@ -121,4 +121,4 @@ Until diagnostics tooling is available, follow the manual bundle guidance in:
   - docs/support/templates/BUG_REPORT.md
   - docs/support/templates/FEATURE_REQUEST.md
 
-Thank you for helping improve Arachne—privacy‑first, composable, and observable by design.
+Thank you for helping improve Meridian Runtime—privacy‑first, composable, and observable by design.

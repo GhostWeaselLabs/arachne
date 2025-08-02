@@ -4,7 +4,7 @@ import time
 
 import pytest
 
-from arachne.observability.metrics import (
+from meridian.observability.metrics import (
     NoopMetrics,
     PrometheusConfig,
     PrometheusMetrics,

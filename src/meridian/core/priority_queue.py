@@ -11,14 +11,46 @@ logger = logging.getLogger(__name__)
 
 @dataclass(slots=True)
 class PriorityQueueConfig:
-    """Configuration for priority-based scheduling."""
+    """
+    Configuration for priority-based scheduling.
+
+    Parameters:
+      fairness_ratio:
+        Relative weights for priority bands when selecting runnable nodes.
+        Tuple order corresponds to (control, high, normal). Larger values
+        increase the share of scheduling opportunities for that band.
+      max_batch_per_node:
+        Upper bound on how many items a single node may process during one
+        scheduling slice. Keeps the loop fair by preventing monopolization.
+
+    Notes:
+      - Choose a higher control ratio for responsive control-plane behavior.
+      - Reduce max_batch_per_node to favor latency over throughput.
+    """
 
     fairness_ratio: tuple[int, int, int] = (4, 2, 1)  # control, high, normal
     max_batch_per_node: int = 8
 
 
 class PrioritySchedulingQueue:
-    """Priority-based scheduling queue with fairness guarantees."""
+    """
+    Priority-based scheduling queue with fairness guarantees.
+
+    Responsibilities:
+      - Track runnable nodes per PriorityBand (CONTROL, HIGH, NORMAL).
+      - Enforce a simple fairness model across bands using configurable ratios.
+      - Provide the next runnable node to the scheduler’s main loop.
+
+    Fairness Model (high-level):
+      - Each band is assigned a weight via fairness_ratio.
+      - The queue prefers CONTROL, then HIGH, then NORMAL respecting weights.
+      - When multiple nodes are runnable within a band, the band queue is
+        serviced in a FIFO manner to approximate round-robin.
+
+    Notes:
+      - This is a cooperative, in-memory mechanism; it assumes relatively
+        short work units per node to maintain fairness.
+    """
 
     def __init__(self, config: PriorityQueueConfig) -> None:
         self._config = config
@@ -46,7 +78,22 @@ class PrioritySchedulingQueue:
         self._ready_queues[priority].append(node_name)
 
     def get_next_runnable(self) -> tuple[str, PriorityBand] | None:
-        """Get next runnable node respecting priority bands and fairness."""
+        """
+        Get next runnable node respecting priority bands and fairness.
+
+        Returns:
+          A tuple of (node_name, PriorityBand) or None if no nodes are runnable.
+
+        Behavior:
+          - Compute relative ratios per band and attempt to service bands
+            proportionally.
+          - CONTROL band is preferentially serviced if present.
+          - Falls back to any available band if ratio-based selection yields none.
+
+        Note:
+          - This fairness is intentionally simple; it aims for approximate
+            proportional servicing over time, not strict quotas per timeslice.
+        """
         # Check bands in priority order with fairness ratios
         ratios = {
             PriorityBand.CONTROL: self._config.fairness_ratio[0],
@@ -96,13 +143,40 @@ class PrioritySchedulingQueue:
 
 
 class NodeProcessor:
-    """Handles node execution with error handling and work batching."""
+    """
+    Handles node execution with error handling and work batching.
+
+    Responsibilities:
+      - Start/stop nodes with error isolation.
+      - Process messages for nodes up to max_batch_per_node per slice.
+      - Dispatch ticks and update last_tick timestamps.
+      - Log and count errors without crashing the scheduler.
+
+    Semantics:
+      - Messages are processed with precedence over ticks (scheduler controls
+        the order of calls).
+      - Message type is derived from the input edge’s priority band:
+        CONTROL edges produce MessageType.CONTROL; otherwise MessageType.DATA.
+      - Exceptions in node hooks increment error counters and are logged;
+        the processor continues with other work to avoid starvation.
+    """
 
     def __init__(self, config: PriorityQueueConfig) -> None:
         self._config = config
 
     def process_node_messages(self, plan: RuntimePlan, node_name: str) -> bool:
-        """Process available messages for a node. Returns True if work was done."""
+        """
+        Process available messages for a node.
+
+        Returns:
+          True if at least one message was processed; False otherwise.
+
+        Behavior:
+          - Pulls messages from input edges, up to max_batch_per_node.
+          - Wraps dequeued payloads into Message envelopes with inferred type.
+          - Calls node.on_message(port_name, message) for each processed item.
+          - Catches and logs exceptions per-message to continue processing.
+        """
         from .message import Message, MessageType
 
         node_ref = plan.nodes[node_name]
@@ -140,7 +214,17 @@ class NodeProcessor:
         return work_done
 
     def process_node_tick(self, plan: RuntimePlan, node_name: str) -> bool:
-        """Process tick for a node. Returns True if work was done."""
+        """
+        Process tick for a node.
+
+        Returns:
+          True if a tick was processed successfully; False if an error occurred.
+
+        Behavior:
+          - Invokes node.on_tick() and updates the node’s last_tick timestamp.
+          - Logs exceptions and increments error counters, but does not abort
+            the outer scheduling loop.
+        """
         from time import monotonic
 
         node_ref = plan.nodes[node_name]
@@ -157,7 +241,13 @@ class NodeProcessor:
             return False
 
     def start_all_nodes(self, plan: RuntimePlan) -> None:
-        """Start all nodes with error handling."""
+        """
+        Start all nodes with error handling.
+
+        Behavior:
+          - Iterates through nodes and invokes on_start().
+          - Logs failures per node and increments error counters.
+        """
         for node_name, node_ref in plan.nodes.items():
             try:
                 node_ref.node.on_start()
@@ -167,7 +257,13 @@ class NodeProcessor:
                 node_ref.error_count += 1
 
     def stop_all_nodes(self, plan: RuntimePlan) -> None:
-        """Stop all nodes in reverse order with error handling."""
+        """
+        Stop all nodes in reverse order with error handling.
+
+        Behavior:
+          - Invokes on_stop() from last to first to respect potential dependencies.
+          - Logs failures per node; continues stopping the rest.
+        """
         node_names = list(plan.nodes.keys())
         for node_name in reversed(node_names):
             try:

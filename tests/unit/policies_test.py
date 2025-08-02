@@ -1,4 +1,4 @@
-from arachne.core.policies import Block, Coalesce, Drop, Latest, PutResult
+from meridian.core.policies import Block, Coalesce, Drop, Latest, PutResult
 
 
 def test_block_policy() -> None:

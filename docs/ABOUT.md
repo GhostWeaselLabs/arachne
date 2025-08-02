@@ -1,11 +1,11 @@
-# Arachne Documentation
+# Meridian Runtime Documentation
 
-This directory contains the source for the Arachne documentation site, published via GitHub Pages and built with MkDocs Material.
+This directory contains the source for the Meridian Runtime documentation site, published via GitHub Pages and built with MkDocs Material.
 
 Quick links
-- Live site: https://ghostweasellabs.github.io/arachne/
+- Live site: https://ghostweasellabs.github.io/meridian-runtime/
 - MkDocs config: ../mkdocs.yml
-- Repo: https://github.com/GhostWeaselLabs/arachne
+- Repo: https://github.com/GhostWeaselLabs/meridian-runtime
 
 Structure
 - index.md — Docs homepage (user-facing landing page)
@@ -44,7 +44,7 @@ Adding new pages
 3) If the page is user-facing, link it from index.md or a relevant section.
 
 Issues and support
-- Open issues at: https://github.com/GhostWeaselLabs/arachne/issues
+- Open issues at: https://github.com/GhostWeaselLabs/meridian-runtime/issues
 - See support guidance in: support/HOW-TO-REPORT-ISSUES.md
 
-Thank you for helping improve the Arachne docs!
+Thank you for helping improve the Meridian Runtime docs!

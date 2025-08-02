@@ -39,16 +39,16 @@ EARS Requirements
 - The system shall support correlation ID propagation across messages via headers.trace_id (generated if missing).
 
 Deliverables
-- src/arachne/observability/logging.py
+- src/meridian/observability/logging.py
   - JSON-structured logging facade with minimal API: info, warn, error, debug
   - Context support: node, edge, port, trace_id, event, and timestamps
   - Global configuration: log level, output stream, optional extra fields
-- src/arachne/observability/metrics.py
+- src/meridian/observability/metrics.py
   - Metrics interface (protocol) with Counter, Gauge, Histogram
   - Default no-op implementation
   - Prometheus adapter (optional submodule) exposing a registry and exporter hooks
   - Metric name and label conventions (see below)
-- src/arachne/observability/tracing.py
+- src/meridian/observability/tracing.py
   - Optional tracing adapter (OpenTelemetry-friendly) with span helpers
   - contextvars integration to propagate trace_id and span contexts
   - Functions: start_span(name, attributes) → context manager; set_trace_id(str)
@@ -80,22 +80,22 @@ Logging
 
 Metrics
 - Conventions:
-  - Namespace: arachne_*
+  - Namespace: meridian_*
   - Labels: graph, subgraph, node, edge_id, port, policy, priority_band
 - Node metrics:
-  - arachne_node_messages_total (counter)
-  - arachne_node_errors_total (counter)
-  - arachne_node_tick_duration_seconds (histogram)
+  - meridian_node_messages_total (counter)
+  - meridian_node_errors_total (counter)
+  - meridian_node_tick_duration_seconds (histogram)
 - Edge metrics:
-  - arachne_edge_enqueued_total (counter)
-  - arachne_edge_dequeued_total (counter)
-  - arachne_edge_dropped_total (counter)
-  - arachne_edge_queue_depth (gauge)
-  - arachne_edge_blocked_time_seconds_total (counter or histogram; see below)
+  - meridian_edge_enqueued_total (counter)
+  - meridian_edge_dequeued_total (counter)
+  - meridian_edge_dropped_total (counter)
+  - meridian_edge_queue_depth (gauge)
+  - meridian_edge_blocked_time_seconds_total (counter or histogram; see below)
 - Scheduler metrics:
-  - arachne_scheduler_runnable_nodes (gauge)
-  - arachne_scheduler_loop_latency_seconds (histogram)
-  - arachne_scheduler_priority_applied_total (counter, labeled by band)
+  - meridian_scheduler_runnable_nodes (gauge)
+  - meridian_scheduler_loop_latency_seconds (histogram)
+  - meridian_scheduler_priority_applied_total (counter, labeled by band)
 - Implementation notes:
   - No-op by default; optionally enable a Prometheus adapter with on-demand registry creation and HTTP exposition outside of core (user’s responsibility)
   - Histograms: choose low-cardinality buckets; provide sane defaults
@@ -162,7 +162,7 @@ Configuration
   - metrics:
     - exporter: "noop" | "prometheus"
     - prometheus:
-      - namespace: "arachne"
+      - namespace: "meridian"
       - default_buckets: [0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2, 5]
   - tracing:
     - enabled: bool (default false)
@@ -182,17 +182,17 @@ Performance and Overhead
   - If enabled, keep spans coarse-grained and sampled
 
 Metric Catalog (Initial)
-- arachne_node_messages_total{node}
-- arachne_node_errors_total{node}
-- arachne_node_tick_duration_seconds_bucket/sum/count{node}
-- arachne_edge_enqueued_total{edge_id, policy}
-- arachne_edge_dequeued_total{edge_id}
-- arachne_edge_dropped_total{edge_id, policy}
-- arachne_edge_queue_depth{edge_id}
-- arachne_edge_blocked_time_seconds_total{edge_id}
-- arachne_scheduler_runnable_nodes{band}
-- arachne_scheduler_loop_latency_seconds_bucket/sum/count{}
-- arachne_scheduler_priority_applied_total{band}
+- meridian_node_messages_total{node}
+- meridian_node_errors_total{node}
+- meridian_node_tick_duration_seconds_bucket/sum/count{node}
+- meridian_edge_enqueued_total{edge_id, policy}
+- meridian_edge_dequeued_total{edge_id}
+- meridian_edge_dropped_total{edge_id, policy}
+- meridian_edge_queue_depth{edge_id}
+- meridian_edge_blocked_time_seconds_total{edge_id}
+- meridian_scheduler_runnable_nodes{band}
+- meridian_scheduler_loop_latency_seconds_bucket/sum/count{}
+- meridian_scheduler_priority_applied_total{band}
 
 Testing Strategy
 Unit tests
@@ -260,11 +260,11 @@ Checklist
 ### Implementation Details
 
 **Core Observability Components**:
-- `src/arachne/observability/logging.py` (103 lines) - JSON structured logging with contextvars
-- `src/arachne/observability/metrics.py` (129 lines) - Prometheus metrics with no-op defaults
-- `src/arachne/observability/tracing.py` (96 lines) - Optional tracing with contextvars integration
-- `src/arachne/observability/config.py` (31 lines) - Unified configuration utilities
-- `src/arachne/utils/ids.py` (13 lines) - ID generation utilities
+- `src/meridian/observability/logging.py` (103 lines) - JSON structured logging with contextvars
+- `src/meridian/observability/metrics.py` (129 lines) - Prometheus metrics with no-op defaults
+- `src/meridian/observability/tracing.py` (96 lines) - Optional tracing with contextvars integration
+- `src/meridian/observability/config.py` (31 lines) - Unified configuration utilities
+- `src/meridian/utils/ids.py` (13 lines) - ID generation utilities
 
 **Core Module Integration**:
 - Enhanced `message.py` with automatic trace_id generation and headers

@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Any as _Any, TypeAlias
 from .issue import Issue
 
 if TYPE_CHECKING:
-    from arachne.core.subgraph import Subgraph as _Subgraph
+    from meridian.core.subgraph import Subgraph as _Subgraph
 else:
     _Subgraph = _Any  # type: ignore[assignment]
 

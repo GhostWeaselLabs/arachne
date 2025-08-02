@@ -1,6 +1,6 @@
 # Milestone M99: Quality Pass (Code Comments, Docs Fixes, CI Docs Checks)
 
-Status: Planned
+Status: In Progress
 Owner: Core Maintainers (Lead: doubletap-dave)
 Duration: 2–4 days
 Branch: feature/m99-quality-pass
@@ -71,7 +71,7 @@ CI Workflow Health (All Jobs Green)
 ## 4) Deliverables
 
 - Code Documentation:
-  - Pass across `src/arachne/core/*`, `src/arachne/observability/*`, `src/arachne/utils/*` to ensure public classes/functions have docstrings with:
+  - Pass across `src/meridian/core/*`, `src/meridian/observability/*`, `src/meridian/utils/*` to ensure public classes/functions have docstrings with:
     - Purpose and contracts
     - Parameters and types
     - Return values and types
@@ -99,9 +99,9 @@ CI Workflow Health (All Jobs Green)
 ## 5) Work Breakdown
 
 Task Group A: Code Docstrings and Comments
-- A1: Inventory public surfaces in `src/arachne/core/` and add or refine docstrings.
-- A2: Inventory `src/arachne/observability/` and document adapters and configuration flows.
-- A3: Inventory `src/arachne/utils/` and add examples to docstrings where helpful.
+- A1: Inventory public surfaces in `src/meridian/core/` and add or refine docstrings.
+- A2: Inventory `src/meridian/observability/` and document adapters and configuration flows.
+- A3: Inventory `src/meridian/utils/` and add examples to docstrings where helpful.
 - A4: Add rationale comments for performance-sensitive or non-obvious logic.
 
 Task Group B: Docs Formatting and Links
@@ -141,13 +141,14 @@ Task Group E: CI Workflow Health (All Jobs Green)
   - Code fences include proper language identifiers.
   - Homepage and README consistently link to Quickstart, API, Patterns, Observability, and Troubleshooting.
 - Code Docstrings
-  - All public classes, functions, and modules in `src/arachne` have typed docstrings with contracts and side effects where applicable.
+  - All public classes, functions, and modules in `src/meridian` have typed docstrings with contracts and side effects where applicable.
   - Comments exist for non-obvious logic and performance-sensitive sections.
 - CI
-  - CI builds docs and fails on errors.
-  - Link-check job passes; broken links fail PRs.
-  - Optional snippet/execution checks pass or are quarantined with clear skip rationale.
-  - All workflows (lint, format, type-check, tests with coverage, packaging, Pages deploy) pass on PRs and main; any temporary skips or relaxations are documented and time-bounded.
+  CI
+    - CI builds docs and fails on errors. Status: Implemented and green.
+    - Link-check job passes; broken links fail PRs. Status: Running but currently non-blocking pending stability.
+    - Optional snippet/execution checks pass or are quarantined with clear skip rationale. Status: "Validate docs commands" using uv is passing.
+    - All workflows (lint, format, type-check, tests with coverage, packaging, Pages deploy) pass on PRs and main; any temporary skips or relaxations are documented and time-bounded. Status: Green on main; badge reflects passing.
 
 -------------------------------------------------------------------------------
 
@@ -187,10 +188,10 @@ CI
 
 ## 9) CI Checklist (High-Level)
 
-- [ ] Docs build job added to CI (PR + main).
-- [ ] Link-checking job added and required for PRs.
-- [ ] Optional snippet execution or example smoke job (allowed to fail initially, then promote to required).
-- [ ] All workflow jobs green on PRs and main: lint, format, type-check, tests with coverage, packaging, and Pages deploy.
+- [x] Docs build job added to CI (PR + main). Notes: MkDocs build job is green and runs on PRs and main.
+- [ ] Link-checking job added and required for PRs. Notes: Link-check runs but is currently non-blocking pending stability.
+- [x] Optional snippet execution or example smoke job (allowed to fail initially, then promote to required). Notes: "Validate docs commands" fixed via uv; runs successfully.
+- [x] All workflow jobs green on PRs and main: lint, format, type-check, tests with coverage, packaging, and Pages deploy. Notes: CI badge reflects passing; flaky link checks quarantined.
 - [ ] Coverage thresholds enforced and documented; relaxations (if any) tracked with a deadline to restore targets.
 - [ ] Ownership and on-failure triage guidance documented.
 
@@ -199,10 +200,10 @@ CI
 ## 10) Execution Checklist
 
 Code Documentation
-- [ ] `src/arachne/core/*` docstrings complete and typed
-- [ ] `src/arachne/observability/*` docstrings complete and typed
-- [ ] `src/arachne/utils/*` docstrings complete and typed
-- [ ] Non-obvious logic annotated with short clarifying comments
+- [x] `src/meridian/core/*` docstrings complete and typed — Completed across Node, Message, Ports, Policies, Edge, Priority Queue, Runtime Plan, Subgraph, and module init. Includes parameters, returns, exceptions, and side‑effects.
+- [x] `src/meridian/observability/*` docstrings complete and typed — Completed for logging, metrics, tracing, and unified config; includes usage and configuration semantics.
+- [x] `src/meridian/utils/*` docstrings complete and typed — Completed for ids, time, and validation helpers; clarified legacy aliases and shallow vs. runtime validations.
+- [x] Non-obvious logic annotated with short clarifying comments — Added notes on backpressure, fairness model, coalescing behavior, and timing utilities.
 
 Docs Rendering and Structure
 - [ ] Replace “---” separators with “***” or `<hr>` where used visually
@@ -218,13 +219,13 @@ Docs Completeness
 - [ ] Troubleshooting includes clear remediation steps
 
 CI Docs Checks
-- [ ] MkDocs build job added and green
-- [ ] Link-check job added and green
-- [ ] Optional snippet/execution checks configured or queued for nightly
+- [x] MkDocs build job added and green — Site build verified on PRs and main.
+- [ ] Link-check job added and green — Currently runs as non-blocking; promote once stable.
+- [x] Optional snippet/execution checks configured or queued for nightly — "Validate docs commands" fixed using uv and passing.
 
 CI Workflow Health
-- [ ] All jobs green on PRs and main (lint, format, type-check, tests with coverage, packaging, Pages deploy)
-- [ ] Flaky jobs identified with a mitigation plan and owner
+- [x] All jobs green on PRs and main (lint, format, type-check, tests with coverage, packaging, Pages deploy) — CI badge now passing.
+- [x] Flaky jobs identified with a mitigation plan and owner — Link-check flakiness mitigated via ignores and non-blocking status.
 - [ ] Coverage thresholds enforced; relaxations documented and time-bounded
 
 -------------------------------------------------------------------------------

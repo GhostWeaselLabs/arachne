@@ -1,4 +1,4 @@
-from arachne.core import Node, Subgraph
+from meridian.core import Node, Subgraph
 
 
 def test_subgraph_connect_and_expose() -> None:

@@ -1,6 +1,6 @@
-from arachne.core import Edge, Port, PortDirection
-from arachne.core.policies import Block, Coalesce, Drop, Latest, PutResult
-from arachne.core.ports import PortSpec
+from meridian.core import Edge, Port, PortDirection
+from meridian.core.policies import Block, Coalesce, Drop, Latest, PutResult
+from meridian.core.ports import PortSpec
 
 
 def mk_edge(cap: int = 2) -> Edge[int]:

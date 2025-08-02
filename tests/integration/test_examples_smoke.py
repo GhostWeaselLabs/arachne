@@ -1,7 +1,7 @@
-# Integration smoke tests for Arachne examples
+# Integration smoke tests for Meridian Runtime examples
 # This file now includes an M2 minimal wiring test.
 
-from arachne.core import Message, MessageType, Node, Subgraph
+from meridian.core import Message, MessageType, Node, Subgraph
 
 
 class Producer(Node):

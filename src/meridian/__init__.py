@@ -33,7 +33,7 @@ __all__ = [
 
 __version__ = "0.0.0"
 
-_PKG_NAME = "arachne"
+_PKG_NAME = "meridian"
 _MIN_PY = (3, 11)
 
 if _sys.version_info < _MIN_PY:
