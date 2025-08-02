@@ -58,9 +58,22 @@ class NodeRef:
 
 
 class RuntimePlan:
-    """Execution plan built from registered subgraphs."""
+    """
+    Execution plan built from registered subgraphs.
+
+    Responsibilities:
+      - Materialize nodes and edges from registered Subgraphs into runtime references.
+      - Track per-node readiness (messages and ticks) and compute effective priorities.
+      - Provide helper operations for priority/capacity mutation and node-scheduler wiring.
+      - Support efficient lookups of outgoing edges for routing/emission.
+
+    Notes:
+      - Node-ready state is derived each scheduler iteration via update_readiness().
+      - Priorities originate from edge metadata; node priority is computed from ready inputs.
+    """
 
     def __init__(self) -> None:
+        """Initialize empty runtime state containers."""
         self.nodes: dict[str, NodeRef] = {}
         self.edges: dict[str, EdgeRef] = {}
         self.ready_states: dict[str, ReadyState] = {}
@@ -76,7 +89,23 @@ class RuntimePlan:
         graphs: list[Subgraph],
         pending_priorities: dict[str, PriorityBand] | None = None,
     ) -> None:
-        """Build runtime plan from registered graphs."""
+        """
+        Build the runtime plan from registered subgraphs.
+
+        Parameters:
+          graphs:
+            Subgraphs previously registered with the scheduler.
+          pending_priorities:
+            Optional mapping of edge_id to PriorityBand to apply during build.
+
+        Behavior:
+          - Validates duplicate node names.
+          - Constructs NodeRef and EdgeRef objects and links inputs/outputs.
+          - Applies pending edge priorities before finalization.
+
+        Raises:
+          ValueError: If duplicate node names are encountered.
+        """
         self.clear()
         pending_priorities = pending_priorities or {}
 
@@ -107,7 +136,17 @@ class RuntimePlan:
                     self.nodes[edge.target_node].inputs[edge.target_port.name] = edge_ref
 
     def update_readiness(self, tick_interval_ms: int) -> None:
-        """Update node readiness states based on messages and tick intervals."""
+        """
+        Update per-node readiness for messages and ticks.
+
+        Parameters:
+          tick_interval_ms:
+            Milliseconds after which a node becomes tick-ready if it has not ticked.
+
+        Behavior:
+          - message_ready: True if any input edge has depth > 0.
+          - tick_ready: True if time since last_tick exceeds tick_interval_ms.
+        """
         current_time = monotonic()
 
         for node_name, node_ref in self.nodes.items():
@@ -123,7 +162,17 @@ class RuntimePlan:
             ready_state.tick_ready = time_since_tick >= tick_interval_ms
 
     def get_node_priority(self, node_name: str) -> PriorityBand:
-        """Get effective priority for a node based on ready inputs."""
+        """
+        Compute the effective priority for a node.
+
+        Rules:
+          - If message_ready: use the highest PriorityBand among ready input edges.
+          - Else if tick_ready: NORMAL priority.
+          - Else: NORMAL priority.
+
+        Returns:
+          PriorityBand for scheduling the node.
+        """
         node_ref = self.nodes[node_name]
         ready_state = self.ready_states[node_name]
 
@@ -143,12 +192,17 @@ class RuntimePlan:
         return PriorityBand.NORMAL
 
     def is_node_ready(self, node_name: str) -> bool:
-        """Check if a node is ready to run."""
+        """Return True if the node is ready to run (messages or tick)."""
         ready_state = self.ready_states[node_name]
         return ready_state.message_ready or ready_state.tick_ready
 
     def set_edge_priority(self, edge_id: str, priority_band: PriorityBand) -> None:
-        """Set priority for an edge in the runtime plan."""
+        """
+        Set the priority band for an edge in the runtime plan.
+
+        Raises:
+          ValueError: If the edge_id is unknown.
+        """
         if edge_id not in self.edges:
             raise ValueError(f"Unknown edge: {edge_id}")
 
@@ -156,7 +210,12 @@ class RuntimePlan:
         logger.debug(f"Set priority {priority_band} for edge {edge_id}")
 
     def set_edge_capacity(self, edge_id: str, capacity: int) -> None:
-        """Set capacity for an edge in the runtime plan."""
+        """
+        Set capacity for an edge in the runtime plan.
+
+        Raises:
+          ValueError: If the edge_id is unknown or capacity <= 0.
+        """
         if edge_id not in self.edges:
             raise ValueError(f"Unknown edge: {edge_id}")
 
@@ -172,7 +231,12 @@ class RuntimePlan:
             node_ref.node._set_scheduler(scheduler)
 
     def get_outgoing_edges(self, node_name: str, port_name: str) -> list[Any]:
-        """Get outgoing edges for a specific node and port."""
+        """
+        Get outgoing edges for a specific node and port.
+
+        Returns:
+          List of Edge instances whose source matches (node_name, port_name).
+        """
         edges = []
         for edge_ref in self.edges.values():
             if (

@@ -28,7 +28,7 @@ def generate_node_template(
 
     input_specs_str = ",\n".join(input_specs) if input_specs else "        # No input ports"
     output_specs_str = ",\n".join(output_specs) if output_specs else "        # No output ports"
-    port_import = "from arachne.core.ports import PortSpec" if inputs or outputs else ""
+    port_import = "from meridian.core.ports import PortSpec" if inputs or outputs else ""
 
     template = f'''"""Generated {class_name} node.
 
@@ -42,8 +42,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from arachne.core.message import Message
-from arachne.core.node import Node
+from meridian.core.message import Message
+from meridian.core.node import Node
 {port_import}
 
 
@@ -61,23 +61,23 @@ class {class_name}(Node):
         super().__init__(name=name)
         self.inputs = inputs  # type: ignore[assignment]
         self.outputs = outputs  # type: ignore[assignment]
-    
+
     async def on_start(self) -> None:
         """Called when the node starts. Override for initialization logic."""
         # TODO: Add initialization logic here
         pass
-    
+
     async def on_message(self, port: str, message: Message[Any]) -> None:
         """Process incoming messages and produce outputs."""
         # TODO: Implement your processing logic here
-        
+
         # Example: Forward data to output port
         # await self.send("output_port", message.payload)
-        
+
         # Example: Transform data before sending
         # result = transform(message.payload)
         # await self.send("output_port", result)
-        
+
         pass
 
     async def on_tick(self) -> None:
@@ -108,39 +108,39 @@ import pytest
 from unittest.mock import AsyncMock
 
 from {snake_case(class_name)} import {class_name}
-from arachne.core.message import Message
+from meridian.core.message import Message
 
 
 class {test_class}:
     """Test cases for {class_name}."""
-    
+
     @pytest.fixture
     def node(self):
         """Create a {class_name} instance for testing."""
         return {class_name}()
-    
+
     def test_init(self, node):
         """Test node initialization."""
         assert node.name == "{snake_case(class_name)}"
         assert len(node.inputs) == {len(inputs)}
         assert len(node.outputs) == {len(outputs)}
-    
+
     async def test_lifecycle(self, node):
         """Test node lifecycle methods."""
         await node.on_start()
         await node.on_stop()
-    
+
     async def test_process_message(self, node):
         """Test message processing."""
         # TODO: Add specific test cases for your processing logic
         message = Message(payload="test_data", metadata={{}})
-        
+
         # Mock the send method to capture outputs
         node.send = AsyncMock()
-        
+
         # Test processing
         await node.on_message("input_port", message)
-        
+
         # TODO: Add assertions based on expected behavior
         # Example: node.send.assert_called_once_with("output_port", expected_result)
 '''
@@ -159,7 +159,7 @@ import pytest
 from unittest.mock import AsyncMock
 
 from {module_path} import {class_name}
-from arachne.core.message import Message
+from meridian.core.message import Message
 
 
 class {test_class}:

@@ -8,11 +8,15 @@ theme:
   features:
     - navigation.instant
     - navigation.tracking
-    - content.code.copy
     - navigation.tabs
     - navigation.top
     - content.action.edit
     - content.action.view
+    - content.code.copy
+    - content.code.annotate
+    - navigation.indexes
+    - toc.integrate
+    - content.tabs.link
   palette:
     - scheme: default
       primary: indigo
@@ -26,6 +30,8 @@ theme:
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
 nav:
   - Home: index.md
   - Quickstart: quickstart.md
@@ -58,10 +64,34 @@ nav:
           - Bug Report: support/templates/BUG_REPORT.md
           - Feature Request: support/templates/FEATURE_REQUEST.md
 markdown_extensions:
+  # Core MkDocs/Material-friendly extensions
   - admonition
-  - codehilite
   - toc:
       permalink: true
+  - attr_list
+  - def_list
+  - footnotes
+  - meta
+
+  # PyMdown extensions for richer content features
+  - pymdownx.superfences
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.magiclink
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      linenums: false
+      use_pygments: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.arithmatex:
+      generic: true
 extra:
   social:
     - icon: fontawesome/brands/github
@@ -78,6 +108,11 @@ plugins:
       enable_creation_date: true
       fallback_to_build_date: true
       type: timeago
+  # - redirects:
+  #     redirect_maps:
+  #       old/page.md: new/page.md
+  # - minify:
+  #     minify_html: true
   # - google-analytics:
   #     tracking_id: UA-XXXXXXXXX-X
   #     anonymize_ip: true

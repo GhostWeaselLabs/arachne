@@ -19,25 +19,25 @@ from __future__ import annotations
 
 from typing import Any
 
-from arachne.core.subgraph import Subgraph
+from meridian.core.subgraph import Subgraph
 # Placeholder imports for potential scheduler usage
-from arachne.core.scheduler import Scheduler, SchedulerConfig
-from arachne.core.ports import PortSpec
-from arachne.utils.validation import validate_graph, Issue
+from meridian.core.scheduler import Scheduler, SchedulerConfig
+from meridian.core.ports import PortSpec
+from meridian.utils.validation import validate_graph, Issue
 # TODO: Import your node classes here
 # from arachne.nodes.your_node import YourNode
 
 
 class {class_name}(Subgraph):
     """TODO: Brief description of {class_name} functionality."""
-    
+
     def __init__(self, name: str = "{snake_case(class_name)}") -> None:
         """Initialize the subgraph."""
         super().__init__(name=name)
         self._setup_nodes()
         self._setup_connections()
         self._setup_exposed_ports()
-    
+
     def _setup_nodes(self) -> None:
         """Create and add nodes to the subgraph."""
         # TODO: Create your nodes here
@@ -45,7 +45,7 @@ class {class_name}(Subgraph):
         # self.processor = YourNode("processor")
         # self.add_node(self.processor)
         pass
-    
+
     def _setup_connections(self) -> None:
         """Wire nodes together."""
         # TODO: Connect your nodes here
@@ -61,7 +61,7 @@ class {class_name}(Subgraph):
                 raise ValueError(issue.message)
             if issue.is_warning():
                 print(f"Warning: {{issue.message}}")
-    
+
     def _setup_exposed_ports(self) -> None:
         """Expose internal ports as subgraph ports."""
         # TODO: Expose ports to make them available externally
@@ -89,17 +89,17 @@ def generate_subgraph_test_template(class_name: str) -> str:
 import pytest
 
 from {snake_case(class_name)} import {class_name}
-from arachne.core.scheduler import Scheduler, SchedulerConfig
+from meridian.core.scheduler import Scheduler, SchedulerConfig
 
 
 class {test_class}:
     """Test cases for {class_name}."""
-    
+
     @pytest.fixture
     def subgraph(self):
         """Create a {class_name} instance for testing."""
         return {class_name}()
-    
+
     def test_subgraph_creation(self, subgraph):
         """Basic creation test."""
         assert subgraph.name == "{snake_case(class_name)}"
@@ -111,19 +111,19 @@ class {test_class}:
         except ValueError:
             # Expected if no nodes are added yet
             pass
-    
+
     def test_node_composition(self, subgraph):
         """Test that nodes are properly added."""
         # TODO: Verify that expected nodes are present
         # Example: assert "processor" in subgraph.node_names()
         _ = Scheduler(SchedulerConfig())
         pass
-    
+
     def test_edge_connections(self, subgraph):
         """Test that nodes are properly connected."""
         # TODO: Verify connections between nodes
         pass
-    
+
     def test_port_exposure(self, subgraph):
         """Test that ports are properly exposed."""
         # TODO: Verify that expected ports are exposed
