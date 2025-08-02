@@ -13,7 +13,7 @@ Get the source: https://github.com/GhostWeaselLabs/arachne
 
 For an overview of how this documentation is organized, see About these docs: ./ABOUT.md
 
----
+***
 
 ## What can you build?
 
@@ -23,7 +23,7 @@ For an overview of how this documentation is organized, see About these docs: ./
 - Control planes with prioritized signals
 - Any real‑time graph that needs predictable flow control and visibility
 
----
+***
 
 ## Quick start
 
@@ -32,13 +32,13 @@ Prereqs
 - uv (https://github.com/astral-sh/uv)
 
 Initialize environment
-```
+```bash
 uv lock
 uv sync
 ```
 
 Dev loop
-```
+```bash
 # Lint
 uv run ruff check .
 
@@ -53,11 +53,11 @@ uv run pytest
 ```
 
 Run the example (hello graph)
-```
+```bash
 uv run python -m examples.hello_graph.main
 ```
 
----
+***
 
 ## Core ideas in 30 seconds
 
@@ -69,7 +69,7 @@ uv run python -m examples.hello_graph.main
 
 These primitives keep graphs explicit, testable, and easy to evolve.
 
----
+***
 
 ## Next steps
 
@@ -81,15 +81,15 @@ Read the guides:
 - Troubleshooting: ./troubleshooting.md
 
 Contribute and plan:
-- Contributing Guide: ../docs/contributing/CONTRIBUTING.md
-- Release Process: ../docs/contributing/RELEASING.md
-- Governance & Roadmaps: ../docs/plan
+- Contributing Guide: ./contributing/CONTRIBUTING.md
+- Release Process: ./contributing/RELEASING.md
+- Governance & Roadmaps: ./plan/
 
----
+***
 
 ## Example layout
 
-```
+```text
 src/arachne/
   core/           # nodes, edges, subgraphs, scheduler
   observability/  # logs, metrics, tracing hooks
@@ -101,7 +101,7 @@ tests/
   integration/    # end-to-end graph tests
 ```
 
----
+***
 
 ## Design principles
 
@@ -111,7 +111,7 @@ tests/
 - Prioritize control‑plane messages
 - Observability is not an afterthought
 
----
+***
 
 ## Links
 

@@ -3,14 +3,16 @@
 Thanks for your interest in Arachne! This document explains how to set up your environment, follow our standards, and propose changes. Arachne is a composable, asyncio-native, graph runtime created by GhostWeasel (Lead: doubletap-dave). We aim for clarity, predictability, and a strong developer experience.
 
 Quick links
-- Governance and overview: docs/plan/M0-governance-and-overview.md
-- Milestones and plans: docs/plan/
-- Support/how to report issues: docs/support/HOW-TO-REPORT-ISSUES.md
-- Troubleshooting: docs/support/TROUBLESHOOTING.md
+- Governance and overview: ../plan/M0-governance-and-overview.md
+- Milestones and plans: ../plan/
+- Support/how to report issues: ../support/HOW-TO-REPORT-ISSUES.md
+- Troubleshooting: ../support/TROUBLESHOOTING.md
+- CI triage and ownership: ./CI-TRIAGE.md
+- Docs style guide: ./DOCS_STYLE.md
 
 Note: By contributing, you agree to follow our Code of Conduct (CoC) and project governance in M0.
 
--------------------------------------------------------------------------------
+***
 
 1) Project Goals and Principles
 
@@ -23,7 +25,7 @@ Note: By contributing, you agree to follow our Code of Conduct (CoC) and project
 - Platform-agnostic: no assumptions about specific hosting services
 - Docs-as-product: plans, support docs, and examples are first-class
 
--------------------------------------------------------------------------------
+***
 
 2) Prerequisites and Environment Setup
 
@@ -59,6 +61,9 @@ Pre-commit (recommended)
   - pre-commit install --hook-type pre-push
 - Run on all files once:
   - pre-commit run --all-files
+```bash
+pre-commit run --all-files
+```
 - Hooks configured:
   - Ruff (lint with autofix) + Ruff formatter
   - Black
@@ -66,17 +71,38 @@ Pre-commit (recommended)
 This ensures consistent style locally and prevents CI churn.
 
 CI parity (run what CI runs)
-- Lint: uv run ruff check .
-- Format check: uv run black --check .
-- Type-check: uv run mypy src
-- Tests (with coverage gates): uv run pytest
-- Build coverage XML like CI: uv run pytest --cov=src --cov-report=xml:coverage.xml --cov-fail-under=0
-- Packaging (optional): uv build
-- Run a subset of tests: uv run pytest -q tests/path::TestClass::test_method
+- Lint:
+  ```bash
+  uv run ruff check .
+  ```
+- Format check:
+  ```bash
+  uv run black --check .
+  ```
+- Type-check:
+  ```bash
+  uv run mypy src
+  ```
+- Tests (with coverage gates):
+  ```bash
+  uv run pytest
+  ```
+- Build coverage XML like CI:
+  ```bash
+  uv run pytest --cov=src --cov-report=xml:coverage.xml --cov-fail-under=0
+  ```
+- Packaging (optional):
+  ```bash
+  uv build
+  ```
+- Run a subset of tests:
+  ```bash
+  uv run pytest -q tests/path::TestClass::test_method
+  ```
 
 Note: Some commands may be wrapped by scripts in scripts/ to ensure consistent options. Prefer those if present.
 
--------------------------------------------------------------------------------
+***
 
 3) Repository Layout
 
@@ -88,7 +114,7 @@ Note: Some commands may be wrapped by scripts in scripts/ to ensure consistent o
 - docs/support/*: issue reporting, troubleshooting, and templates
 - scripts/*: helper scripts for lint/type-check/test/release
 
--------------------------------------------------------------------------------
+***
 
 4) Development Standards
 
@@ -124,7 +150,7 @@ Documentation
 - Provide examples or recipes when adding notable features.
 - Keep README concise with pointers to deeper docs.
 
--------------------------------------------------------------------------------
+***
 
 5) Branching, Commits, and PRs
 
@@ -149,7 +175,7 @@ Review process
 - Address comments via follow-up commits; prefer small, targeted updates.
 - Squash or rebase as needed to keep history clean.
 
--------------------------------------------------------------------------------
+***
 
 6) Decision Records and RFCs
 
@@ -180,7 +206,7 @@ Location
 - Logging/metrics in tests: Use structured assertions or capture context; avoid coupling to specific backends.
 - Performance checks: Add micro-benchmarks for hot paths where feasible (non-blocking in CI).
 
--------------------------------------------------------------------------------
+***
 
 8) Observability, Errors, and Diagnostics
 
@@ -198,7 +224,7 @@ Location
 - Treat diagnostics bundles as sensitive; ensure anonymization and scrubbing where applicable.
 - Follow the principle of least privilege for configuration and environment access.
 
--------------------------------------------------------------------------------
+***
 
 10) Releasing
 
@@ -209,7 +235,7 @@ Location
   - Release verification (examples/tests)
 - Any public API change must include release notes and migration steps.
 
--------------------------------------------------------------------------------
+***
 
 11) Getting Help
 
@@ -218,18 +244,19 @@ Location
 - For templates: docs/support/templates/
 - If you’re blocked by a decision or unclear policy, open a discussion or small PR to propose a path forward and request maintainer guidance.
 
--------------------------------------------------------------------------------
+***
 
 12) Code of Conduct
 
 All contributors and maintainers must follow our CoC. Be respectful, constructive, and collaborative. Report violations through the project’s designated channels.
 
--------------------------------------------------------------------------------
+***
 
 Checklist Before Opening a PR
 
 - [ ] Code compiles and passes tests locally
-- [ ] uv run ruff check . and uv run black --check . run clean
+- [ ] uv run ruff check .
+- [ ] uv run black --check .
 - [ ] uv run mypy src passes (or narrow, justified suppressions)
 - [ ] uv run pytest passes locally (coverage gate ≥80% overall for M1)
 - [ ] Tests added/updated, including regression tests if fixing a bug

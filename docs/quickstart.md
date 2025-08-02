@@ -2,15 +2,21 @@
 
 Prerequisites
 - Python 3.11+
-- uv: https://docs.astral.sh/uv/
+- uv: https://docs.astral.sh/uv/ (manages a virtualenv automatically for uv run)
 
 Clone and setup
-- git clone <repo-url>; cd Arachne
-- uv lock; uv sync
+```bash
+git clone <repo-url>
+cd Arachne
+uv lock
+uv sync
+```
 
 Run examples
-- uv run python -m examples.hello_graph.main
-- uv run python -m examples.pipeline_demo.main
+```bash
+uv run python -m examples.hello_graph.main
+uv run python -m examples.pipeline_demo.main
+```
 
 Author your first node
 ```python
@@ -19,40 +25,57 @@ from arachne.core import Node, Message
 class Printer(Node):
     def __init__(self):
         super().__init__("printer", inputs=[], outputs=[])
-    def _handle_message(self, port, msg):
+    def _handle_message(self, port: str, msg: Message) -> None:
         print("payload=", msg.payload)
 ```
 
 Wire a subgraph and run
 ```python
-from arachne.core import Subgraph, Scheduler, Message, Node
+from arachne.core import Subgraph, Scheduler, Message, MessageType, Node
 from arachne.core.ports import Port, PortDirection, PortSpec
-from arachne.core.policies import latest
 
 class Producer(Node):
     def __init__(self):
-        super().__init__("producer", outputs=[Port("out", PortDirection.OUTPUT, spec=PortSpec("out", int))])
-    def _handle_tick(self):
+        super().__init__(
+            "producer",
+            inputs=[],
+            outputs=[Port("out", PortDirection.OUTPUT, spec=PortSpec("out", int))],
+        )
+    def _handle_tick(self) -> None:
         self.emit("out", Message(type=MessageType.DATA, payload=1))
 
 class Consumer(Node):
     def __init__(self):
-        super().__init__("consumer", inputs=[Port("in", PortDirection.INPUT, spec=PortSpec("in", int))])
-    def _handle_message(self, port, msg):
+        super().__init__(
+            "consumer",
+            inputs=[Port("in", PortDirection.INPUT, spec=PortSpec("in", int))],
+            outputs=[],
+        )
+    def _handle_message(self, port: str, msg: Message) -> None:
         print(msg.payload)
 
 sg = Subgraph.from_nodes("hello", [Producer(), Consumer()])
-sg.connect(("producer","out"), ("consumer","in"), capacity=16, spec=PortSpec("in", int))
+sg.connect(("producer","out"), ("consumer","in"), capacity=16)
 Scheduler().register(sg)
 Scheduler().run()
 ```
 
 Dev loop
-- uv run ruff check .
-- uv run black --check .
-- uv run mypy src
-- uv run pytest -q
+```bash
+uv run ruff check .
+uv run black --check .
+uv run mypy src
+uv run pytest -q
+```
 
 Troubleshooting
-- If uv not found: install uv, redo lock/sync
-- If type mismatch: ensure PortSpec.schema matches Message.payload type
+- If uv is not found, install uv and then initialize the environment:
+  ```bash
+  uv lock
+  uv sync
+  ```
+- If you see a type mismatch on enqueue, ensure PortSpec.schema matches the type of Message.payload (e.g., PortSpec("in", int) with payload=int).
+- If imports fail when running examples, use module form with uv:
+  ```bash
+  uv run python -m examples.hello_graph.main
+  ```
