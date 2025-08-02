@@ -152,12 +152,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Prepare lychee cache
+        id: lychee-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/lychee
+          key: lychee-${{ runner.os }}-${{ hashFiles('.lycheeignore') }}
+          restore-keys: |
+            lychee-${{ runner.os }}-
+
       - name: Show lychee config note
         run: |
           echo "Using .lycheeignore for transient domains and known flaky targets"
           echo "Retries enabled via lychee flags to reduce flakiness"
+          echo "Caching lychee at ~/.cache/lychee to speed up subsequent runs"
 
-      - name: Run lychee
+      - name: Run lychee (docs and repo root)
         uses: lycheeverse/lychee-action@v1.10.0
         with:
           args: >
@@ -170,6 +180,14 @@ jobs:
             --max-retries 2
             --exclude-all-private
             --exclude-file .lycheeignore
+            --scheme https
+            docs
             .
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fail if lychee reported issues
+        if: ${{ failure() }}
+        run: |
+          echo "::error::Link-check failed. See lychee output above. Consider updating .lycheeignore for transient domains."
+          exit 1
