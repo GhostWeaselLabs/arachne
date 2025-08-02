@@ -229,7 +229,7 @@ CI Workflow Health
 - [x] All jobs green on PRs and main (lint, format, type-check, tests with coverage, packaging, Pages deploy) — CI badge now passing.
 - [x] Flaky jobs identified with a mitigation plan and owner — Link-check flakiness mitigated via ignores and non-blocking status.
 - [x] Coverage thresholds enforced; relaxations documented and time-bounded — Gate set via pytest --cov-fail-under in CI; documented thresholds and restoration timelines captured in CONTRIBUTING and M99 notes.
-- [x] Code scanning added and scheduled — CodeQL workflow runs on PRs, main, and weekly; enable “Require code scanning results” in ruleset after first green run.
+- [x] Code scanning added and scheduled — CodeQL workflow runs on PRs, main, and weekly; “Require code scanning results” enabled in the main ruleset (CodeQL).
 - [x] Dependency automation added — Dependabot configured for GitHub Actions, Python packages, and docs tooling with weekly updates.
 
 -------------------------------------------------------------------------------
@@ -246,7 +246,7 @@ CI Workflow Health
 
 - Update CHANGELOG with a Quality section noting documentation and CI improvements. — Next PR
 - Review PRs for docstring quality and Markdown formatting alignment. — Ongoing
-- Enforce docs build and link checks as required PR gates after proving stability. — Promotion of link-check to “required” occurs via a manual branch protection setting after stability on main. After CodeQL’s first successful run, enable “Require code scanning results” in the main branch ruleset and select CodeQL.
+- Enforce docs build and link checks as required PR gates after proving stability. — Promotion of link-check to “required” occurs via a manual branch protection setting after stability on main. Code scanning requirement enabled: “Require code scanning results” (CodeQL) is active in the main ruleset.
 
 -------------------------------------------------------------------------------
 
