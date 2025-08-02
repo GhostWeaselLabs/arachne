@@ -116,7 +116,7 @@ jobs:
                   print(f"hello_graph run non-fatal error: {e}", file=sys.stderr)
           PY
           echo "Running pipeline_demo (import smoke)..."
-          python - << 'PY'
+          uv run python - << 'PY'
           import importlib, sys
           try:
               importlib.import_module("examples.pipeline_demo.main")
