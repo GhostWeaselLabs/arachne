@@ -1,6 +1,6 @@
 # Documentation Style Guide (DOCS_STYLE)
 
-This guide defines conventions for Arachne’s documentation to ensure the content renders correctly in both GitHub and our MkDocs Material site, remains consistent, and is easy to maintain.
+This guide defines conventions for Meridian Runtime’s documentation to ensure the content renders correctly in both GitHub and our MkDocs Material site, remains consistent, and is easy to maintain.
 
 Scope
 - Applies to all Markdown files in docs/.
@@ -27,13 +27,13 @@ uv run pytest
 ```
 
 ```python
-from arachne.core import Message, MessageType
+from meridian.core import Message, MessageType
 
 msg = Message(type=MessageType.DATA, payload=42)
 ```
 
 ```yaml
-site_name: Arachne
+site_name: Meridian Runtime
 theme:
   name: material
 ```
@@ -242,4 +242,4 @@ Don’t
 - Observability: ./../observability.md
 - Troubleshooting: ./../troubleshooting.md
 
-By following these conventions, we keep Arachne’s docs predictable, readable, and contributor‑friendly across GitHub and the generated site.
+By following these conventions, we keep Meridian Runtime’s docs predictable, readable, and contributor‑friendly across GitHub and the generated site.

@@ -3,9 +3,9 @@
 Install and import
 - Prereqs: Python 3.11+, uv
 - Install dev tools: uv lock; uv sync
-- Import: from arachne.core import Message, Node, Subgraph, Scheduler, PortSpec, Port, PortDirection
-- Policies: from arachne.core.policies import Block, Drop, Latest, Coalesce
-- Observability: from arachne.observability.metrics import configure_metrics, PrometheusMetrics
+- Import: from meridian.core import Message, Node, Subgraph, Scheduler, PortSpec, Port, PortDirection
+- Policies: from meridian.core.policies import Block, Drop, Latest, Coalesce
+- Observability: from meridian.observability.metrics import configure_metrics, PrometheusMetrics
 
 Core types
 - Message: immutable envelope with payload and headers; supports get_trace_id(), with_headers(...)
@@ -27,8 +27,8 @@ Priorities and bands
 - Scheduler fairness_ratio: default (4,2,1); max_batch_per_node: default 8
 
 Observability
-- Logging: structured events via arachne.observability.logging
-- Metrics: Noop by default; configure with PrometheusMetrics(); counters/gauges/histograms names include arachne_* prefix
+- Logging: structured events via meridian.observability.logging
+- Metrics: Noop by default; configure with PrometheusMetrics(); counters/gauges/histograms names include meridian_* prefix
 - Tracing: context propagation via trace_id; spans around node and scheduler operations
 
 Validation
@@ -44,8 +44,8 @@ See also
 
 Example: minimal pipeline
 ```python
-from arachne.core import Message, Node, Subgraph, Scheduler, PortSpec, Port, PortDirection
-from arachne.core.policies import Latest
+from meridian.core import Message, Node, Subgraph, Scheduler, PortSpec, Port, PortDirection
+from meridian.core.policies import Latest
 from arachne.core import MessageType
 
 class Producer(Node):

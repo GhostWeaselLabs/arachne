@@ -1,10 +1,10 @@
-# Arachne Support Policy
+# Meridian Runtime Support Policy
 
 Owner: GhostWeasel (Lead: doubletap-dave)  
 Status: Stable  
 Audience: Users and contributors
 
-Arachne is built to be operable and supportable with a strong bias toward privacy and safety. This document describes how to get help, how to report issues, and what to expect from maintainers.
+Meridian Runtime is built to be operable and supportable with a strong bias toward privacy and safety. This document describes how to get help, how to report issues, and what to expect from maintainers.
 
 -------------------------------------------------------------------------------
 
@@ -32,7 +32,7 @@ Arachne is built to be operable and supportable with a strong bias toward privac
 
 ## Privacy‑First Support
 
-Arachne’s support process intentionally avoids collecting sensitive information. Please do not share:
+Meridian’s support process intentionally avoids collecting sensitive information. Please do not share:
 - Secrets: API keys, tokens, passwords, private URLs
 - PII: names, emails, phone numbers, addresses, IDs
 - Payload contents: message bodies or domain data

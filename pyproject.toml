@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "BSD-3-Clause" }
 authors = [
-  { name = "GhostWeasel", email = "devnull@example.com" },
+  { name = "GhostWeasel", email = "devnull@ghostweasel.net" },
 ]
 keywords = ["graph", "runtime", "scheduler", "asyncio", "observability", "python"]
 classifiers = [
@@ -27,8 +27,8 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Homepage = "https://example.com/meridian-runtime"
-Repository = "https://example.com/meridian-runtime.git"
+Homepage = "https://ghostweasel.net/meridian-runtime"
+Repository = "https://ghostweasel.net/meridian-runtime.git"
 Changelog = "CHANGELOG.md"
 Documentation = "docs/plan/M0-governance-and-overview.md"
 

@@ -26,7 +26,7 @@ Owner: Core Maintainers
 Duration: 2–4 days
 
 Overview
-Provide developer utilities and project scaffolding to accelerate consistent, SRP/DRY-friendly node and subgraph creation. Utilities include time helpers, correlation ID generation, and validation helpers for types and graph contracts. Scaffolding includes generators to create node and subgraph skeletons conforming to Arachne conventions (~200 LOC/file, explicit typing, docstrings, tests).
+Provide developer utilities and project scaffolding to accelerate consistent, SRP/DRY-friendly node and subgraph creation. Utilities include time helpers, correlation ID generation, and validation helpers for types and graph contracts. Scaffolding includes generators to create node and subgraph skeletons conforming to Meridian conventions (~200 LOC/file, explicit typing, docstrings, tests).
 
 EARS Requirements
 - The system shall provide utilities for correlation ID generation, monotonic time, and validation helpers for ports and graphs.
@@ -37,20 +37,20 @@ EARS Requirements
 - Where Pydantic is enabled, the utilities shall support optional schema adapters without hard dependencies.
 
 Deliverables
-- src/arachne/utils/ids.py
+- src/meridian/utils/ids.py
   - Correlation ID generator (uuid4, ULID-like or short lexicographic-friendly option).
   - Functions: new_trace_id(), new_id(prefix: str | None = None).
-- src/arachne/utils/time.py
+- src/meridian/utils/time.py
   - Monotonic and wall-clock helpers: now_ts_ms(), now_rfc3339(), monotonic_ns().
   - Simple duration context manager: time_block() -> elapsed seconds.
-- src/arachne/utils/validation.py
+- src/meridian/utils/validation.py
   - Port and schema validation helpers.
   - Graph wiring checks (non-exhaustive): type compatibility, unique names, positive capacities.
   - Optional Pydantic adapter interface for schema validation.
-- src/arachne/scaffolding/generate_node.py
+- src/meridian/scaffolding/generate_node.py
   - CLI for generating node modules with class skeleton, typing, docstring, and unit test.
   - Options: --name, --package, --inputs, --outputs, --dir, --force, --include-tests.
-- src/arachne/scaffolding/generate_subgraph.py
+- src/meridian/scaffolding/generate_subgraph.py
   - CLI for generating subgraph modules with exposed ports, connect wiring stubs, and tests.
   - Options: --name, --package, --dir, --force, --include-tests.
 - Template files (inline within generators or small template directory) that adhere to ~200 LOC/file guidance.

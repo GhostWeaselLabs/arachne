@@ -1,6 +1,6 @@
-# Contributing to Arachne
+# Contributing to Meridian Runtime
 
-Thanks for your interest in Arachne! This document explains how to set up your environment, follow our standards, and propose changes. Arachne is a composable, asyncio-native, graph runtime created by GhostWeasel (Lead: doubletap-dave). We aim for clarity, predictability, and a strong developer experience.
+Thanks for your interest in Meridian Runtime! This document explains how to set up your environment, follow our standards, and propose changes. Meridian is a composable, asyncio-native, graph runtime created by GhostWeasel (Lead: doubletap-dave). We aim for clarity, predictability, and a strong developer experience.
 
 Quick links
 - Governance and overview: ../plan/M0-governance-and-overview.md
@@ -42,7 +42,7 @@ Local setup
    - See https://github.com/astral-sh/uv for installation instructions.
 3. Clone the repository:
    - git clone <repo-url>
-   - cd Arachne
+   - cd meridian-runtime
 4. Create and activate a virtual environment (uv will manage it automatically for most commands, but you can also do it yourself if preferred).
 5. Install dependencies (managed by uv via pyproject.toml):
    - uv lock
@@ -106,7 +106,7 @@ Note: Some commands may be wrapped by scripts in scripts/ to ensure consistent o
 
 3) Repository Layout
 
-- src/arachne/*: runtime and library code
+- src/meridian/*: runtime and library code
 - tests/*: unit, integration, and property-based tests
 - examples/*: runnable examples and recipes
 - docs/plan/*: milestone plans and decision records
@@ -213,7 +213,7 @@ Location
 - Log structure: prefer event = "node_started", node_id, graph_id, etc.
 - Metrics: stable names, low label cardinality, adapters optional.
 - Errors: do not include payload contents by default; attach metadata only.
-- Diagnostics: future CLI command arachne diagnostics collect will generate redacted bundles. Until then, follow docs/support/HOW-TO-REPORT-ISSUES.md for safe data sharing.
+- Diagnostics: future CLI command meridian diagnostics collect will generate redacted bundles. Until then, follow docs/support/HOW-TO-REPORT-ISSUES.md for safe data sharing.
 
 -------------------------------------------------------------------------------
 
@@ -265,4 +265,4 @@ Checklist Before Opening a PR
 - [ ] Linked to issue(s) and/or Decision Record for significant changes
 - [ ] Scoped, reviewable commits with clear messages
 
-Thank you for helping build Arachne!
+Thank you for helping build Meridian Runtime!

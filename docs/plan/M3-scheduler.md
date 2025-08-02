@@ -46,7 +46,7 @@ EARS Requirements
 - The system shall remain single-process and asyncio-friendly without requiring async to use it (adapter layer can be added later).
 
 Deliverables
-- src/arachne/core/scheduler.py
+- src/meridian/core/scheduler.py
   - Scheduler class and run loop [DONE]
   - Registration of graphs/subgraphs with expansion into an internal plan (nodes, edges, ports) [DONE]
   - Runnable queues and priority biasing [DONE]
@@ -54,7 +54,7 @@ Deliverables
   - Graceful shutdown and stop semantics [DONE]
   - Runtime mutators: set_priority, set_capacity (with validation and safe application) [DONE]
   - Backpressure-aware emit routing glue between Node.emit and Edge.put/try_put [DONE]
-- src/arachne/core/runtime_plan.py (optional small helper)
+- src/meridian/core/runtime_plan.py (optional small helper)
   - Flatten Subgraph into execution plan: topo order, node/edge indices, port maps [DONE - integrated into scheduler]
   - Deterministic IDs for edges and addressable endpoints [DONE]
 - Minimal integration hooks

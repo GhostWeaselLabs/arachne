@@ -23,7 +23,7 @@ Deliverables
   - uv-managed dev loop
   - ruff (lint), black (format), mypy (types), pytest + coverage (tests) [DONE]
 - Repo structure:
-  - src/arachne/… (package skeletons: core/, observability/, utils/) [DONE]
+  - src/meridian/… (package skeletons: core/, observability/, utils/) [DONE]
   - examples/ (placeholder) [DONE]
   - tests/unit/, tests/integration/ (smoke scaffolds) [DONE]
   - docs/ (existing), docs/plan/ (this file) [DONE]
@@ -43,7 +43,7 @@ Deliverables
 Scope and Tasks
 1) Repository and tooling
 - Create pyproject.toml:
-  - Project metadata (name: arachne, version: 0.0.0, license: BSD 3-Clause)
+  - Project metadata (name: meridian-runtime, version: 0.0.0, license: BSD 3-Clause)
   - Dependencies: none (runtime) for M1
   - Dev dependencies: ruff, black, mypy, pytest, pytest-cov, types-*
   - [tool.ruff], [tool.black], [tool.pytest.ini_options] sections
@@ -53,10 +53,10 @@ Scope and Tasks
 
 2) Codebase layout
 - Create packages:
-  - src/arachne/__init__.py
-  - src/arachne/core/__init__.py
-  - src/arachne/observability/__init__.py
-  - src/arachne/utils/__init__.py
+  - src/meridian/__init__.py
+  - src/meridian/core/__init__.py
+  - src/meridian/observability/__init__.py
+  - src/meridian/utils/__init__.py
   - examples/__init__.py
 - Add placeholder modules with TODO headers so imports resolve in tests.
 

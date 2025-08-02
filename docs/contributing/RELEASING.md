@@ -1,4 +1,4 @@
-# Releasing Arachne
+# Releasing Meridian Runtime
 
 Owner: GhostWeasel (Lead: doubletap-dave)
 Audience: Maintainers and release managers
