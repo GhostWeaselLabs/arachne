@@ -1,22 +1,22 @@
-# Unit smoke tests for Arachne package
+# Unit smoke tests for Meridian Runtime package
 
 
-def test_import_arachne_package():
+def test_import_meridian_package():
     # Verify that the package can be imported and exposes expected attributes
-    import arachne  # noqa: F401
+    import meridian  # noqa: F401
 
-    assert hasattr(arachne, "__version__"), "Arachne package should expose __version__"
+    assert hasattr(meridian, "__version__"), "Meridian package should expose __version__"
     # Basic sanity on optional namespaces/symbols
-    assert hasattr(arachne, "Message")
-    assert hasattr(arachne, "Node")
-    assert hasattr(arachne, "Subgraph")
-    assert hasattr(arachne, "Scheduler")
+    assert hasattr(meridian, "Message")
+    assert hasattr(meridian, "Node")
+    assert hasattr(meridian, "Subgraph")
+    assert hasattr(meridian, "Scheduler")
 
 
-def test_version_is_semverish():
-    import arachne
+def test_version_is_semverish_for_meridian():
+    import meridian
 
-    version = getattr(arachne, "__version__", None)
+    version = getattr(meridian, "__version__", None)
     assert isinstance(version, str) and version, "__version__ must be a non-empty string"
 
     # Very lightweight semantic-ish validation: MAJOR.MINOR.PATCH or 0.0.0 for bootstrap

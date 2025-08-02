@@ -191,7 +191,7 @@ def test_error_handling() -> None:
     sch.register(sg)
 
     # Should not crash despite node errors
-    with patch("arachne.core.priority_queue.logger") as mock_logger:
+    with patch("meridian.core.priority_queue.logger") as mock_logger:
         sch.run()
 
         # Should have logged errors
