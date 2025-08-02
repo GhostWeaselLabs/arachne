@@ -1,4 +1,4 @@
-from arachne.core import Message, MessageType
+from meridian.core import Message, MessageType
 
 
 def test_header_normalization_and_helpers() -> None:

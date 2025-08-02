@@ -1,4 +1,4 @@
-from arachne.core import Message, MessageType, Node
+from meridian.core import Message, MessageType, Node
 
 
 class Harness(Node):

@@ -31,7 +31,7 @@ class TestScaffoldingSmoke:
                 [
                     sys.executable,
                     "-m",
-                    "arachne.scaffolding.generate_node",
+                    "meridian.scaffolding.generate_node",
                     "--name",
                     "SmokeTestNode",
                     "--package",
@@ -74,7 +74,7 @@ class TestScaffoldingSmoke:
                 [
                     sys.executable,
                     "-m",
-                    "arachne.scaffolding.generate_subgraph",
+                    "meridian.scaffolding.generate_subgraph",
                     "--name",
                     "SmokeTestPipeline",
                     "--package",
@@ -112,7 +112,7 @@ class TestScaffoldingSmoke:
                 [
                     sys.executable,
                     "-m",
-                    "arachne.scaffolding.generate_node",
+                    "meridian.scaffolding.generate_node",
                     "--name",
                     "ImportTestNode",
                     "--package",
@@ -157,7 +157,7 @@ class TestScaffoldingSmoke:
                 [
                     sys.executable,
                     "-m",
-                    "arachne.scaffolding.generate_subgraph",
+                    "meridian.scaffolding.generate_subgraph",
                     "--name",
                     "ImportTestPipeline",
                     "--package",
@@ -195,7 +195,7 @@ class TestScaffoldingSmoke:
             [
                 sys.executable,
                 "-m",
-                "arachne.scaffolding.generate_node",
+                "meridian.scaffolding.generate_node",
                 "--name",
                 "invalid-name",  # Invalid: contains dash
                 "--package",
@@ -216,7 +216,7 @@ class TestScaffoldingSmoke:
                 [
                     sys.executable,
                     "-m",
-                    "arachne.scaffolding.generate_node",
+                    "meridian.scaffolding.generate_node",
                     "--name",
                     "OverwriteTest",
                     "--package",
@@ -235,7 +235,7 @@ class TestScaffoldingSmoke:
                 [
                     sys.executable,
                     "-m",
-                    "arachne.scaffolding.generate_node",
+                    "meridian.scaffolding.generate_node",
                     "--name",
                     "OverwriteTest",
                     "--package",
@@ -259,7 +259,7 @@ class TestScaffoldingSmoke:
                 [
                     sys.executable,
                     "-m",
-                    "arachne.scaffolding.generate_node",
+                    "meridian.scaffolding.generate_node",
                     "--name",
                     "ComplexTypeNode",
                     "--package",
@@ -294,7 +294,7 @@ class TestScaffoldingSmoke:
                 [
                     sys.executable,
                     "-m",
-                    "arachne.scaffolding.generate_node",
+                    "meridian.scaffolding.generate_node",
                     "--name",
                     "DeepPackageNode",
                     "--package",
@@ -328,7 +328,7 @@ class TestGeneratedCodeQuality:
                 [
                     sys.executable,
                     "-m",
-                    "arachne.scaffolding.generate_node",
+                    "meridian.scaffolding.generate_node",
                     "--name",
                     "LintTestNode",
                     "--package",
@@ -371,7 +371,7 @@ class TestGeneratedCodeQuality:
                 [
                     sys.executable,
                     "-m",
-                    "arachne.scaffolding.generate_node",
+                    "meridian.scaffolding.generate_node",
                     "--name",
                     "TypeTestNode",
                     "--package",
@@ -416,7 +416,7 @@ class TestGeneratedCodeQuality:
                 [
                     sys.executable,
                     "-m",
-                    "arachne.scaffolding.generate_node",
+                    "meridian.scaffolding.generate_node",
                     "--name",
                     "ComplexNode",
                     "--package",
@@ -445,7 +445,7 @@ class TestGeneratedCodeQuality:
                 [
                     sys.executable,
                     "-m",
-                    "arachne.scaffolding.generate_subgraph",
+                    "meridian.scaffolding.generate_subgraph",
                     "--name",
                     "ComplexPipeline",
                     "--package",
