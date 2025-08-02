@@ -52,11 +52,26 @@ Local setup
    - uv run mypy --version
    - uv run pytest --version
 
-Common commands
+Pre-commit (recommended)
+- Install pre-commit:
+  - uv run pip install pre-commit
+  - pre-commit install
+  - pre-commit install --hook-type pre-push
+- Run on all files once:
+  - pre-commit run --all-files
+- Hooks configured:
+  - Ruff (lint with autofix) + Ruff formatter
+  - Black
+  - EOF fixer, trailing whitespace, YAML/TOML checks
+This ensures consistent style locally and prevents CI churn.
+
+CI parity (run what CI runs)
 - Lint: uv run ruff check .
 - Format check: uv run black --check .
 - Type-check: uv run mypy src
 - Tests (with coverage gates): uv run pytest
+- Build coverage XML like CI: uv run pytest --cov=src --cov-report=xml:coverage.xml --cov-fail-under=0
+- Packaging (optional): uv build
 - Run a subset of tests: uv run pytest -q tests/path::TestClass::test_method
 
 Note: Some commands may be wrapped by scripts in scripts/ to ensure consistent options. Prefer those if present.
