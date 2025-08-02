@@ -85,24 +85,42 @@ jobs:
   docs-snippets:
     name: Validate docs commands
     runs-on: ubuntu-latest
-    # Only run if the repository contains an examples/ directory
-    if: ${{ hashFiles('examples/**') != '' }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Detect examples directory
+        id: detect_examples
+        shell: bash
+        run: |
+          if [ -d "examples" ] && find examples -type f | grep -q .; then
+            echo "run_snippets=true" >> "$GITHUB_OUTPUT"
+            echo "Examples detected; will run snippet smoke."
+          else
+            echo "run_snippets=false" >> "$GITHUB_OUTPUT"
+            echo "No examples/ content detected; skipping snippet smoke."
+          fi
+
       - uses: actions/setup-python@v5
+        if: ${{ steps.detect_examples.outputs.run_snippets == 'true' }}
         with:
           python-version: "3.11"
+
       - name: Install uv and tools
+        if: ${{ steps.detect_examples.outputs.run_snippets == 'true' }}
         run: |
           python -m pip install --upgrade pip
           pip install uv
+
       - name: Sync deps
+        if: ${{ steps.detect_examples.outputs.run_snippets == 'true' }}
         run: |
           if [ ! -f uv.lock ]; then
             uv lock
           fi
           uv sync
+
       - name: Run example entrypoints (smoke)
+        if: ${{ steps.detect_examples.outputs.run_snippets == 'true' }}
         run: |
           set -e
           echo "Running hello_graph (short smoke)..."
