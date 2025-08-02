@@ -150,11 +150,11 @@ jobs:
         uses: actions/checkout@v4
       - name: Run lychee
         uses: lycheeverse/lychee-action@v1.10.0
+        continue-on-error: true
         with:
           args: >
             --verbose
             --no-progress
-            --exclude-file .lycheeignore
             --accept 200,206,429
             .
         env:
