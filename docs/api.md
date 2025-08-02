@@ -46,7 +46,7 @@ Example: minimal pipeline
 ```python
 from meridian.core import Message, Node, Subgraph, Scheduler, PortSpec, Port, PortDirection
 from meridian.core.policies import Latest
-from arachne.core import MessageType
+from meridian.core import MessageType
 
 class Producer(Node):
     def __init__(self):

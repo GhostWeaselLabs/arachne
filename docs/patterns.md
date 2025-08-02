@@ -11,9 +11,9 @@ This page shows common graph patterns with minimal examples. See also: ./api.md 
 
 Example: latest (keep only newest)
 ```python
-from arachne.core import Subgraph, Scheduler, Node, Message, MessageType, PortSpec
-from arachne.core.ports import Port, PortDirection
-from arachne.core.policies import Latest
+from meridian.core import Subgraph, Scheduler, Node, Message, MessageType, PortSpec
+from meridian.core.ports import Port, PortDirection
+from meridian.core.policies import Latest
 
 class Producer(Node):
     def __init__(self):
@@ -50,13 +50,13 @@ sg.connect(("producer","out"), ("consumer","in"), capacity=16)  # default: block
 
 - drop: drop when full
 ```python
-from arachne.core.policies import Drop
+from meridian.core.policies import Drop
 sg.connect(("producer","out"), ("consumer","in"), capacity=16, policy=Drop())
 ```
 
 - coalesce: merge bursts via a function
 ```python
-from arachne.core.policies import Coalesce
+from meridian.core.policies import Coalesce
 def combine(old, new):
     return new  # or custom logic to merge items
 sg.connect(("producer","out"), ("consumer","in"), capacity=16, policy=Coalesce(combine))
@@ -75,8 +75,8 @@ Use higher priority edges for kill switches or coordination. Control-plane messa
 
 Minimal example
 ```python
-from arachne.core import Subgraph, Node, PortSpec, Message, MessageType
-from arachne.core.ports import Port, PortDirection
+from meridian.core import Subgraph, Node, PortSpec, Message, MessageType
+from meridian.core.ports import Port, PortDirection
 
 class Upper(Node):
     def __init__(self):

@@ -1,11 +1,11 @@
-# Arachne Post‑v1 Roadmap
+# Meridian Runtime Post‑v1 Roadmap
 
 Owner: GhostWeasel (Lead: doubletap-dave)
 Status: Living document
 Audience: Contributors, maintainers, integrators
 
 Purpose
-This roadmap captures high‑value initiatives considered out of scope for v1.0.0 but aligned with Arachne’s mission: a composable, asyncio‑native graph runtime with strong observability, predictable scheduling, and privacy‑first error handling. It is organized by time horizon and includes requirements framed with EARS to ensure clarity and testability.
+This roadmap captures high‑value initiatives considered out of scope for v1.0.0 but aligned with Meridian’s mission: a composable, asyncio‑native graph runtime with strong observability, predictable scheduling, and privacy‑first error handling. It is organized by time horizon and includes requirements framed with EARS to ensure clarity and testability.
 
 Guiding Themes
 - Composability and portability over bespoke integrations
@@ -20,7 +20,7 @@ Horizon 1: Near‑Term (v1.x series)
 
 1) CLI Enhancements and Diagnostics
 EARS — Event-driven:
-- When a user runs `arachne diagnostics collect`, the CLI shall gather anonymized runtime metadata, environment info (OS, Python version), configuration checksums, and recent logs into a bundle.
+- When a user runs `meridian diagnostics collect`, the CLI shall gather anonymized runtime metadata, environment info (OS, Python version), configuration checksums, and recent logs into a bundle.
 - When a diagnostics bundle is created, the CLI shall apply redaction rules to scrub secrets, tokens, PII, and payload contents by default.
 
 EARS — Ubiquitous:

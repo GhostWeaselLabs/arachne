@@ -71,7 +71,7 @@ CI Workflow Health (All Jobs Green)
 ## 4) Deliverables
 
 - Code Documentation:
-  - Pass across `src/arachne/core/*`, `src/arachne/observability/*`, `src/arachne/utils/*` to ensure public classes/functions have docstrings with:
+  - Pass across `src/meridian/core/*`, `src/meridian/observability/*`, `src/meridian/utils/*` to ensure public classes/functions have docstrings with:
     - Purpose and contracts
     - Parameters and types
     - Return values and types
@@ -99,9 +99,9 @@ CI Workflow Health (All Jobs Green)
 ## 5) Work Breakdown
 
 Task Group A: Code Docstrings and Comments
-- A1: Inventory public surfaces in `src/arachne/core/` and add or refine docstrings.
-- A2: Inventory `src/arachne/observability/` and document adapters and configuration flows.
-- A3: Inventory `src/arachne/utils/` and add examples to docstrings where helpful.
+- A1: Inventory public surfaces in `src/meridian/core/` and add or refine docstrings.
+- A2: Inventory `src/meridian/observability/` and document adapters and configuration flows.
+- A3: Inventory `src/meridian/utils/` and add examples to docstrings where helpful.
 - A4: Add rationale comments for performance-sensitive or non-obvious logic.
 
 Task Group B: Docs Formatting and Links
@@ -141,7 +141,7 @@ Task Group E: CI Workflow Health (All Jobs Green)
   - Code fences include proper language identifiers.
   - Homepage and README consistently link to Quickstart, API, Patterns, Observability, and Troubleshooting.
 - Code Docstrings
-  - All public classes, functions, and modules in `src/arachne` have typed docstrings with contracts and side effects where applicable.
+  - All public classes, functions, and modules in `src/meridian` have typed docstrings with contracts and side effects where applicable.
   - Comments exist for non-obvious logic and performance-sensitive sections.
 - CI
   CI
@@ -200,9 +200,9 @@ CI
 ## 10) Execution Checklist
 
 Code Documentation
-- [x] `src/arachne/core/*` docstrings complete and typed — Completed across Node, Message, Ports, Policies, Edge, Priority Queue, Runtime Plan, Subgraph, and module init. Includes parameters, returns, exceptions, and side‑effects.
-- [x] `src/arachne/observability/*` docstrings complete and typed — Completed for logging, metrics, tracing, and unified config; includes usage and configuration semantics.
-- [x] `src/arachne/utils/*` docstrings complete and typed — Completed for ids, time, and validation helpers; clarified legacy aliases and shallow vs. runtime validations.
+- [x] `src/meridian/core/*` docstrings complete and typed — Completed across Node, Message, Ports, Policies, Edge, Priority Queue, Runtime Plan, Subgraph, and module init. Includes parameters, returns, exceptions, and side‑effects.
+- [x] `src/meridian/observability/*` docstrings complete and typed — Completed for logging, metrics, tracing, and unified config; includes usage and configuration semantics.
+- [x] `src/meridian/utils/*` docstrings complete and typed — Completed for ids, time, and validation helpers; clarified legacy aliases and shallow vs. runtime validations.
 - [x] Non-obvious logic annotated with short clarifying comments — Added notes on backpressure, fairness model, coalescing behavior, and timing utilities.
 
 Docs Rendering and Structure
