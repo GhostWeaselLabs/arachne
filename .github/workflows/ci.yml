@@ -168,6 +168,7 @@ jobs:
           echo "Caching lychee at ~/.cache/lychee to speed up subsequent runs"
 
       - name: Run lychee (docs and repo root)
+        id: lychee
         uses: lycheeverse/lychee-action@v1.10.0
         with:
           args: >
@@ -181,13 +182,38 @@ jobs:
             --exclude-all-private
             --exclude-file .lycheeignore
             --scheme https
+            --format markdown
+            --output lychee-report.md
             docs
             .
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Upload lychee report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lychee-report
+          path: lychee-report.md
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Print lychee summary
+        if: always()
+        run: |
+          echo "## Link Check Summary" >> $GITHUB_STEP_SUMMARY
+          if [ -f lychee-report.md ]; then
+            bad_count=$(grep -cE '^.*(Error|BROKEN).*' lychee-report.md || true)
+            echo "- Broken link count (approx): ${bad_count}" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### First 50 lines of report" >> $GITHUB_STEP_SUMMARY
+            head -n 50 lychee-report.md >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- Report file not found (lychee may have failed before writing output)" >> $GITHUB_STEP_SUMMARY
+          fi
+
       - name: Fail if lychee reported issues
         if: ${{ failure() }}
         run: |
-          echo "::error::Link-check failed. See lychee output above. Consider updating .lycheeignore for transient domains."
+          echo "::error::Link-check failed. See lychee output above, the lychee-report artifact, and the summary for details."
           exit 1
