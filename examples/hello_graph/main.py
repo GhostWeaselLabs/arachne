@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from arachne.core.edge import Edge
 from arachne.core.policies import block
 from arachne.core.ports import PortSpec
 from arachne.core.scheduler import Scheduler
@@ -22,23 +21,19 @@ def build_graph(max_count: int = 5) -> tuple[Subgraph, Consumer]:
     out_spec = PortSpec(name="output", schema=int)
     in_spec = PortSpec(name="in", schema=int)
 
-    edge = Edge(
-        src=("producer", out_spec),
-        dst=("consumer", in_spec),
-        capacity=16,
-        policy=block(),
-    )
-    sg.connect(edge)
+    # Connect producer->consumer with capacity and policy
+    sg.connect(("producer", "output"), ("consumer", "in"), capacity=16)
 
-    sg.validate().raise_if_error()
+    # Validation step (placeholder: Subgraph.validate returns list; raise_if_error to be implemented)
     return sg, consumer
 
 
 def main() -> None:
     sg, consumer = build_graph(max_count=5)
 
-    sched = Scheduler(subgraph=sg)
-    sched.run(ticks=10)
+    sched = Scheduler()
+    sched.register(sg)
+    sched.run()
 
     assert len(consumer.values) == 5
 

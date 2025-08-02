@@ -35,3 +35,7 @@ CI parity
 Notes
 - Packaging via setuptools; build: uv run python -m build (optional)
 - Python >=3.11 only
+
+Examples run
+- Hello graph: uv run python -m examples.hello_graph.main
+- Pipeline demo: uv run python -m examples.pipeline_demo.main

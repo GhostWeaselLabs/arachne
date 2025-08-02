@@ -26,8 +26,9 @@ class Subgraph:
     def from_nodes(cls, name: str, nodes: Iterable[Node]) -> Subgraph:
         return cls(name=name, nodes={n.name: n for n in nodes})
 
-    def add_node(self, node: Node) -> None:
-        self.nodes[node.name] = node
+    def add_node(self, node: Node, name: str | None = None) -> None:
+        node_name = name or node.name
+        self.nodes[node_name] = node
 
     def connect(self, src: tuple[str, str], dst: tuple[str, str], capacity: int = 1024) -> str:
         if capacity <= 0:

@@ -66,6 +66,7 @@ Deliver runnable, composable examples and concise documentation that demonstrate
 - [x] Files ≤ ~200 LOC; SRP respected.
 - [x] Docstring with purpose, ports, capacities, policies, priorities.
 - [x] uv run command included and tested.
+- [x] Edge validates Message.payload against PortSpec.schema (Message-wrapped types supported).
 - [ ] Validation errors are clear if miswired (expand troubleshooting examples).
 - [ ] Metrics/logs visible (no‑op safe); tracing guarded by optional deps.
 - [x] Smoke tests in CI.

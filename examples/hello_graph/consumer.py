@@ -1,20 +1,18 @@
 from __future__ import annotations
 
 from arachne.core.message import Message
+from arachne.core.node import Node
+from arachne.core.ports import PortDirection, Port, PortSpec
 
 
-class Consumer:
-    """
-    Prints or records incoming integer payloads.
-
-    Ports:
-      in:int
-    """
-
+class Consumer(Node):
     def __init__(self) -> None:
+        super().__init__(name="consumer")
         self.values: list[int] = []
+        # define single input port "in"
+        self.inputs = [Port(name="in", direction=PortDirection.INPUT, spec=PortSpec("in", int))]
 
-    def on_message(self, port: str, msg: Message[int]) -> None:
+    def _handle_message(self, port: str, msg: Message[int]) -> None:
         if port != "in":
             return
         self.values.append(msg.payload)
