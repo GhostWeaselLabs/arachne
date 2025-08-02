@@ -27,7 +27,7 @@ theme:
         icon: material/weather-sunny
         name: Switch to light mode
 nav:
-  - Home: home.md
+  - Home: index.md
   - Quickstart: quickstart.md
   - API: api.md
   - Patterns: patterns.md
