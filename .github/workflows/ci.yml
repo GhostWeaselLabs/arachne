@@ -69,11 +69,11 @@ jobs:
         run: |
           uv run pytest -q --maxfail=1
 
-      - name: Generate coverage XML
+      - name: Generate coverage XML (fail under 80%)
         shell: bash
         if: always()
         run: |
-          uv run pytest --cov=src --cov-report=xml:coverage.xml --cov-fail-under=0
+          uv run pytest --cov=src --cov-report=xml:coverage.xml --cov-fail-under=80
 
       - name: Upload coverage artifact
         if: always()
@@ -159,7 +159,6 @@ jobs:
 
       - name: Run lychee
         uses: lycheeverse/lychee-action@v1.10.0
-        continue-on-error: true
         with:
           args: >
             --verbose
