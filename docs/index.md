@@ -49,7 +49,7 @@ uv run black --check .
 uv run mypy src
 
 # Tests with coverage
-uv run pytest
+uv run pytest --cov=src --cov-fail-under=80
 ```
 
 Run the example (hello graph)

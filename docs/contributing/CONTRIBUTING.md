@@ -68,6 +68,10 @@ pre-commit run --all-files
   - Ruff (lint with autofix) + Ruff formatter
   - Black
   - EOF fixer, trailing whitespace, YAML/TOML checks
+  - markdownlint (docs style)
+  - docs: no bare code fences (fails on ``` with no language)
+  - docs: forbid '---' as visual separators (use *** or <hr> instead)
+  - docs: link check (internal-only via lychee)
 This ensures consistent style locally and prevents CI churn.
 
 CI parity (run what CI runs)
@@ -85,11 +89,22 @@ CI parity (run what CI runs)
   ```
 - Tests (with coverage gates):
   ```bash
-  uv run pytest
+  uv run pytest --cov=src --cov-fail-under=80
   ```
-- Build coverage XML like CI:
+- Build coverage XML like CI (80% gate matches CI):
   ```bash
-  uv run pytest --cov=src --cov-report=xml:coverage.xml --cov-fail-under=0
+  uv run pytest --cov=src --cov-report=xml:coverage.xml --cov-fail-under=80
+  ```
+- Optional: install lychee locally for pre-commit docs link checks:
+  ```bash
+  # Using cargo (recommended)
+  cargo install lychee
+  # Verify
+  lychee --version
+  ```
+  If lychee is not installed, the docs link-check pre-commit hook may fail locally; install it or skip with:
+  ```bash
+  SKIP=docs-lychee-internal pre-commit run --all-files
   ```
 - Packaging (optional):
   ```bash
@@ -258,7 +273,7 @@ Checklist Before Opening a PR
 - [ ] uv run ruff check .
 - [ ] uv run black --check .
 - [ ] uv run mypy src passes (or narrow, justified suppressions)
-- [ ] uv run pytest passes locally (coverage gate ≥80% overall for M1)
+- [ ] uv run pytest --cov=src --cov-fail-under=80 passes locally (coverage gate ≥80% overall)
 - [ ] Tests added/updated, including regression tests if fixing a bug
 - [ ] Docs updated (README, examples, or deeper docs as needed)
 - [ ] No payload contents in error events or logs; redaction applied where appropriate
