@@ -8,6 +8,9 @@
 #   make demo-coalesce
 #   make demo-sentiment-debug
 #   make demo-coalesce-quiet
+#   make docs-build
+#   make docs-serve
+#   make docs-check-links
 #
 # Notes:
 # - These targets assume your shell is positioned at the repository root.
@@ -48,6 +51,9 @@ help:
 	@echo "  demo-sentiment-debug     Run the sentiment demo with --debug"
 	@echo "  demo-coalesce            Run the streaming coalesce demo"
 	@echo "  demo-coalesce-quiet      Run the coalesce demo with --quiet"
+	@echo "  docs-build               Build the MkDocs site to ./site"
+	@echo "  docs-serve               Serve the docs locally with live reload"
+	@echo "  docs-check-links         Check links in docs and README using lychee"
 	@echo
 	@echo "Override parameters with environment variables. Examples:"
 	@echo "  RATE_HZ=20 TICK_MS=10 make demo-sentiment"
@@ -109,3 +115,21 @@ demo-coalesce-quiet:
 		--cap-sensor-to-agg $(CAP_SENSOR_TO_AGG) \
 		--cap-agg-to-sink $(CAP_AGG_TO_SINK) \
 		--keep $(COAL_KEEP)
+
+# --------------------------------------------------------------------
+# Documentation (MkDocs)
+# --------------------------------------------------------------------
+.PHONY: docs-build
+docs-build:
+	@which mkdocs >/dev/null 2>&1 || (echo "mkdocs not found. Install with: pip install mkdocs mkdocs-material" && exit 1)
+	mkdocs build --strict
+
+.PHONY: docs-serve
+docs-serve:
+	@which mkdocs >/dev/null 2>&1 || (echo "mkdocs not found. Install with: pip install mkdocs mkdocs-material" && exit 1)
+	mkdocs serve -a 127.0.0.1:8000
+
+.PHONY: docs-check-links
+docs-check-links:
+	@which lychee >/dev/null 2>&1 || (echo "lychee not found. Install with: cargo install lychee" && exit 1)
+	lychee --no-progress --max-concurrency 8 --exclude-all-private --accept 200,429 --retry-wait-time 2 --retry-count 2 --timeout 20 --base ./ .

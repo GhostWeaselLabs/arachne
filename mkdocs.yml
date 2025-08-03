@@ -1,5 +1,5 @@
 site_name: Meridian Runtime
-site_description: Minimal, reusable graph runtime for Python
+site_description: Minimal, reusable graph runtime for Python.
 repo_url: https://github.com/GhostWeaselLabs/meridian-runtime
 site_url: https://ghostweasellabs.github.io/meridian-runtime/
 edit_uri: edit/main/

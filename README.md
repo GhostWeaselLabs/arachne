@@ -27,7 +27,7 @@ Use cases
 ## Documentation
 
 - Site: https://ghostweasellabs.github.io/meridian-runtime/ — Deployed via GitHub Pages (source: GitHub Actions)
-- Repo: https://github.com/GhostWeaselLabs/meridian-runtime
+Docs: https://ghostweasellabs.github.io/meridian-runtime/
 - Quickstart: https://ghostweasellabs.github.io/meridian-runtime/docs/quickstart/
 - API: https://ghostweasellabs.github.io/meridian-runtime/docs/api/
 - Patterns: https://ghostweasellabs.github.io/meridian-runtime/docs/patterns/
@@ -38,14 +38,14 @@ Use cases
 
 
 
-## Quickstart
+## Quick start
 
 Prereqs
 - Python 3.11+
 - uv (modern Python package manager)
 
-1) Initialize environment
-```
+Initialize environment
+```bash
 uv lock
 uv sync
 ```
