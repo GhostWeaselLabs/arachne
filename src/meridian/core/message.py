@@ -81,13 +81,16 @@ class Message:
           - This method mutates the frozen dataclass via object.__setattr__ only to
             finalize auto-populated headers at construction time.
         """
-        # Ensure trace_id is present in headers
-        if not self.headers.get("trace_id"):
+        # Ensure trace_id is present in headers only when the key is absent.
+        # If the key is present with a value of None, preserve that explicit intent.
+        if "trace_id" not in self.headers:
             # We need to work around frozen dataclass limitation
             object.__setattr__(self, "headers", {**self.headers, "trace_id": generate_trace_id()})
 
-        # Ensure timestamp is present
-        if not self.headers.get("timestamp"):
+        # Ensure timestamp is present only when the key is absent.
+        # If the key is present with a value of None, preserve that explicit intent
+        # so get_timestamp() can coerce it to 0.0 in tests.
+        if "timestamp" not in self.headers:
             import time
 
             object.__setattr__(self, "headers", {**self.headers, "timestamp": time.time()})

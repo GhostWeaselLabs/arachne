@@ -1,0 +1,54 @@
+{
+  "config": {
+    "capacity": 1024,
+    "consumers": 2,
+    "fairness_ratio": [
+      4,
+      2,
+      1
+    ],
+    "idle_sleep_ms": 0,
+    "max_batch_per_node": 128,
+    "producers": 2,
+    "seconds": 5.0,
+    "seed": 8675309,
+    "shutdown_timeout_s": 2.0,
+    "tick_interval_ms": 1
+  },
+  "env": {
+    "platform": "darwin",
+    "python": "3.12.11"
+  },
+  "name": "scheduler_loop",
+  "results": {
+    "iterations_per_second_estimate": 4919.0,
+    "scheduler_loop_latency_seconds": {
+      "buckets": {
+        "0.001": 24595,
+        "0.005": 24595,
+        "0.01": 24595,
+        "0.025": 24595,
+        "0.05": 24595,
+        "0.1": 24595,
+        "0.25": 24595,
+        "0.5": 24595,
+        "1": 24595,
+        "2": 24595,
+        "5": 24595,
+        "inf": 24595
+      },
+      "count": 24595,
+      "p50_estimate_seconds": 0.001,
+      "p95_estimate_seconds": 0.001,
+      "p99_estimate_seconds": 0.001,
+      "sum": 0.3121418375521898
+    },
+    "total_processed": 16930
+  },
+  "summary": {
+    "loop_p95_ms": 1.0,
+    "loop_p99_ms": 1.0,
+    "processed": 16930
+  },
+  "version": 1
+}

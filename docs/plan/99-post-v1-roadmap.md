@@ -27,34 +27,71 @@ EARS — Ubiquitous:
 - The CLI shall support subcommands for graph validation, linting, and quick profiling (e.g., edge depths, queue sizes).
 - The CLI shall support exporting a machine‑readable snapshot of node/edge schemas and runtime topology.
 
-2) Graph Inspector (Text/Terminal)
+2) Rust Fast Path Extensions (PyO3)
+EARS — Ubiquitous:
+- The system shall provide an optional `meridian_fast` extension backed by Rust (via PyO3/maturin) implementing:
+  - A bounded ring buffer for edges with block/drop/latest/coalesce policies.
+  - Policy handlers as zero‑copy operations over indices and lengths.
+  - Scheduler ready‑queue band selection and dispatch primitives.
+- When `meridian_fast` is installed, the runtime shall auto‑detect and use the Rust implementations; otherwise, it shall fall back to pure Python.
+
+EARS — Unwanted:
+- If the Rust extension is unavailable or fails to load, the system shall degrade gracefully with no behavior change.
+
+Notes:
+- Package as an optional extra: `pip install meridian-runtime[fast]`.
+- Keep the public API identical; optimize internal data structures and loops.
+
+3) CPU Topology Awareness and Affinity
+EARS — Event-driven:
+- At startup, the runtime shall detect logical CPU count and affinity mask, log them, and expose metrics (e.g., `runtime_cpu_visible`, `runtime_cpu_affinity_count`).
+- When `MERIDIAN_SET_CPU_AFFINITY=1` is set on Linux, the process shall set its CPU affinity to the full visible set and log the result.
+
+EARS — Unwanted:
+- Affinity setting shall be opt‑in and never cause startup failure if the platform doesn’t support it.
+
+4) Deterministic Metrics Overhead Minimization
+EARS — Ubiquitous:
+- The metrics subsystem shall provide a zero‑overhead stub when disabled and batch increments when enabled to keep overhead ≤10% versus no metrics.
+
+Notes:
+- Preserve budget checks in CI; validate with microbenchmarks.
+
+5) Nightly Profiling Artifacts
+EARS — Event-driven:
+- When profiling mode is enabled (`MERIDIAN_PROF=1`), CI shall capture sampling profiles (py‑spy/perf) during stress tests and upload flamegraphs.
+
+EARS — Unwanted:
+- Profiling mode shall not be enabled by default in PR CI to avoid noise.
+
+6) Graph Inspector (Text/Terminal)
 EARS — Ubiquitous:
 - The system shall provide a TUI inspector enabling overview of nodes, edges, queue states, and lifecycle statuses with refresh intervals.
 - The inspector shall remain opt‑in and run without impacting runtime performance beyond nominal observation overhead.
 
-3) Runtime Introspection API
+7) Runtime Introspection API
 EARS — Ubiquitous:
 - The runtime shall expose an introspection surface to enumerate nodes, edge policies, and recent error events with redacted metadata.
 - The runtime shall provide structured metrics readers for exporting counters/gauges/histograms to common backends via adapters.
 
-4) Schema and Validation Ergonomics
+8) Schema and Validation Ergonomics
 EARS — Ubiquitous:
 - The system shall offer optional validators (TypedDict/Pydantic) with a consistent adapter interface.
 - The system shall include validation error mapping to structured runtime error events (no payloads by default).
 
-5) Scheduler Profiling and Fairness Tuning
+9) Scheduler Profiling and Fairness Tuning
 EARS — Event-driven:
 - When profiling mode is enabled, the scheduler shall record scheduling latencies, runnable queue lengths, and per‑node execution times with constant‑factor overhead.
 
 EARS — State-driven:
 - While steady‑state, the scheduler shall support configurable fairness strategies (e.g., round‑robin, weighted) selectable via policy.
 
-6) Persistence‑Friendly Hooks
+10) Persistence‑Friendly Hooks
 EARS — Ubiquitous:
 - The system shall provide extension points for durable inbox/outbox adapters (e.g., SQLite, file‑backed) without making persistence mandatory.
 - The system shall document at‑least‑once and at‑most‑once semantics for adapters that opt into persistence.
 
-7) Examples and Recipes Expansion
+11) Examples and Recipes Expansion
 EARS — Ubiquitous:
 - The repository shall include curated examples demonstrating backpressure policies, redaction strategies, and controlled shutdown.
 - The examples shall include “debug mode” scripts that set up structured logs and quick metrics sinks.
@@ -99,9 +136,10 @@ EARS — Ubiquitous:
 
 Horizon 3: Long‑Term (v3.x+)
 
-1) Multi‑Process/Distributed Execution
+1) Multi‑Process/Distributed Execution (Rust Bridges)
 EARS — Ubiquitous:
 - The runtime shall support partitioned execution across processes or hosts with clear delivery guarantees and robust health checks.
+- Bridge edges shall be backed by shared memory or lock‑free queues implemented in Rust, with a `DistributedEngine` composing multiple schedulers.
 
 EARS — Unwanted:
 - If a partition becomes isolated, the system shall degrade gracefully with backpressure, clear error events, and recovery paths.
@@ -129,6 +167,7 @@ Cross‑Cutting Concerns
 Observability
 - The system shall continue to prioritize structured logs, metrics, and optional tracing, with stable keys and label cardinality guidance.
 - Adapters shall be provided for common metrics backends (Prometheus, OpenTelemetry exporters) without hard dependencies.
+- Profiling: provide nightly sampling profiles and flamegraphs for stress runs; keep off by default in PR CI.
 
 Privacy and Redaction
 - Redaction hooks shall be consistently applied across logs, diagnostics, inspector tools, and replay facilities.
@@ -137,10 +176,13 @@ Privacy and Redaction
 Performance
 - Benchmarks and micro‑profiling suites shall accompany major changes (scheduler, edges, validators).
 - Clear SLOs: baseline latency envelopes for node execution and enqueue/dequeue operations under reference workloads.
+- Rust fast paths: optional acceleration layer (`meridian_fast`) for ring buffers, policies, and scheduler dispatch with behavior parity tests.
+- CPU topology awareness: metrics for visible CPUs and affinity; optional process pinning via `MERIDIAN_SET_CPU_AFFINITY`.
 
 API Stability
 - Semantic versioning applies to public APIs; deprecations shall include migration notes and timelines.
 - Experimental APIs shall be clearly marked with upgrade expectations.
+- Fast‑path implementations must preserve public API semantics and be fully covered by conformance tests against the Python reference.
 
 -------------------------------------------------------------------------------
 
@@ -151,6 +193,8 @@ Candidate RFC/Decision Record Topics
 - Visual inspector transport and privacy posture
 - Replay/log formats and time‑travel debugging guarantees
 - Multi‑process partitioning model and delivery guarantees
+- Rust fast‑path FFI surface and conformance testing approach
+- Scheduler core replacement plan and callback adapter interface
 
 -------------------------------------------------------------------------------
 

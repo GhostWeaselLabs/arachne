@@ -1,0 +1,53 @@
+{
+  "budgets": {
+    "sched_p95_ms": null
+  },
+  "config": {
+    "capacity": 1024,
+    "consumer_batch_max": 16,
+    "consumers": 2,
+    "idle_sleep_ms": 0,
+    "producer_burst_max": 8,
+    "producer_sleep_ms": 0,
+    "producers": 2,
+    "run_seconds": 3.0,
+    "shutdown_timeout_s": 2.0,
+    "tick_interval_ms": 1
+  },
+  "env": {
+    "platform": "darwin",
+    "python": "3.12.11"
+  },
+  "metrics": {
+    "counters": {
+      "arachne_scheduler_priority_applied_total": 24914.0
+    },
+    "gauges": {
+      "arachne_scheduler_runnable_nodes": 0.0
+    },
+    "scheduler_loop_latency_seconds": {
+      "buckets": {
+        "0.001": 24914,
+        "0.005": 24914,
+        "0.01": 24914,
+        "0.025": 24914,
+        "0.05": 24914,
+        "0.1": 24914,
+        "0.25": 24914,
+        "0.5": 24914,
+        "1": 24914,
+        "2": 24914,
+        "5": 24914,
+        "inf": 24914
+      },
+      "count": 24914,
+      "p95_estimate_seconds": 0.001,
+      "sum": 0.31655306299217045
+    },
+    "total_processed": 17244
+  },
+  "name": "throughput_and_latency",
+  "result": "pass",
+  "seed": 1337,
+  "suite": "stress"
+}

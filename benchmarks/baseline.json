@@ -1,0 +1,13 @@
+{
+  "edge_put_get": {
+    "ops_per_sec_no_metrics": 22000,
+    "ops_per_sec_prom_metrics": 21000,
+    "metrics_overhead_pct": 6.0
+  },
+  "scheduler_loop": {
+    "iterations_per_second": 4500,
+    "loop_p50_ms": 1.0,
+    "loop_p95_ms": 1.5,
+    "loop_p99_ms": 2.0
+  }
+}
