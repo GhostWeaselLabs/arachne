@@ -24,7 +24,8 @@ class Edge(Generic[T]):
     - Accepts Message payloads or raw values; when a PortSpec is provided, values are
       validated via PortSpec.validate before enqueue.
     - Enqueue behavior is governed by a Policy (Block, Drop, Latest, Coalesce). If no
-      policy is provided on try_put(), Latest is used by default.
+      policy is provided on try_put(), Latest is used by default or the configured default_policy
+      if present.
 
     Metrics and Observability
     - edge_enqueued_total: count of successful enqueues (including replace/coalesce cases)
@@ -44,6 +45,7 @@ class Edge(Generic[T]):
     - target_node/target_port: destination for items
     - capacity: maximum number of items permitted
     - spec: optional PortSpec used to validate payload types
+    - default_policy: optional Policy used when none is provided at try_put() time
 
     """
 
@@ -53,6 +55,7 @@ class Edge(Generic[T]):
     target_port: Port
     capacity: int = 1024
     spec: PortSpec | None = None
+    default_policy: Policy[T] | None = None
     _q: deque[T] = field(default_factory=deque, init=False, repr=False)
     _metrics: Metrics = field(default_factory=lambda: get_metrics(), init=False, repr=False)
     _enq = None
@@ -159,7 +162,8 @@ class Edge(Generic[T]):
                 logger.warn("edge.validation_failed", "Item does not conform to PortSpec schema")
             raise TypeError("item does not conform to PortSpec schema")
 
-        pol = policy or Latest()
+        # Choose policy: explicit > default_policy > Latest()
+        pol = policy or self.default_policy or Latest()
         res = pol.on_enqueue(self.capacity, len(self._q), item)
 
         with with_context(edge_id=self._edge_id()):

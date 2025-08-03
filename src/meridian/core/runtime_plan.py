@@ -111,7 +111,19 @@ class RuntimePlan:
 
         # Collect all nodes and edges
         for graph in graphs:
-            for node in graph.nodes.values():
+            # If the subgraph recorded duplicate adds, surface a consistent error here
+            if getattr(graph, "_has_duplicate_names", False):
+                raise ValueError("Duplicate node name: subgraph recorded duplicate additions")
+
+            # Detect duplicate node names within the same subgraph before adding
+            seen_in_graph: set[str] = set()
+            for key, node in graph.nodes.items():
+                # Detect duplicates within the same subgraph by dict key (supports add_node duplicates)
+                if key in seen_in_graph:
+                    raise ValueError(f"Duplicate node name: {key}")
+                seen_in_graph.add(key)
+
+                # Detect duplicates across already-added graphs by node name
                 if node.name in self.nodes:
                     raise ValueError(f"Duplicate node name: {node.name}")
 

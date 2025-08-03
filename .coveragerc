@@ -1,0 +1,31 @@
+[run]
+branch = True
+source =
+    src
+
+[report]
+# Exclude legacy validator package from coverage calculations.
+omit =
+    src/meridian/utils/validators/*
+    # Optionally omit tests and scaffolding templates from coverage reporting
+    tests/*
+    src/meridian/scaffolding/templates/*
+
+# Treat these lines as non-coverable (common guardrails, pragmas)
+exclude_lines =
+    pragma: no cover
+    if __name__ == .__main__.:
+    @overload
+    @abstractmethod
+    @dataclass\(frozen=True, slots=True\)
+
+# Show missing lines in terminal report
+show_missing = True
+precision = 2
+
+[html]
+directory = htmlcov
+title = Meridian Runtime Coverage Report
+
+[xml]
+output = coverage.xml

@@ -116,6 +116,10 @@ Soak tests (nightly)
 - Nightly jobs run shortened soaks (~10–15 minutes) for v1; longer soaks post-v1.
 - Run locally (optional): uv run pytest -q -k "soak"
   - Tip: Prefer a dedicated machine and avoid running soaks alongside other heavy workloads.
+- Short-run behavior and adaptive sampling:
+  - Default duration is controlled by MERIDIAN_SOAK_SECONDS (default: 120).
+  - For short local runs (e.g., MERIDIAN_SOAK_SECONDS=5), the soak harness adapts its sampling interval to avoid flakiness and still produce a representative snapshot.
+  - Artifacts are written to .meridian/artifacts/soak/long_running_stability.json; short runs will contain fewer samples but remain valid for sanity checks.
 
 CI notes and expectations
 What CI enforces for v1

@@ -194,13 +194,17 @@ class NodeProcessor:
 
             if msg_payload is not None:
                 try:
-                    # Wrap payload in Message - infer type based on edge priority
-                    msg_type = (
-                        MessageType.CONTROL
-                        if edge_ref.priority_band == PriorityBand.CONTROL
-                        else MessageType.DATA
-                    )
-                    message = Message(msg_type, msg_payload)
+                    # If producer already enqueued a Message, pass it through unchanged.
+                    if isinstance(msg_payload, Message):
+                        message = msg_payload
+                    else:
+                        # Wrap raw payload in Message - infer type based on edge priority
+                        msg_type = (
+                            MessageType.CONTROL
+                            if edge_ref.priority_band == PriorityBand.CONTROL
+                            else MessageType.DATA
+                        )
+                        message = Message(msg_type, msg_payload)
 
                     node.on_message(port_name, message)
                     work_done = True

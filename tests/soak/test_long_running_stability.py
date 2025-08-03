@@ -107,7 +107,8 @@ class Consumer(Node):
     def on_start(self) -> None:
         self._processed = 0
 
-    def on_message(self, port: Port, msg: Any) -> None:
+    def on_message(self, port: str, msg: Message) -> None:
+        # Count any received message
         self._processed += 1
 
     def on_tick(self) -> None:
@@ -168,6 +169,10 @@ def _mk_subgraph(cfg: SoakConfig) -> Tuple[Subgraph, List[Consumer]]:
         consumers.append(Consumer(f"cons{c}", ins[c % len(ins)], cfg.consumer_batch_max))
 
     g = Subgraph.from_nodes("soak_topology", [*producers, *consumers])
+    # Wire producers to consumers in a simple 1:1 mapping (wrap-around)
+    for idx, p in enumerate(producers):
+        c = consumers[idx % len(consumers)]
+        g.connect((p.name, p._out.name), (c.name, c._in.name), capacity=cfg.capacity)
     return g, consumers
 
 
@@ -215,6 +220,10 @@ def _periodic_monitor(seconds: float, interval: float, consumers: List[Consumer]
     """
     Periodically record RSS and processed counters to detect trends.
     """
+    # Adapt interval for short runs to ensure multiple samples are collected.
+    # Use a minimum of 1s and target ~20 samples over the run window.
+    adaptive_interval = max(1.0, min(interval, max(1.0, seconds / 20.0)))
+
     data: Dict[str, Any] = {
         "rss_bytes": [],  # type: ignore[assignment]
         "processed": [],
@@ -227,7 +236,7 @@ def _periodic_monitor(seconds: float, interval: float, consumers: List[Consumer]
             data["rss_bytes"].append(int(rss))
         data["processed"].append(sum(c.processed for c in consumers))
         data["timestamps"].append(time.time())
-        time.sleep(interval)
+        time.sleep(adaptive_interval)
     return data
 
 

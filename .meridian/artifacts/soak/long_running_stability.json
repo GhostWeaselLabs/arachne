@@ -1,0 +1,79 @@
+{
+  "config": {
+    "capacity": 1024,
+    "consumer_batch_max": 32,
+    "consumers": 2,
+    "idle_sleep_ms": 0,
+    "producer_burst_max": 8,
+    "producers": 2,
+    "run_seconds": 5.0,
+    "shutdown_timeout_s": 5.0,
+    "tick_interval_ms": 1
+  },
+  "env": {
+    "platform": "darwin",
+    "psutil": false,
+    "python": "3.12.11"
+  },
+  "metrics": {
+    "counters": {
+      "arachne_edge_dequeued_total{edge_id=prod0:o0->cons0:i0}": 21785.0,
+      "arachne_edge_dequeued_total{edge_id=prod1:o1->cons1:i1}": 21862.0,
+      "arachne_edge_dropped_total{edge_id=prod0:o0->cons0:i0}": 0.0,
+      "arachne_edge_dropped_total{edge_id=prod1:o1->cons1:i1}": 0.0,
+      "arachne_edge_enqueued_total{edge_id=prod0:o0->cons0:i0}": 21785.0,
+      "arachne_edge_enqueued_total{edge_id=prod1:o1->cons1:i1}": 21862.0,
+      "arachne_node_errors_total{node=cons0}": 0.0,
+      "arachne_node_errors_total{node=cons1}": 0.0,
+      "arachne_node_errors_total{node=prod0}": 0.0,
+      "arachne_node_errors_total{node=prod1}": 0.0,
+      "arachne_node_messages_total{node=cons0}": 0.0,
+      "arachne_node_messages_total{node=cons1}": 0.0,
+      "arachne_node_messages_total{node=prod0}": 0.0,
+      "arachne_node_messages_total{node=prod1}": 0.0,
+      "arachne_scheduler_priority_applied_total": 63000.0
+    },
+    "gauges": {
+      "arachne_edge_queue_depth{edge_id=prod0:o0->cons0:i0}": 0.0,
+      "arachne_edge_queue_depth{edge_id=prod1:o1->cons1:i1}": 0.0,
+      "arachne_scheduler_runnable_nodes": 0.0
+    },
+    "processed_over_time": [
+      0,
+      8842,
+      17759,
+      26462,
+      35217
+    ],
+    "rss_bytes_over_time": [],
+    "scheduler_loop_latency_seconds": {
+      "buckets": {
+        "0.001": 63000,
+        "0.005": 63000,
+        "0.01": 63000,
+        "0.025": 63000,
+        "0.05": 63000,
+        "0.1": 63000,
+        "0.25": 63000,
+        "0.5": 63000,
+        "1": 63000,
+        "2": 63000,
+        "5": 63000,
+        "inf": 63000
+      },
+      "count": 63000,
+      "p95_estimate_seconds": 0.001,
+      "sum": 0.7070030841277912
+    },
+    "timestamps": [
+      1754191629.082058,
+      1754191630.0873432,
+      1754191631.0925598,
+      1754191632.099746,
+      1754191633.1074739
+    ]
+  },
+  "name": "long_running_stability",
+  "seed": 4242,
+  "suite": "soak"
+}

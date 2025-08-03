@@ -52,6 +52,8 @@ class Subgraph:
     edges: list[Edge[object]] = field(default_factory=list)
     exposed_inputs: dict[str, tuple[str, str]] = field(default_factory=dict)
     exposed_outputs: dict[str, tuple[str, str]] = field(default_factory=dict)
+    # Internal flag to record if duplicate node keys were added at any time.
+    _has_duplicate_names: bool = False
 
     @classmethod
     def from_nodes(cls, name: str, nodes: Iterable[Node]) -> Subgraph:
@@ -87,9 +89,19 @@ class Subgraph:
             detect duplicates before building a runtime plan.
         """
         node_name = name or node.name
+        # Record duplicate additions without raising immediately so that
+        # build_from_graphs() can surface a consistent ValueError site.
+        if node_name in self.nodes:
+            self._has_duplicate_names = True
         self.nodes[node_name] = node
 
-    def connect(self, src: tuple[str, str], dst: tuple[str, str], capacity: int = 1024) -> str:
+    def connect(
+        self,
+        src: tuple[str, str],
+        dst: tuple[str, str],
+        capacity: int = 1024,
+        policy: object | None = None,
+    ) -> str:
         """Connect an output port to an input port with a bounded edge.
 
         Parameters:
@@ -99,6 +111,8 @@ class Subgraph:
             Tuple of (target_node_name, target_port_name) for an input port.
           capacity:
             Positive integer capacity for the bounded edge queue.
+          policy:
+            Optional backpressure Policy to set as the edge's default_policy.
 
         Returns:
           Stable edge identifier: "src_node:src_port->dst_node:dst_port".
@@ -120,7 +134,13 @@ class Subgraph:
         s_port_obj = next(p for p in sn.outputs if p.name == s_port)
         d_port_obj = next(p for p in dn.inputs if p.name == d_port)
         edge: Edge[object] = Edge(
-            s_node, s_port_obj, d_node, d_port_obj, capacity=capacity, spec=d_port_obj.spec
+            s_node,
+            s_port_obj,
+            d_node,
+            d_port_obj,
+            capacity=capacity,
+            spec=d_port_obj.spec,
+            default_policy=policy,  # type: ignore[arg-type]
         )
         self.edges.append(edge)
         return f"{s_node}:{s_port}->{d_node}:{d_port}"
@@ -187,6 +207,9 @@ class Subgraph:
                 issues.append(
                     ValidationIssue("error", "UNKNOWN_NODE", "edge references unknown node")
                 )
+                # Still check capacity to report BAD_CAP even when nodes are unknown
+                if e.capacity <= 0:
+                    issues.append(ValidationIssue("error", "BAD_CAP", "edge capacity must be > 0"))
                 continue
             src = self.nodes[e.source_node]
             dst = self.nodes[e.target_node]

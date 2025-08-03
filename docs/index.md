@@ -54,9 +54,16 @@ uv run mypy src
 uv run pytest --cov=src --cov-fail-under=80
 ```
 
-Run the example (hello graph)
+Run the examples
 ```bash
+# Hello graph (minimal)
 uv run python -m examples.hello_graph.main
+
+# Sentiment pipeline (control-plane preemption, backpressure)
+uv run python examples/sentiment/main.py --human --timeout-s 6.0
+
+# Streaming coalesce (burst smoothing with deterministic merges)
+uv run python examples/streaming_coalesce/main.py --human --timeout-s 5.0
 ```
 
 ***
@@ -97,7 +104,9 @@ src/meridian/
   observability/  # logs, metrics, tracing hooks
   utils/          # shared utilities
 examples/
-  hello_graph/    # minimal runnable example
+  hello_graph/          # minimal runnable example
+  sentiment/            # control-plane overrides and priorities
+  streaming_coalesce/   # coalescing policy under burst pressure
 tests/
   unit/           # unit tests
   integration/    # end-to-end graph tests
