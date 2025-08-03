@@ -28,12 +28,18 @@ theme:
   icon:
     repo: fontawesome/brands/github
   palette:
-    - scheme: slate
-      primary: black
+    - scheme: default
+      primary: indigo
       accent: indigo
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
+    - scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
 
 extra_css:
   - styles/overrides.css
