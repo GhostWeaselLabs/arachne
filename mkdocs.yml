@@ -23,8 +23,8 @@ theme:
     - search.highlight
     - header.autohide
   font:
-    text: Inter
-    code: JetBrains Mono
+    text: IBM Plex Sans
+    code: IBM Plex Mono
   icon:
     repo: fontawesome/brands/github
   palette:
