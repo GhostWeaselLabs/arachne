@@ -13,12 +13,12 @@
 /* 1) Global typography and smoothing */
 :root {
     /* Nudged gradients: slightly deeper purple and cooler cyan for better contrast */
-    --mr-gradient-1: linear-gradient(135deg, #6e40ff, #00d6ff 58%, #00f2a3);
-    --mr-gradient-2: linear-gradient(135deg, #00d6ff, #6e40ff 58%, #ff71dc);
+    --mr-gradient-1: linear-gradient(135deg, #7c4dff, #00e5ff 60%, #00ffaa);
+    --mr-gradient-2: linear-gradient(135deg, #00e5ff, #7c4dff 60%, #ff7ce5);
 
     --mr-primary: #000000; /* black navbar and primary elements */
-    --mr-accent: #6e40ff; /* purple accent (nudged) */
-    --mr-accent-2: #00d6ff; /* cyan accent (nudged) */
+    --mr-accent: #7c4dff; /* purple accent (brighter) */
+    --mr-accent-2: #00e5ff; /* cyan accent (brighter) */
     --mr-muted: rgba(255, 255, 255, 0.64);
     --mr-strong: rgba(255, 255, 255, 0.96);
     --mr-panel: rgba(255, 255, 255, 0.045);
@@ -43,8 +43,8 @@
 
     /* Unified underline thickness and animation duration */
     --mr-underline-thickness: 2px;
-    --mr-underline-offset: 0px; /* baseline for nav/links; adjusted contextually where needed */
-    --mr-underline-thickness-header: 2px; /* normalized from 3/2px to 2px */
+    --mr-underline-offset: 2px; /* pull underline slightly away from elements */
+    --mr-underline-thickness-header: 2px; /* consistent across headers */
     --mr-anim-duration-fast: 160ms;
     --mr-anim-duration: 240ms;
 }
@@ -75,6 +75,10 @@ pre,
 }
 
 .md-header__inner {
+    display: flex; /* ensure flex to allow alignment */
+    align-items: center;
+    justify-content: space-between; /* push brand left, actions right */
+    gap: var(--mr-space-6);
     backdrop-filter: saturate(120%) blur(2px);
     padding-top: var(--mr-space-2);
     padding-bottom: var(--mr-space-2);
@@ -85,6 +89,7 @@ pre,
     color: var(--mr-strong) !important;
     font-weight: 650;
     letter-spacing: 0.2px;
+    margin-right: auto; /* keep brand pinned to the left */
 }
 
 /* 3) Navigation tabs – gradient hover/active underline */
@@ -94,6 +99,7 @@ pre,
     border-bottom: 1px solid var(--mr-border);
     padding-top: 0;
     padding-bottom: 0;
+    margin-left: 0; /* prevent tabs from shifting content */
 }
 
 .md-tabs__link {
@@ -105,8 +111,8 @@ pre,
     background-size: 200% var(--mr-underline-thickness);
     background-position: 100% calc(100% - var(--mr-underline-offset));
     background-repeat: no-repeat;
-    padding-bottom: 0.38rem; /* bring underline closer */
-    margin-bottom: -2px; /* visually tuck underline up */
+    padding-bottom: 0.44rem; /* give underline a touch more clearance */
+    margin-bottom: -1px; /* reduce tuck to keep line visually even */
 }
 
 .md-tabs__link:hover,
@@ -119,8 +125,8 @@ pre,
 .md-tabs__item--active .md-tabs__link {
     color: var(--mr-strong) !important;
     background-image: var(--mr-gradient-2);
-    background-position: 0% 100%;
-    padding-bottom: 0.45rem; /* slightly stronger baseline for active */
+    background-position: 0% calc(100% - var(--mr-underline-offset));
+    padding-bottom: 0.46rem; /* consistent with non-active with slight emphasis */
 }
 
 /* 4) Sidebar navigation – modern translucent panels */
@@ -159,18 +165,21 @@ pre,
 }
 
 .md-content__inner {
-    background: var(--mr-panel);
+    background: rgba(
+        255,
+        255,
+        255,
+        0.035
+    ); /* slightly lighter for less heavy card feel */
     border: 1px solid var(--mr-border);
-    border-radius: 16px;
-    padding: var(--mr-space-7) var(--mr-space-7);
-    box-shadow:
-        0 10px 25px rgba(0, 0, 0, 0.22),
-        inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    border-radius: 12px; /* softer corners */
+    padding: calc(var(--mr-space-7) - 0.25rem) calc(var(--mr-space-7) - 0.25rem);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18); /* reduce depth to feel integrated */
 }
 
 /* Slightly wider readable width without going full-bleed */
 .md-grid {
-    max-width: 1280px; /* increase from default ~1100px to reduce squished feel */
+    max-width: 1400px; /* a bit wider to reduce squished center */
 }
 
 /* 6) Headings with gradient accents */
@@ -190,10 +199,10 @@ pre,
     display: block;
     height: var(--mr-underline-thickness-header);
     width: 64px;
-    margin-top: 10px;
+    margin-top: 12px; /* add breathing room so underline isn't cramped */
     border-radius: 2px;
     background: var(--mr-gradient-1);
-    opacity: 0.9;
+    opacity: 0.95;
 }
 
 .md-typeset h2::after {
@@ -201,19 +210,19 @@ pre,
     display: block;
     height: var(--mr-underline-thickness-header);
     width: 48px;
-    margin-top: 8px;
+    margin-top: 10px; /* align perceived spacing with h1 underline */
     border-radius: 2px;
     background: var(--mr-gradient-2);
-    opacity: 0.85;
+    opacity: 0.9;
 }
 
 /* 7) Links with animated gradient underline */
 .md-typeset a {
-    color: #c9eaff;
+    color: #cfe9ff;
     text-decoration: none;
     background-image: var(--mr-gradient-2);
     background-size: 200% var(--mr-underline-thickness);
-    background-position: 100% calc(100% - 1px); /* bring underline closer to text */
+    background-position: 100% calc(100% - 3px); /* more clearance from glyphs/icons */
     background-repeat: no-repeat;
     transition:
         color var(--mr-anim-duration-fast) ease,
@@ -221,7 +230,7 @@ pre,
         background-size var(--mr-anim-duration) ease;
     /* Sync gradient underline shift with gradient text fade (if applied) */
     background-clip: border-box;
-    text-underline-offset: 2px; /* globally nudge underline away from inline icons */
+    text-underline-offset: 3px; /* consistent offset for inline icons */
 }
 
 .md-typeset a:hover,
@@ -239,6 +248,7 @@ pre,
     padding: 0.12em 0.38em;
     /* Prevent underline from overlapping icon glyphs or inline icons in links */
     text-underline-offset: 3px;
+    vertical-align: baseline; /* avoid odd baseline jumps near underlines */
 }
 
 .md-typeset pre > code {
@@ -331,6 +341,43 @@ pre,
     border-top: 1px solid var(--mr-border);
 }
 
+/* Right-align header actions (search + GitHub) */
+.md-header .md-header__option,
+.md-header .md-header__source,
+.md-header .md-search {
+    margin-left: auto; /* push actions to the far right */
+}
+
+.md-header .md-header__options {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--mr-space-5);
+    margin-left: auto;
+}
+
+/* Ensure search input and GitHub icon align neatly on the right */
+.md-search {
+    order: 2;
+}
+
+.md-header__source {
+    order: 3;
+}
+
+.md-header__title {
+    order: 1;
+}
+
+/* Slight spacing tweaks for right-aligned actions */
+.md-search__form {
+    margin-right: 0;
+}
+
+.md-header__source .md-source__icon {
+    margin-left: var(--mr-space-3);
+}
+
 .md-footer-meta,
 .md-footer__inner {
     color: var(--mr-muted);
@@ -369,9 +416,12 @@ pre,
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    transition: background-position var(--mr-anim-duration) ease;
+    transition:
+        background-position var(--mr-anim-duration) ease,
+        opacity var(--mr-anim-duration-fast) ease;
     background-size: 200% 100%;
     background-position: 100% 50%;
+    opacity: 0.98; /* subtle polish to match underline emphasis */
 }
 
 .mr-gradient-border {
