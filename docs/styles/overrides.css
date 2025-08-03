@@ -6,16 +6,20 @@
    - Improved spacing/padding rhythm
    - Tighter underline proximity for links/tabs/buttons
    - Slightly wider readable content width on larger screens
-*/
+   - Normalized underline thickness/offset across nav, headers, and icons
+   - Synced gradient animation timing for text and underline
+ */
 
 /* 1) Global typography and smoothing */
 :root {
-    --mr-gradient-1: linear-gradient(135deg, #7c4dff, #00e5ff 60%, #00ffaa);
-    --mr-gradient-2: linear-gradient(135deg, #00e5ff, #7c4dff 60%, #ff7ce5);
+    /* Nudged gradients: slightly deeper purple and cooler cyan for better contrast */
+    --mr-gradient-1: linear-gradient(135deg, #6e40ff, #00d6ff 58%, #00f2a3);
+    --mr-gradient-2: linear-gradient(135deg, #00d6ff, #6e40ff 58%, #ff71dc);
+
     --mr-primary: #000000; /* black navbar and primary elements */
-    --mr-accent: #7c4dff; /* purple accent */
-    --mr-accent-2: #00e5ff; /* cyan accent */
-    --mr-muted: rgba(255, 255, 255, 0.62);
+    --mr-accent: #6e40ff; /* purple accent (nudged) */
+    --mr-accent-2: #00d6ff; /* cyan accent (nudged) */
+    --mr-muted: rgba(255, 255, 255, 0.64);
     --mr-strong: rgba(255, 255, 255, 0.96);
     --mr-panel: rgba(255, 255, 255, 0.045);
     --mr-border: rgba(255, 255, 255, 0.09);
@@ -36,6 +40,13 @@
     --mr-space-6: 1.5rem;
     --mr-space-7: 2rem;
     --mr-space-8: 2.5rem;
+
+    /* Unified underline thickness and animation duration */
+    --mr-underline-thickness: 2px;
+    --mr-underline-offset: 0px; /* baseline for nav/links; adjusted contextually where needed */
+    --mr-underline-thickness-header: 2px; /* normalized from 3/2px to 2px */
+    --mr-anim-duration-fast: 160ms;
+    --mr-anim-duration: 240ms;
 }
 
 html {
@@ -88,13 +99,13 @@ pre,
 .md-tabs__link {
     color: var(--mr-muted) !important;
     transition:
-        color 160ms ease,
-        background-position 240ms ease;
+        color var(--mr-anim-duration-fast) ease,
+        background-position var(--mr-anim-duration) ease;
     background-image: var(--mr-gradient-1);
-    background-size: 200% 2px;
-    background-position: 100% 100%;
+    background-size: 200% var(--mr-underline-thickness);
+    background-position: 100% calc(100% - var(--mr-underline-offset));
     background-repeat: no-repeat;
-    padding-bottom: 0.4rem; /* bring underline closer */
+    padding-bottom: 0.38rem; /* bring underline closer */
     margin-bottom: -2px; /* visually tuck underline up */
 }
 
@@ -177,7 +188,7 @@ pre,
 .md-typeset h1::after {
     content: "";
     display: block;
-    height: 3px;
+    height: var(--mr-underline-thickness-header);
     width: 64px;
     margin-top: 10px;
     border-radius: 2px;
@@ -188,7 +199,7 @@ pre,
 .md-typeset h2::after {
     content: "";
     display: block;
-    height: 2px;
+    height: var(--mr-underline-thickness-header);
     width: 48px;
     margin-top: 8px;
     border-radius: 2px;
@@ -201,12 +212,16 @@ pre,
     color: #c9eaff;
     text-decoration: none;
     background-image: var(--mr-gradient-2);
-    background-size: 200% 2px;
+    background-size: 200% var(--mr-underline-thickness);
     background-position: 100% calc(100% - 1px); /* bring underline closer to text */
     background-repeat: no-repeat;
     transition:
-        color 160ms ease,
-        background-position 240ms ease;
+        color var(--mr-anim-duration-fast) ease,
+        background-position var(--mr-anim-duration) ease,
+        background-size var(--mr-anim-duration) ease;
+    /* Sync gradient underline shift with gradient text fade (if applied) */
+    background-clip: border-box;
+    text-underline-offset: 2px; /* globally nudge underline away from inline icons */
 }
 
 .md-typeset a:hover,
@@ -222,6 +237,8 @@ pre,
     border: 1px solid var(--mr-border);
     border-radius: 8px;
     padding: 0.12em 0.38em;
+    /* Prevent underline from overlapping icon glyphs or inline icons in links */
+    text-underline-offset: 3px;
 }
 
 .md-typeset pre > code {
@@ -236,8 +253,8 @@ pre,
 .md-clipboard {
     opacity: 0.75;
     transition:
-        opacity 160ms ease,
-        transform 160ms ease;
+        opacity var(--mr-anim-duration-fast) ease,
+        transform var(--mr-anim-duration-fast) ease;
     backdrop-filter: saturate(120%) blur(1px);
 }
 
@@ -278,8 +295,9 @@ pre,
         0 8px 20px rgba(0, 0, 0, 0.25),
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
     transition:
-        transform 120ms ease,
-        box-shadow 160ms ease;
+        transform var(--mr-anim-duration-fast) ease,
+        box-shadow var(--mr-anim-duration) ease,
+        background-position var(--mr-anim-duration) ease;
     background-size: 200% 100%;
     background-position: 100% 50%;
 }
@@ -351,6 +369,9 @@ pre,
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    transition: background-position var(--mr-anim-duration) ease;
+    background-size: 200% 100%;
+    background-position: 100% 50%;
 }
 
 .mr-gradient-border {
@@ -382,6 +403,6 @@ pre,
     }
 
     .md-tabs__link {
-        padding-bottom: 0.38rem;
+        padding-bottom: 0.34rem;
     }
 }
