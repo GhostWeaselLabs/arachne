@@ -3,12 +3,63 @@ site_description: Minimal, reusable graph runtime for Python.
 repo_url: https://github.com/GhostWeaselLabs/meridian-runtime
 site_url: https://ghostweasellabs.github.io/meridian-runtime/
 edit_uri: edit/main/
+
 theme:
   name: material
+  language: en
   features:
     - navigation.instant
     - navigation.tracking
     - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.indexes
+    - navigation.path
+    - content.code.copy
+    - content.code.annotate
+    - content.action.edit
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - header.autohide
+  font:
+    text: Inter
+    code: JetBrains Mono
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+
+extra_css:
+  - styles/overrides.css
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/GhostWeaselLabs/meridian-runtime
+      name: GitHub
+  generator: false
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Quickstart: quickstart.md
+  - Examples: examples.md
+  - Concepts:
+      - Overview: ABOUT.md
+      - Patterns: patterns.md
+      - Observability: observability.md
+  - API Reference: api.md
+  - Troubleshooting: troubleshooting.md
+  - Contributing:
+      - Guide: contributing/CONTRIBUTING.md
+      - Support: ../SUPPORT.md
+      - Plans & Roadmaps: plan/
     - navigation.top
     - content.action.edit
     - content.action.view
