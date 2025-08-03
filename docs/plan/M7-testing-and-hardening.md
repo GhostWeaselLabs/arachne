@@ -202,7 +202,7 @@ Checklist
 - [x] Unit tests: core primitives, node/subgraph, scheduler
 - [x] Unit tests: PQ edge cases (dedup, FIFO, ratio bias, bounded skew)
 - [x] Integration tests: backpressure, priorities (preemption), mixed overflow policies, shutdown, observability smoke
-- [ ] Unit tests: node lifecycle error isolation (on_start/on_tick/on_message/on_stop)
+- [x] Unit tests: node lifecycle error isolation (on_start/on_tick/on_message/on_stop)
 - [ ] Stress tests: throughput, latency, fairness, priority preemption
 - [ ] Soak tests: long-running stability and memory checks
 - [ ] Benchmarks: edge put/get, scheduler loop latency; baseline stored

@@ -1,0 +1,71 @@
+{
+  "modes": [
+    {
+      "config": {
+        "batch": 256,
+        "capacity": 4096,
+        "items": 200000,
+        "measure_iters": 5,
+        "warmup_iters": 2
+      },
+      "env": {
+        "platform": "darwin",
+        "python": "3.12.11"
+      },
+      "mode": "no_metrics",
+      "results": {
+        "iterations": 5,
+        "ops_per_sec": 21713.887142073698,
+        "processed_total": 20480,
+        "time_p50_seconds": 0.188453875,
+        "time_p95_seconds": 0.190315541,
+        "time_total_seconds": 0.943175207,
+        "times_seconds": [
+          0.190315541,
+          0.188645083,
+          0.18778,
+          0.187980708,
+          0.188453875
+        ]
+      }
+    },
+    {
+      "config": {
+        "batch": 256,
+        "capacity": 4096,
+        "items": 200000,
+        "measure_iters": 5,
+        "warmup_iters": 2
+      },
+      "env": {
+        "platform": "darwin",
+        "python": "3.12.11"
+      },
+      "mode": "prom_metrics",
+      "results": {
+        "iterations": 5,
+        "ops_per_sec": 21194.905936412382,
+        "processed_total": 20480,
+        "time_p50_seconds": 0.192211958,
+        "time_p95_seconds": 0.196448,
+        "time_total_seconds": 0.966269917,
+        "times_seconds": [
+          0.196448,
+          0.191957334,
+          0.19204575,
+          0.193606875,
+          0.192211958
+        ]
+      }
+    }
+  ],
+  "name": "edge_put_get",
+  "summary": {
+    "metrics_overhead_pct": 2.3900888968687544,
+    "ops_per_sec": {
+      "no_metrics": 21713.887142073698,
+      "prom_metrics": 21194.905936412382
+    }
+  },
+  "version": 1
+}
