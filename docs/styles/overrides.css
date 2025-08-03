@@ -82,6 +82,7 @@ pre,
     backdrop-filter: saturate(120%) blur(2px);
     padding-top: var(--mr-space-2);
     padding-bottom: var(--mr-space-2);
+    width: 100%;
 }
 
 /* Increase header brand prominence */
@@ -90,6 +91,7 @@ pre,
     font-weight: 650;
     letter-spacing: 0.2px;
     margin-right: auto; /* keep brand pinned to the left */
+    flex: 0 1 auto;
 }
 
 /* 3) Navigation tabs – gradient hover/active underline */
@@ -342,27 +344,41 @@ pre,
 }
 
 /* Right-align header actions (search + GitHub) */
-.md-header .md-header__option,
-.md-header .md-header__source,
-.md-header .md-search {
-    margin-left: auto; /* push actions to the far right */
+.md-header .md-header__options {
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--mr-space-5);
+    flex: 1 1 auto; /* consume remaining space to push right */
 }
 
+.md-header .md-search,
+.md-header .md-header__source {
+    margin-left: var(--mr-space-5);
+}
+
+/* Ensure options container sits at far right and doesn't wrap awkwardly */
 .md-header .md-header__options {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     gap: var(--mr-space-5);
-    margin-left: auto;
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    flex-wrap: nowrap;
 }
 
 /* Ensure search input and GitHub icon align neatly on the right */
 .md-search {
     order: 2;
+    margin-right: 0;
 }
 
 .md-header__source {
     order: 3;
+    margin-right: 0;
 }
 
 .md-header__title {
@@ -372,6 +388,7 @@ pre,
 /* Slight spacing tweaks for right-aligned actions */
 .md-search__form {
     margin-right: 0;
+    margin-left: auto;
 }
 
 .md-header__source .md-source__icon {
