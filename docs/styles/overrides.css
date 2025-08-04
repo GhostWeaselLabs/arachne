@@ -104,6 +104,34 @@ pre,
     padding-top: var(--mr-space-2);
     padding-bottom: var(--mr-space-2);
 }
+
+/* Header two-row layout: top bar (brand left, actions right), secondary bar (tabs) */
+.md-header__inner .md-grid {
+    display: grid;
+    grid-template-columns: auto 1fr auto; /* brand | spacer | actions */
+    align-items: center;
+    gap: var(--mr-space-6);
+}
+
+/* Brand pinned left */
+.md-header__inner .md-header__title {
+    justify-self: start;
+}
+
+/* Header actions (search + GitHub) flushed right */
+.md-header__inner .md-header__options {
+    justify-self: end;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--mr-space-5);
+    margin: 0;
+}
+
+/* Ensure search + GitHub are tight to the right within the container */
+.md-header__inner .md-search,
+.md-header__inner .md-header__source {
+    margin: 0;
+}
 /* Theme sweep: subtle gradient bar along the header */
 .md-header::after {
     content: "";
@@ -121,14 +149,21 @@ pre,
     letter-spacing: 0.2px;
 }
 
-/* 3) Navigation tabs – gradient hover/active underline */
+/* 3) Navigation tabs – secondary bar under the header (Material-style) */
 .md-tabs {
     background: var(--mr-primary) !important;
-    border-top: 1px solid transparent;
+    border-top: 1px solid var(--mr-border);
     border-bottom: 1px solid var(--mr-border);
-    padding-top: 0;
-    padding-bottom: 0;
-    margin-left: 0; /* prevent tabs from shifting content */
+    padding-top: var(--mr-space-2);
+    padding-bottom: var(--mr-space-2);
+    position: relative;
+    z-index: 5;
+}
+
+/* Keep tabs aligned to grid width */
+.md-tabs .md-grid {
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 .md-tabs__link {
@@ -205,13 +240,16 @@ pre,
     box-shadow: none;
 }
 
-/* Breadcrumb/Home: labeled bar matching TOC style */
+/* Breadcrumb/Home: labeled bar matching TOC style exactly */
 .md-content__inner .md-typeset .md-breadcrumbs,
 .md-typeset .md-breadcrumbs {
     background: var(--mr-bg-elev);
     border: 1px solid var(--mr-border);
-    border-radius: 8px; /* match TOC radius */
-    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 0.75rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
 
@@ -235,14 +273,18 @@ pre,
     background: var(--mr-bg-elev);
     border: 1px solid var(--mr-border);
     border-radius: 8px;
-    padding: 0.5rem 0.75rem;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding: 0 0.75rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
 
-/* TOC list items with subtle separators only */
+/* TOC list items with subtle separators only; align to labeled bar baseline */
 .md-sidebar .md-nav--secondary .md-nav__list {
     background: transparent;
     border-left: 2px solid rgba(255, 255, 255, 0.08);
+    margin-top: var(--mr-space-3);
 }
 
 .md-sidebar .md-nav--secondary .md-nav__link {
@@ -321,7 +363,9 @@ pre,
         background-position var(--mr-anim-duration) ease,
         background-size var(--mr-anim-duration) ease;
     background-clip: border-box;
-    text-underline-offset: var(--mr-underline-offset);
+    text-underline-offset: calc(
+        var(--mr-underline-offset) + 1px
+    ); /* extra clearance */
     text-decoration-skip-ink: auto;
     border-radius: 2px;
 }
@@ -513,10 +557,10 @@ pre,
     }
 }
 
-/* Right-align header actions (search + GitHub) within Material grid */
+/* Right-align header actions (search + GitHub) within Material grid (top bar) */
 .md-header__inner .md-grid {
     display: grid;
-    grid-template-columns: auto 1fr auto; /* left title / tabs / right actions */
+    grid-template-columns: auto 1fr auto; /* brand | spacer | actions */
     align-items: center;
     gap: var(--mr-space-6);
 }
