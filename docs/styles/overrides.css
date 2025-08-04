@@ -5,6 +5,7 @@
    - Consistent underline thickness/offset (no collisions with icons)
    - Widened content grid; integrated TOC/breadcrumb bars
    - Theme sweep (header) + H1 ink lift micro-animations
+   - Heading anchor/permalink icons fully hidden site-wide
 */
 
 /* 1) Global typography and smoothing */
@@ -209,7 +210,7 @@ pre,
 .md-typeset .md-breadcrumbs {
     background: var(--mr-bg-elev);
     border: 1px solid var(--mr-border);
-    border-radius: 10px;
+    border-radius: 8px; /* match TOC radius */
     padding: 0.5rem 0.75rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
@@ -229,7 +230,7 @@ pre,
     box-shadow: none;
 }
 
-/* TOC title as a simple label bar */
+/* TOC title as a simple label bar (mirrors Home breadcrumb bar) */
 .md-sidebar .md-nav--secondary .md-nav__title {
     background: var(--mr-bg-elev);
     border: 1px solid var(--mr-border);
@@ -634,12 +635,10 @@ pre,
     }
 }
 
-/* Heading anchor icon (¶/page) underline spacing – never collide */
-.md-typeset h1 .headerlink,
-.md-typeset h2 .headerlink,
-.md-typeset h3 .headerlink {
-    background-image: none !important; /* no gradient underline on the icon itself */
-    text-decoration: none !important; /* prevent underline from the icon */
-    margin-left: 0.25rem; /* breathing room from heading text */
-    vertical-align: baseline;
+/* Heading anchor icon (¶/page) – fully hidden for cohesion */
+.md-typeset .headerlink {
+    display: none !important;
+    visibility: hidden !important;
+    background-image: none !important;
+    text-decoration: none !important;
 }
