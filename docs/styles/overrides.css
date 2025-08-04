@@ -8,21 +8,15 @@
    - Slightly wider readable content width on larger screens
    - Normalized underline thickness/offset across nav, headers, and icons
    - Synced gradient animation timing for text and underline
+   - IBM Carbon grayscale palettes per scheme (light: gray10, dark: gray90)
+   - Header reworked: left quicklinks, center tabs, right actions
  */
 
 /* 1) Global typography and smoothing */
 :root {
-    /* Nudged gradients: slightly deeper purple and cooler cyan for better contrast */
+    /* Accent gradients (brand/interactive) */
     --mr-gradient-1: linear-gradient(135deg, #7c4dff, #00e5ff 60%, #00ffaa);
     --mr-gradient-2: linear-gradient(135deg, #00e5ff, #7c4dff 60%, #ff7ce5);
-
-    --mr-primary: #000000; /* black navbar and primary elements */
-    --mr-accent: #7c4dff; /* purple accent (brighter) */
-    --mr-accent-2: #00e5ff; /* cyan accent (brighter) */
-    --mr-muted: rgba(255, 255, 255, 0.64);
-    --mr-strong: rgba(255, 255, 255, 0.96);
-    --mr-panel: rgba(255, 255, 255, 0.045);
-    --mr-border: rgba(255, 255, 255, 0.09);
 
     /* Typography scale and rhythm */
     --mr-font-body:
@@ -49,6 +43,44 @@
     --mr-anim-duration: 240ms;
 }
 
+/* IBM Carbon palettes per scheme */
+/* Light mode (mkdocs scheme 'default') – gray10 */
+[data-md-color-scheme="default"] {
+    --mr-bg: #161616; /* gray10 background (near-black text on very dark bg) */
+    --mr-bg-elev: #262626; /* gray20 panels */
+    --mr-border: rgba(255, 255, 255, 0.12);
+    --mr-text: #f4f4f4; /* gray90 text on dark */
+    --mr-text-muted: rgba(244, 244, 244, 0.72);
+    --mr-primary: #000000; /* header/nav background stays black */
+    --mr-accent: #7c4dff;
+    --mr-accent-2: #00e5ff;
+    --mr-panel: rgba(255, 255, 255, 0.04);
+}
+
+/* Dark mode (mkdocs scheme 'slate') – gray90 */
+[data-md-color-scheme="slate"] {
+    --mr-bg: #161616; /* gray90 bg in Carbon naming (dark) */
+    --mr-bg-elev: #262626; /* gray80 panel equivalent */
+    --mr-border: rgba(255, 255, 255, 0.12);
+    --mr-text: #f4f4f4;
+    --mr-text-muted: rgba(244, 244, 244, 0.72);
+    --mr-primary: #000000;
+    --mr-accent: #7c4dff;
+    --mr-accent-2: #00e5ff;
+    --mr-panel: rgba(255, 255, 255, 0.04);
+}
+
+/* Base doc surfaces use scheme variables */
+.md-main,
+.md-content,
+.md-sidebar {
+    background: transparent;
+}
+body {
+    background-color: var(--mr-bg);
+    color: var(--mr-text);
+}
+
 html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -58,6 +90,7 @@ body,
 .md-typeset {
     font-family: var(--mr-font-body);
     line-height: var(--mr-line-height);
+    color: var(--mr-text);
 }
 
 code,
@@ -72,6 +105,7 @@ pre,
     background: var(--mr-primary) !important;
     box-shadow: inset 0 -1px 0 0 var(--mr-border);
     border-bottom: 1px solid var(--mr-border);
+    color: var(--mr-text);
 }
 
 .md-header__inner {
@@ -82,7 +116,7 @@ pre,
 
 /* Increase header brand prominence */
 .md-header__title {
-    color: var(--mr-strong) !important;
+    color: var(--mr-text) !important;
     font-weight: 650;
     letter-spacing: 0.2px;
 }
@@ -98,7 +132,7 @@ pre,
 }
 
 .md-tabs__link {
-    color: var(--mr-muted) !important;
+    color: var(--mr-text-muted) !important;
     transition:
         color var(--mr-anim-duration-fast) ease,
         background-position var(--mr-anim-duration) ease;
@@ -112,7 +146,7 @@ pre,
 
 .md-tabs__link:hover,
 .md-tabs__link:focus {
-    color: var(--mr-strong) !important;
+    color: var(--mr-text) !important;
     background-position: 0% 100%;
 }
 
@@ -128,6 +162,7 @@ pre,
 .md-sidebar {
     background: transparent;
     padding-top: var(--mr-space-4);
+    color: var(--mr-text-muted);
 }
 
 .md-nav {
@@ -136,7 +171,7 @@ pre,
 
 .md-nav__title,
 .md-nav__link {
-    color: var(--mr-muted);
+    color: var(--mr-text-muted);
     padding-top: var(--mr-space-2);
     padding-bottom: var(--mr-space-2);
 }
@@ -144,7 +179,7 @@ pre,
 .md-nav__link:hover,
 .md-nav__link:focus,
 .md-nav__item--active > .md-nav__link {
-    color: var(--mr-strong);
+    color: var(--mr-text);
 }
 
 /* Group titles */
@@ -157,15 +192,13 @@ pre,
 /* 5) Content area panels – subtle translucency and borders */
 .md-content {
     background: transparent;
+    color: var(--mr-text);
 }
 
 .md-content__inner {
-    background: rgba(
-        255,
-        255,
-        255,
-        0.035
-    ); /* slightly lighter for less heavy card feel */
+    background: var(
+        --mr-bg-elev
+    ); /* IBM gray20/gray80 panel depending on scheme */
     border: 1px solid var(--mr-border);
     border-radius: 12px; /* softer corners */
     padding: calc(var(--mr-space-7) - 0.25rem) calc(var(--mr-space-7) - 0.25rem);
@@ -336,6 +369,72 @@ pre,
     border-top: 1px solid var(--mr-border);
 }
 
+/* Header left quicklinks (pills) — occupy left space tastefully */
+.mr-header-left {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--mr-space-3);
+}
+
+.mr-quicklink {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+    padding: 0.35rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--mr-border);
+    background: var(--mr-bg-elev);
+    color: var(--mr-text);
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    transition:
+        transform var(--mr-anim-duration-fast) ease,
+        box-shadow var(--mr-anim-duration) ease,
+        background-position var(--mr-anim-duration) ease,
+        border-color var(--mr-anim-duration-fast) ease,
+        color var(--mr-anim-duration-fast) ease;
+    background-image: var(--mr-gradient-1);
+    background-size: 0% 100%;
+    background-position: 0% 50%;
+    background-repeat: no-repeat;
+}
+
+.mr-quicklink:hover,
+.mr-quicklink:focus {
+    transform: translateY(-1px);
+    box-shadow:
+        0 6px 16px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.18);
+    background-size: 200% 100%; /* subtle gradient sweep on hover */
+    background-position: 100% 50%;
+}
+
+/* Compact variant for tighter headers if needed */
+.mr-quicklink--sm {
+    padding: 0.28rem 0.5rem;
+    font-size: 0.82rem;
+}
+
+/* Divider to separate pills from brand when used inline */
+.mr-header-left__divider {
+    width: 1px;
+    height: 18px;
+    background: var(--mr-border);
+    margin: 0 var(--mr-space-3);
+    border-radius: 1px;
+    opacity: 0.9;
+}
+
+/* Responsive: hide the divider and optionally a pill on very small widths */
+@media (max-width: 720px) {
+    .mr-header-left__divider {
+        display: none;
+    }
+}
+
 /* Right-align header actions (search + GitHub) within Material grid */
 .md-header__inner .md-grid {
     display: grid;
@@ -386,7 +485,7 @@ pre,
 
 /* 14) Cards/feature blocks – utility classes */
 .mr-card {
-    background: var(--mr-panel);
+    background: var(--mr-bg-elev);
     border: 1px solid var(--mr-border);
     border-radius: 16px;
     padding: 1.1rem 1.2rem;

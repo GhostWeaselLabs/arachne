@@ -28,18 +28,22 @@ theme:
   icon:
     repo: fontawesome/brands/github
   palette:
+    # Light mode (IBM gray10)
     - scheme: default
       primary: indigo
       accent: indigo
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
+      # Note: color-scheme variables are applied in CSS via [data-md-color-scheme="default"]
+    # Dark mode (IBM gray90)
     - scheme: slate
       primary: black
       accent: indigo
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
+      # Note: color-scheme variables are applied in CSS via [data-md-color-scheme="slate"]
 
 extra_css:
   - styles/overrides.css
@@ -101,10 +105,6 @@ plugins:
   - search
   # - sitemap:
   #     url: https://ghostweasellabs.github.io/meridian-runtime/
-  # - git-revision-date-localized:
-  #     enable_creation_date: true
-  #     fallback_to_build_date: true
-  #     type: timeago
   # - redirects:
   #     redirect_maps:
   #       old/page.md: new/page.md
