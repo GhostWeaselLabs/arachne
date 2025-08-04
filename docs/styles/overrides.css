@@ -1,22 +1,36 @@
 /* Meridian Runtime – Custom Material for MkDocs theme overrides
    Goal: professional, modern look with black navbar and tasteful gradient accents.
    This stylesheet assumes Material for MkDocs with a slate/dark scheme enabled.
-   Refinements:
-   - IBM Plex Sans/Mono fonts
-   - Improved spacing/padding rhythm
-   - Tighter underline proximity for links/tabs/buttons
-   - Slightly wider readable content width on larger screens
-   - Normalized underline thickness/offset across nav, headers, and icons
-   - Synced gradient animation timing for text and underline
-   - IBM Carbon grayscale palettes per scheme (light: gray10, dark: gray90)
-   - Header reworked: left quicklinks, center tabs, right actions
- */
+    - IBM Plex Sans/Mono fonts
+    - Improved spacing/padding rhythm
+    - Tighter underline proximity for links/tabs/buttons
+    - Slightly wider readable content width on larger screens
+    - Normalized underline thickness/offset across nav, headers, and icons
+    - Synced gradient animation timing for text and underline
+    - IBM Carbon grayscale palettes per scheme (light: gray10, dark: gray90)
+    - Header reworked: left quicklinks, center tabs, right actions
+    - Theme sweep (header background) and H1 ink lift animations
+  */
 
 /* 1) Global typography and smoothing */
 :root {
     /* Accent gradients (brand/interactive) */
     --mr-gradient-1: linear-gradient(135deg, #7c4dff, #00e5ff 60%, #00ffaa);
     --mr-gradient-2: linear-gradient(135deg, #00e5ff, #7c4dff 60%, #ff7ce5);
+
+    /* Light-mode gradients (slightly deeper saturation for gray10) */
+    --mr-gradient-1-light: linear-gradient(
+        135deg,
+        #6f3eff,
+        #00d1ff 60%,
+        #00f0aa
+    );
+    --mr-gradient-2-light: linear-gradient(
+        135deg,
+        #00d1ff,
+        #6f3eff 60%,
+        #ff6bd9
+    );
 
     /* Typography scale and rhythm */
     --mr-font-body:
@@ -46,28 +60,48 @@
 /* IBM Carbon palettes per scheme */
 /* Light mode (mkdocs scheme 'default') – gray10 */
 [data-md-color-scheme="default"] {
-    --mr-bg: #161616; /* gray10 background (near-black text on very dark bg) */
-    --mr-bg-elev: #262626; /* gray20 panels */
-    --mr-border: rgba(255, 255, 255, 0.12);
-    --mr-text: #f4f4f4; /* gray90 text on dark */
-    --mr-text-muted: rgba(244, 244, 244, 0.72);
-    --mr-primary: #000000; /* header/nav background stays black */
-    --mr-accent: #7c4dff;
-    --mr-accent-2: #00e5ff;
-    --mr-panel: rgba(255, 255, 255, 0.04);
+    /* Gray10 surfaces */
+    --mr-bg: #f4f4f4; /* page background */
+    --mr-bg-elev: #e0e0e0; /* panel (approx gray20) */
+    --mr-border: rgba(0, 0, 0, 0.12);
+    --mr-text: #161616; /* primary text (gray100-ish) */
+    --mr-text-muted: rgba(22, 22, 22, 0.72);
+    --mr-primary: #0b0b0e; /* header/nav background (near black for contrast) */
+    --mr-accent: #6f3eff;
+    --mr-accent-2: #00d1ff;
+    --mr-panel: rgba(0, 0, 0, 0.035);
+
+    /* Light-mode gradient bindings */
+    --mr-gradient-active-1: var(--mr-gradient-1-light);
+    --mr-gradient-active-2: var(--mr-gradient-2-light);
+
+    /* Search/input surfaces for light */
+    --mr-input-bg: #ffffff;
+    --mr-input-border: rgba(0, 0, 0, 0.15);
+    --mr-input-placeholder: rgba(22, 22, 22, 0.5);
 }
 
 /* Dark mode (mkdocs scheme 'slate') – gray90 */
 [data-md-color-scheme="slate"] {
-    --mr-bg: #161616; /* gray90 bg in Carbon naming (dark) */
-    --mr-bg-elev: #262626; /* gray80 panel equivalent */
+    /* Gray90 surfaces */
+    --mr-bg: #161616; /* page background (dark) */
+    --mr-bg-elev: #262626; /* panel (gray80) */
     --mr-border: rgba(255, 255, 255, 0.12);
-    --mr-text: #f4f4f4;
+    --mr-text: #f4f4f4; /* primary text */
     --mr-text-muted: rgba(244, 244, 244, 0.72);
-    --mr-primary: #000000;
+    --mr-primary: #000000; /* header/nav background */
     --mr-accent: #7c4dff;
     --mr-accent-2: #00e5ff;
     --mr-panel: rgba(255, 255, 255, 0.04);
+
+    /* Dark-mode gradient bindings */
+    --mr-gradient-active-1: var(--mr-gradient-1);
+    --mr-gradient-active-2: var(--mr-gradient-2);
+
+    /* Search/input surfaces for dark */
+    --mr-input-bg: #1f1f23;
+    --mr-input-border: rgba(255, 255, 255, 0.14);
+    --mr-input-placeholder: rgba(244, 244, 244, 0.55);
 }
 
 /* Base doc surfaces use scheme variables */
@@ -79,6 +113,9 @@
 body {
     background-color: var(--mr-bg);
     color: var(--mr-text);
+    transition:
+        background-color 240ms ease,
+        color 160ms ease;
 }
 
 html {
@@ -106,12 +143,33 @@ pre,
     box-shadow: inset 0 -1px 0 0 var(--mr-border);
     border-bottom: 1px solid var(--mr-border);
     color: var(--mr-text);
+    position: relative;
+    overflow: hidden; /* for theme sweep animation */
 }
 
 .md-header__inner {
     backdrop-filter: saturate(120%) blur(2px);
     padding-top: var(--mr-space-2);
     padding-bottom: var(--mr-space-2);
+}
+/* Theme sweep: subtle gradient bar that slides on scheme change */
+.md-header::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: var(--mr-gradient-active-2);
+    transform: translateX(-100%);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+        transform 400ms ease,
+        opacity 400ms ease;
+}
+[data-md-color-scheme="slate"] .md-header::after,
+[data-md-color-scheme="default"] .md-header::after {
+    transform: translateX(0%);
+    opacity: 0.8;
 }
 
 /* Increase header brand prominence */
@@ -136,7 +194,7 @@ pre,
     transition:
         color var(--mr-anim-duration-fast) ease,
         background-position var(--mr-anim-duration) ease;
-    background-image: var(--mr-gradient-1);
+    background-image: var(--mr-gradient-active-1);
     background-size: 200% var(--mr-underline-thickness);
     background-position: 100% calc(100% - var(--mr-underline-offset));
     background-repeat: no-repeat;
@@ -152,8 +210,8 @@ pre,
 
 /* Active tab highlight */
 .md-tabs__item--active .md-tabs__link {
-    color: var(--mr-strong) !important;
-    background-image: var(--mr-gradient-2);
+    color: var(--mr-text) !important;
+    background-image: var(--mr-gradient-active-2);
     background-position: 0% calc(100% - var(--mr-underline-offset));
     padding-bottom: 0.46rem; /* consistent with non-active with slight emphasis */
 }
@@ -202,7 +260,11 @@ pre,
     border: 1px solid var(--mr-border);
     border-radius: 12px; /* softer corners */
     padding: calc(var(--mr-space-7) - 0.25rem) calc(var(--mr-space-7) - 0.25rem);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18); /* reduce depth to feel integrated */
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08); /* subtle, works on light and dark */
+    transition:
+        background-color 240ms ease,
+        border-color 160ms ease,
+        box-shadow 240ms ease;
 }
 
 /* Slightly wider readable width without going full-bleed */
@@ -229,8 +291,17 @@ pre,
     width: 64px;
     margin-top: 12px; /* add breathing room so underline isn't cramped */
     border-radius: 2px;
-    background: var(--mr-gradient-1);
+    background: var(--mr-gradient-active-1);
     opacity: 0.95;
+    transform-origin: left;
+    transition:
+        transform 240ms ease,
+        opacity 160ms ease,
+        background-position 240ms ease;
+}
+.md-typeset h1:hover::after {
+    transform: translateY(-1px) scaleX(1.02); /* ink lift */
+    opacity: 1;
 }
 
 .md-typeset h2::after {
@@ -240,15 +311,15 @@ pre,
     width: 48px;
     margin-top: 10px; /* align perceived spacing with h1 underline */
     border-radius: 2px;
-    background: var(--mr-gradient-2);
+    background: var(--mr-gradient-active-2);
     opacity: 0.9;
 }
 
 /* 7) Links with animated gradient underline */
 .md-typeset a {
-    color: #cfe9ff;
+    color: #0f62fe; /* IBM link-ish blue tuned by scheme below */
     text-decoration: none;
-    background-image: var(--mr-gradient-2);
+    background-image: var(--mr-gradient-active-2);
     background-size: 200% var(--mr-underline-thickness);
     background-position: 100% calc(100% - 3px); /* more clearance from glyphs/icons */
     background-repeat: no-repeat;
@@ -259,6 +330,12 @@ pre,
     /* Sync gradient underline shift with gradient text fade (if applied) */
     background-clip: border-box;
     text-underline-offset: 3px; /* consistent offset for inline icons */
+}
+[data-md-color-scheme="slate"] .md-typeset a {
+    color: #cfe9ff;
+}
+[data-md-color-scheme="default"] .md-typeset a {
+    color: #0f62fe;
 }
 
 .md-typeset a:hover,
@@ -375,6 +452,10 @@ pre,
     align-items: center;
     gap: var(--mr-space-3);
 }
+/* Placement: attach pills after the brand title when present */
+.md-header__title .mr-header-left {
+    margin-left: var(--mr-space-4);
+}
 
 .mr-quicklink {
     display: inline-flex;
@@ -411,6 +492,12 @@ pre,
     background-size: 200% 100%; /* subtle gradient sweep on hover */
     background-position: 100% 50%;
 }
+[data-md-color-scheme="default"] .mr-quicklink {
+    background-image: var(--mr-gradient-1-light);
+}
+[data-md-color-scheme="slate"] .mr-quicklink {
+    background-image: var(--mr-gradient-1);
+}
 
 /* Compact variant for tighter headers if needed */
 .mr-quicklink--sm {
@@ -440,6 +527,7 @@ pre,
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
+    gap: var(--mr-space-6);
 }
 
 /* Keep title/brand on the left grid cell */
@@ -459,6 +547,15 @@ pre,
 .md-header__inner .md-search,
 .md-header__inner .md-header__source {
     margin: 0;
+}
+/* Search/input theming for both schemes */
+.md-search__input {
+    background: var(--mr-input-bg);
+    border: 1px solid var(--mr-input-border);
+    color: var(--mr-text) !important;
+}
+.md-search__input::placeholder {
+    color: var(--mr-input-placeholder);
 }
 
 .md-footer-meta,
