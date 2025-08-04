@@ -1,38 +1,19 @@
 /* Meridian Runtime – Custom Material for MkDocs theme overrides
-   Goal: professional, modern look with black navbar and tasteful gradient accents.
-   This stylesheet assumes Material for MkDocs with a slate/dark scheme enabled.
-    - IBM Plex Sans/Mono fonts
-    - Improved spacing/padding rhythm
-    - Tighter underline proximity for links/tabs/buttons
-    - Slightly wider readable content width on larger screens
-    - Normalized underline thickness/offset across nav, headers, and icons
-    - Synced gradient animation timing for text and underline
-    - IBM Carbon grayscale palettes per scheme (light: gray10, dark: gray90)
-    - Header reworked: left quicklinks, center tabs, right actions
-    - Theme sweep (header background) and H1 ink lift animations
-  */
+   Dark mode only (IBM Carbon gray90). Premium, modern, and cool.
+   - IBM Plex Sans/Mono fonts
+   - 8px spacing rhythm
+   - Consistent underline thickness/offset (no collisions with icons)
+   - Widened content grid; integrated TOC/breadcrumb bars
+   - Theme sweep (header) + H1 ink lift micro-animations
+*/
 
 /* 1) Global typography and smoothing */
 :root {
-    /* Accent gradients (brand/interactive) */
+    /* Accent gradients (brand/interactive) – slightly deeper saturation for pop on gray90 */
     --mr-gradient-1: linear-gradient(135deg, #7c4dff, #00e5ff 60%, #00ffaa);
     --mr-gradient-2: linear-gradient(135deg, #00e5ff, #7c4dff 60%, #ff7ce5);
 
-    /* Light-mode gradients (slightly deeper saturation for gray10) */
-    --mr-gradient-1-light: linear-gradient(
-        135deg,
-        #6f3eff,
-        #00d1ff 60%,
-        #00f0aa
-    );
-    --mr-gradient-2-light: linear-gradient(
-        135deg,
-        #00d1ff,
-        #6f3eff 60%,
-        #ff6bd9
-    );
-
-    /* Typography scale and rhythm */
+    /* Typography scale and rhythm (8px baseline) */
     --mr-font-body:
         "IBM Plex Sans", Inter, system-ui, -apple-system, Segoe UI, Roboto,
         Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
@@ -40,68 +21,41 @@
         "IBM Plex Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo,
         Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     --mr-line-height: 1.55;
-    --mr-space-1: 0.25rem;
-    --mr-space-2: 0.5rem;
-    --mr-space-3: 0.75rem;
-    --mr-space-4: 1rem;
-    --mr-space-5: 1.25rem;
-    --mr-space-6: 1.5rem;
-    --mr-space-7: 2rem;
-    --mr-space-8: 2.5rem;
+    --mr-space-1: 0.25rem; /* 4px */
+    --mr-space-2: 0.5rem; /* 8px */
+    --mr-space-3: 0.75rem; /* 12px */
+    --mr-space-4: 1rem; /* 16px */
+    --mr-space-5: 1.25rem; /* 20px */
+    --mr-space-6: 1.5rem; /* 24px */
+    --mr-space-7: 2rem; /* 32px */
+    --mr-space-8: 2.5rem; /* 40px */
 
-    /* Unified underline thickness and animation duration */
+    /* Underline + animation */
     --mr-underline-thickness: 2px;
-    --mr-underline-offset: 2px; /* pull underline slightly away from elements */
-    --mr-underline-thickness-header: 2px; /* consistent across headers */
+    --mr-underline-offset: 3px; /* safe distance from glyph descenders/icons */
+    --mr-underline-thickness-header: 2px;
     --mr-anim-duration-fast: 160ms;
     --mr-anim-duration: 240ms;
-}
 
-/* IBM Carbon palettes per scheme */
-/* Light mode (mkdocs scheme 'default') – gray10 */
-[data-md-color-scheme="default"] {
-    /* Gray10 surfaces */
-    --mr-bg: #f4f4f4; /* page background */
-    --mr-bg-elev: #ededed; /* lighter panel to reduce heaviness (between gray10 and gray20) */
-    --mr-border: rgba(0, 0, 0, 0.1);
-    --mr-text: #161616; /* primary text (gray100-ish) */
-    --mr-text-muted: rgba(22, 22, 22, 0.7);
-    --mr-primary: #171717; /* header/nav background slightly lighter than pure black for light mode harmony */
-    --mr-accent: #6f3eff;
-    --mr-accent-2: #00d1ff;
-    --mr-panel: rgba(0, 0, 0, 0.025);
-
-    /* Light-mode gradient bindings */
-    --mr-gradient-active-1: var(--mr-gradient-1-light);
-    --mr-gradient-active-2: var(--mr-gradient-2-light);
-
-    /* Search/input surfaces for light */
-    --mr-input-bg: #ffffff;
-    --mr-input-border: rgba(0, 0, 0, 0.18);
-    --mr-input-placeholder: rgba(22, 22, 22, 0.55);
-}
-
-/* Dark mode (mkdocs scheme 'slate') – gray90 */
-[data-md-color-scheme="slate"] {
-    /* Gray90 surfaces */
-    --mr-bg: #161616; /* page background (dark) */
-    --mr-bg-elev: #262626; /* panel (gray80) */
+    /* Dark mode tokens (IBM Carbon gray90) */
+    --mr-bg: #161616; /* page background */
+    --mr-bg-elev: #262626; /* panel background */
     --mr-border: rgba(255, 255, 255, 0.12);
     --mr-text: #f4f4f4; /* primary text */
     --mr-text-muted: rgba(244, 244, 244, 0.72);
     --mr-primary: #000000; /* header/nav background */
-    --mr-accent: #7c4dff;
-    --mr-accent-2: #00e5ff;
     --mr-panel: rgba(255, 255, 255, 0.04);
 
-    /* Dark-mode gradient bindings */
-    --mr-gradient-active-1: var(--mr-gradient-1);
-    --mr-gradient-active-2: var(--mr-gradient-2);
-
-    /* Search/input surfaces for dark */
+    /* Inputs (search, etc.) */
     --mr-input-bg: #1f1f23;
     --mr-input-border: rgba(255, 255, 255, 0.14);
     --mr-input-placeholder: rgba(244, 244, 244, 0.55);
+}
+
+/* Dark mode only – bind active gradients to dark set */
+:root {
+    --mr-gradient-active-1: var(--mr-gradient-1);
+    --mr-gradient-active-2: var(--mr-gradient-2);
 }
 
 /* Base doc surfaces use scheme variables */
@@ -113,9 +67,6 @@
 body {
     background-color: var(--mr-bg);
     color: var(--mr-text);
-    transition:
-        background-color 240ms ease,
-        color 160ms ease;
 }
 
 html {
@@ -152,24 +103,14 @@ pre,
     padding-top: var(--mr-space-2);
     padding-bottom: var(--mr-space-2);
 }
-/* Theme sweep: subtle gradient bar that slides on scheme change */
+/* Theme sweep: subtle gradient bar along the header */
 .md-header::after {
     content: "";
     position: absolute;
     inset: 0 0 auto 0;
     height: 3px;
     background: var(--mr-gradient-active-2);
-    transform: translateX(-100%);
-    opacity: 0;
-    pointer-events: none;
-    transition:
-        transform 400ms ease,
-        opacity 400ms ease;
-}
-[data-md-color-scheme="slate"] .md-header::after,
-[data-md-color-scheme="default"] .md-header::after {
-    transform: translateX(0%);
-    opacity: 0.8;
+    opacity: 0.85;
 }
 
 /* Increase header brand prominence */
@@ -198,8 +139,8 @@ pre,
     background-size: 200% var(--mr-underline-thickness);
     background-position: 100% calc(100% - var(--mr-underline-offset));
     background-repeat: no-repeat;
-    padding-bottom: 0.48rem; /* extra clearance for light mode to avoid crowding */
-    margin-bottom: 0; /* even baseline across schemes */
+    padding-bottom: 0.44rem;
+    margin-bottom: 0;
 }
 
 .md-tabs__link:hover,
@@ -213,7 +154,8 @@ pre,
     color: var(--mr-text) !important;
     background-image: var(--mr-gradient-active-2);
     background-position: 0% calc(100% - var(--mr-underline-offset));
-    padding-bottom: 0.46rem; /* consistent with non-active with slight emphasis */
+    padding-bottom: 0.46rem;
+    box-shadow: 0 2px 10px rgba(0, 229, 255, 0.12);
 }
 
 /* 4) Sidebar navigation – modern translucent panels */
@@ -247,7 +189,7 @@ pre,
     letter-spacing: 0.04em;
 }
 
-/* 5) Content area panels – integrate with background to avoid floating-card look */
+/* 5) Content area – integrated look (no heavy floating cards) */
 .md-content {
     background: transparent;
     color: var(--mr-text);
@@ -258,22 +200,18 @@ pre,
     background: transparent; /* blend with page */
     border: none;
     border-radius: 10px;
-    padding: calc(var(--mr-space-7) - 0.25rem) calc(var(--mr-space-7) - 0.25rem);
-    box-shadow: none; /* remove heavy card feel */
-    transition:
-        background-color 240ms ease,
-        border-color 160ms ease,
-        box-shadow 240ms ease;
+    padding: var(--mr-space-7);
+    box-shadow: none;
 }
 
-/* Breadcrumb container: subtle inline chip without heavy box shadow */
+/* Breadcrumb/Home: labeled bar matching TOC style */
 .md-content__inner .md-typeset .md-breadcrumbs,
 .md-typeset .md-breadcrumbs {
     background: var(--mr-bg-elev);
     border: 1px solid var(--mr-border);
     border-radius: 10px;
-    padding: 0.4rem 0.6rem;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    padding: 0.5rem 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
 
 /* Breadcrumb items spacing and color */
@@ -284,7 +222,7 @@ pre,
     color: var(--mr-text);
 }
 
-/* Table of contents panel: align with page without looking detached */
+/* Table of contents panel: integrated but distinct */
 .md-sidebar .md-nav--secondary {
     background: transparent;
     border: none;
@@ -297,15 +235,12 @@ pre,
     border: 1px solid var(--mr-border);
     border-radius: 8px;
     padding: 0.5rem 0.75rem;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
 
 /* TOC list items with subtle separators only */
 .md-sidebar .md-nav--secondary .md-nav__list {
     background: transparent;
-    border-left: 2px solid rgba(0, 0, 0, 0.06);
-}
-[data-md-color-scheme="slate"] .md-sidebar .md-nav--secondary .md-nav__list {
     border-left: 2px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -374,26 +309,20 @@ pre,
 
 /* 7) Links with animated gradient underline */
 .md-typeset a {
-    color: #0f62fe; /* IBM link-ish blue tuned by scheme below */
+    color: #cfe9ff;
     text-decoration: none;
     background-image: var(--mr-gradient-active-2);
     background-size: 200% var(--mr-underline-thickness);
-    background-position: 100% calc(100% - 3px); /* more clearance from glyphs/icons */
+    background-position: 100% calc(100% - var(--mr-underline-offset));
     background-repeat: no-repeat;
     transition:
         color var(--mr-anim-duration-fast) ease,
         background-position var(--mr-anim-duration) ease,
         background-size var(--mr-anim-duration) ease;
-    /* Sync gradient underline shift with gradient text fade (if applied) */
     background-clip: border-box;
-    text-underline-offset: 3px; /* consistent offset for inline icons */
-    border-radius: 2px; /* reduce harshness when underline meets glyph descenders */
-}
-[data-md-color-scheme="slate"] .md-typeset a {
-    color: #cfe9ff;
-}
-[data-md-color-scheme="default"] .md-typeset a {
-    color: #0f62fe;
+    text-underline-offset: var(--mr-underline-offset);
+    text-decoration-skip-ink: auto;
+    border-radius: 2px;
 }
 
 .md-typeset a:hover,
@@ -586,7 +515,7 @@ pre,
 /* Right-align header actions (search + GitHub) within Material grid */
 .md-header__inner .md-grid {
     display: grid;
-    grid-template-columns: auto 1fr auto; /* left pills / tabs / right actions */
+    grid-template-columns: auto 1fr auto; /* left title / tabs / right actions */
     align-items: center;
     gap: var(--mr-space-6);
 }
@@ -655,7 +584,7 @@ pre,
     border-radius: 16px;
     padding: 1.1rem 1.2rem;
     box-shadow:
-        0 10px 25px rgba(0, 0, 0, 0.22),
+        0 10px 25px rgba(0, 0, 0, 0.16),
         inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
@@ -703,4 +632,14 @@ pre,
     .md-tabs__link {
         padding-bottom: 0.4rem;
     }
+}
+
+/* Heading anchor icon (¶/page) underline spacing – never collide */
+.md-typeset h1 .headerlink,
+.md-typeset h2 .headerlink,
+.md-typeset h3 .headerlink {
+    background-image: none !important; /* no gradient underline on the icon itself */
+    text-decoration: none !important; /* prevent underline from the icon */
+    margin-left: 0.25rem; /* breathing room from heading text */
+    vertical-align: baseline;
 }
