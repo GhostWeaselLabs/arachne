@@ -62,14 +62,14 @@
 [data-md-color-scheme="default"] {
     /* Gray10 surfaces */
     --mr-bg: #f4f4f4; /* page background */
-    --mr-bg-elev: #e0e0e0; /* panel (approx gray20) */
-    --mr-border: rgba(0, 0, 0, 0.12);
+    --mr-bg-elev: #ededed; /* lighter panel to reduce heaviness (between gray10 and gray20) */
+    --mr-border: rgba(0, 0, 0, 0.1);
     --mr-text: #161616; /* primary text (gray100-ish) */
-    --mr-text-muted: rgba(22, 22, 22, 0.72);
-    --mr-primary: #0b0b0e; /* header/nav background (near black for contrast) */
+    --mr-text-muted: rgba(22, 22, 22, 0.7);
+    --mr-primary: #171717; /* header/nav background slightly lighter than pure black for light mode harmony */
     --mr-accent: #6f3eff;
     --mr-accent-2: #00d1ff;
-    --mr-panel: rgba(0, 0, 0, 0.035);
+    --mr-panel: rgba(0, 0, 0, 0.025);
 
     /* Light-mode gradient bindings */
     --mr-gradient-active-1: var(--mr-gradient-1-light);
@@ -77,8 +77,8 @@
 
     /* Search/input surfaces for light */
     --mr-input-bg: #ffffff;
-    --mr-input-border: rgba(0, 0, 0, 0.15);
-    --mr-input-placeholder: rgba(22, 22, 22, 0.5);
+    --mr-input-border: rgba(0, 0, 0, 0.18);
+    --mr-input-placeholder: rgba(22, 22, 22, 0.55);
 }
 
 /* Dark mode (mkdocs scheme 'slate') – gray90 */
@@ -198,8 +198,8 @@ pre,
     background-size: 200% var(--mr-underline-thickness);
     background-position: 100% calc(100% - var(--mr-underline-offset));
     background-repeat: no-repeat;
-    padding-bottom: 0.44rem; /* give underline a touch more clearance */
-    margin-bottom: -1px; /* reduce tuck to keep line visually even */
+    padding-bottom: 0.48rem; /* extra clearance for light mode to avoid crowding */
+    margin-bottom: 0; /* even baseline across schemes */
 }
 
 .md-tabs__link:hover,
@@ -260,7 +260,7 @@ pre,
     border: 1px solid var(--mr-border);
     border-radius: 12px; /* softer corners */
     padding: calc(var(--mr-space-7) - 0.25rem) calc(var(--mr-space-7) - 0.25rem);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08); /* subtle, works on light and dark */
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06); /* lighter shadow for light mode */
     transition:
         background-color 240ms ease,
         border-color 160ms ease,
@@ -312,7 +312,7 @@ pre,
     margin-top: 10px; /* align perceived spacing with h1 underline */
     border-radius: 2px;
     background: var(--mr-gradient-active-2);
-    opacity: 0.9;
+    opacity: 0.94;
 }
 
 /* 7) Links with animated gradient underline */
@@ -330,6 +330,7 @@ pre,
     /* Sync gradient underline shift with gradient text fade (if applied) */
     background-clip: border-box;
     text-underline-offset: 3px; /* consistent offset for inline icons */
+    border-radius: 2px; /* reduce harshness when underline meets glyph descenders */
 }
 [data-md-color-scheme="slate"] .md-typeset a {
     color: #cfe9ff;
@@ -451,6 +452,7 @@ pre,
     display: inline-flex;
     align-items: center;
     gap: var(--mr-space-3);
+    margin-left: var(--mr-space-4);
 }
 /* Placement: attach pills after the brand title when present */
 .md-header__title .mr-header-left {
@@ -494,6 +496,8 @@ pre,
 }
 [data-md-color-scheme="default"] .mr-quicklink {
     background-image: var(--mr-gradient-1-light);
+    color: #161616;
+    border-color: rgba(0, 0, 0, 0.14);
 }
 [data-md-color-scheme="slate"] .mr-quicklink {
     background-image: var(--mr-gradient-1);
@@ -525,14 +529,16 @@ pre,
 /* Right-align header actions (search + GitHub) within Material grid */
 .md-header__inner .md-grid {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: auto 1fr auto; /* left pills / tabs / right actions */
     align-items: center;
     gap: var(--mr-space-6);
 }
 
-/* Keep title/brand on the left grid cell */
+/* Keep title/brand and optional pills on the left grid cell */
 .md-header__inner .md-header__title {
     justify-self: start;
+    display: inline-flex;
+    align-items: center;
 }
 
 /* Place header options (theme toggle, search, GitHub) in the right grid cell */
@@ -541,6 +547,7 @@ pre,
     display: inline-flex;
     align-items: center;
     gap: var(--mr-space-5);
+    margin-left: var(--mr-space-6);
 }
 
 /* Ensure search and GitHub align flush-right without pushing layout */
@@ -553,14 +560,18 @@ pre,
     background: var(--mr-input-bg);
     border: 1px solid var(--mr-input-border);
     color: var(--mr-text) !important;
+    box-shadow:
+        0 1px 0 rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 .md-search__input::placeholder {
     color: var(--mr-input-placeholder);
+    opacity: 0.9;
 }
 
 .md-footer-meta,
 .md-footer__inner {
-    color: var(--mr-muted);
+    color: var(--mr-text-muted);
 }
 
 /* 13) Tables – cleaner borders and zebra striping */
@@ -633,6 +644,6 @@ pre,
     }
 
     .md-tabs__link {
-        padding-bottom: 0.34rem;
+        padding-bottom: 0.4rem;
     }
 }

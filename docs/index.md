@@ -2,6 +2,24 @@
 
 # Meridian Runtime
 
+<div class="mr-header-left">
+  <a class="mr-quicklink mr-quicklink--sm" href="./getting-started/">Get Started</a>
+  <span class="mr-header-left__divider"></span>
+  <a class="mr-quicklink mr-quicklink--sm" href="./api/">API</a>
+  <a class="mr-quicklink mr-quicklink--sm" href="./examples/">Examples</a>
+</div>
+
+<div class="mr-hero mr-gradient-border" style="margin-top: 16px; margin-bottom: 16px; padding: 18px 18px;">
+  <div class="mr-hero__content">
+    <h2 class="mr-gradient-text" style="margin: 0; font-weight: 800; letter-spacing: -0.02em;">Minimal, observable graph runtime for Python</h2>
+    <p style="margin: 8px 0 0 0;">Build real-time dataflows from small, single‑responsibility nodes connected by typed, bounded edges — with backpressure, priorities, and first‑class observability.</p>
+    <div style="margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap;">
+      <a class="md-button" href="./getting-started/">Get started</a>
+      <a class="md-button" href="./examples/">View examples</a>
+    </div>
+  </div>
+</div>
+
 Minimal, reusable graph runtime for Python. Build real-time, observable dataflows from small, single‑responsibility nodes connected by typed, bounded edges.
 
 Meridian gives you:
