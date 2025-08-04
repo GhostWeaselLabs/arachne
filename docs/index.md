@@ -2,12 +2,7 @@
 
 # Meridian Runtime
 
-<div class="mr-header-left">
-  <a class="mr-quicklink mr-quicklink--sm" href="./getting-started/">Get Started</a>
-  <span class="mr-header-left__divider"></span>
-  <a class="mr-quicklink mr-quicklink--sm" href="./api/">API</a>
-  <a class="mr-quicklink mr-quicklink--sm" href="./examples/">Examples</a>
-</div>
+
 
 <div class="mr-hero mr-gradient-border" style="margin-top: 16px; margin-bottom: 16px; padding: 18px 18px;">
   <div class="mr-hero__content">

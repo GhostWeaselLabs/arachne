@@ -247,24 +247,81 @@ pre,
     letter-spacing: 0.04em;
 }
 
-/* 5) Content area panels – subtle translucency and borders */
+/* 5) Content area panels – integrate with background to avoid floating-card look */
 .md-content {
     background: transparent;
     color: var(--mr-text);
 }
 
+/* Reduce chrome on the primary article wrapper */
 .md-content__inner {
-    background: var(
-        --mr-bg-elev
-    ); /* IBM gray20/gray80 panel depending on scheme */
-    border: 1px solid var(--mr-border);
-    border-radius: 12px; /* softer corners */
+    background: transparent; /* blend with page */
+    border: none;
+    border-radius: 10px;
     padding: calc(var(--mr-space-7) - 0.25rem) calc(var(--mr-space-7) - 0.25rem);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06); /* lighter shadow for light mode */
+    box-shadow: none; /* remove heavy card feel */
     transition:
         background-color 240ms ease,
         border-color 160ms ease,
         box-shadow 240ms ease;
+}
+
+/* Breadcrumb container: subtle inline chip without heavy box shadow */
+.md-content__inner .md-typeset .md-breadcrumbs,
+.md-typeset .md-breadcrumbs {
+    background: var(--mr-bg-elev);
+    border: 1px solid var(--mr-border);
+    border-radius: 10px;
+    padding: 0.4rem 0.6rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* Breadcrumb items spacing and color */
+.md-typeset .md-breadcrumbs__item {
+    color: var(--mr-text-muted);
+}
+.md-typeset .md-breadcrumbs__item:hover {
+    color: var(--mr-text);
+}
+
+/* Table of contents panel: align with page without looking detached */
+.md-sidebar .md-nav--secondary {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+/* TOC title as a simple label bar */
+.md-sidebar .md-nav--secondary .md-nav__title {
+    background: var(--mr-bg-elev);
+    border: 1px solid var(--mr-border);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* TOC list items with subtle separators only */
+.md-sidebar .md-nav--secondary .md-nav__list {
+    background: transparent;
+    border-left: 2px solid rgba(0, 0, 0, 0.06);
+}
+[data-md-color-scheme="slate"] .md-sidebar .md-nav--secondary .md-nav__list {
+    border-left: 2px solid rgba(255, 255, 255, 0.08);
+}
+
+.md-sidebar .md-nav--secondary .md-nav__link {
+    padding: 0.25rem 0.25rem 0.25rem 0.6rem;
+    border-radius: 6px;
+}
+.md-sidebar .md-nav--secondary .md-nav__link:hover,
+.md-sidebar .md-nav--secondary .md-nav__item--active > .md-nav__link {
+    background: var(--mr-bg-elev);
+    color: var(--mr-text);
+}
+
+/* Remove heavy frame around the main article card on landing */
+.md-main__inner {
+    box-shadow: none;
 }
 
 /* Slightly wider readable width without going full-bleed */
