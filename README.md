@@ -24,6 +24,16 @@ Use cases
 
 ---
 
+## Versioning & Deprecation Policy
+
+- This project follows Semantic Versioning starting with v1.0.0 for the public API.
+- Public, stable surfaces are documented across Concepts and Reference in the docs site.
+- Deprecations are announced in a MINOR release and remain available for at least one subsequent MINOR before removal.
+- See:
+  - Versioning and policy overview: https://ghostweasellabs.github.io/meridian-runtime/roadmap/release-v1.0.0/
+  - API Reference: https://ghostweasellabs.github.io/meridian-runtime/reference/api/
+  - Concepts (Architecture, Patterns): https://ghostweasellabs.github.io/meridian-runtime/concepts/architecture/
+
 ## Documentation
 
 - Site: https://ghostweasellabs.github.io/meridian-runtime/ — Deployed via GitHub Pages (source: GitHub Actions)
