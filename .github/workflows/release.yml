@@ -7,7 +7,7 @@ on:
 
 permissions:
   contents: read
-  id-token: write  # Required for PyPI Trusted Publishing (OIDC)
+  id-token: write # Required for PyPI Trusted Publishing (OIDC)
 
 concurrency:
   group: release-${{ github.ref }}
@@ -65,11 +65,10 @@ jobs:
 
       # Publish to PyPI via Trusted Publisher (OIDC). No API token required.
       # Ensure PyPI Trusted Publisher is configured for this repository and workflow filename.
-      - name: Publish to PyPI (Trusted Publisher)
+      - name: Publish to TestPyPI (Trusted Publisher)
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          # To test against TestPyPI first, uncomment the following line and add a Trusted Publisher on TestPyPI:
-          # repository-url: https://test.pypi.org/legacy/
+          repository-url: https://test.pypi.org/legacy/
 
       - name: Post-publish smoke (install from PyPI)
         if: ${{ success() }}
