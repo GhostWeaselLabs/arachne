@@ -202,5 +202,6 @@ extra_javascript:
   - javascripts/dynamic-header.js
   # Local vendor scripts (self-contained, no external dependencies)
   - javascripts/vendor/meridian-halo.standalone.min.js
+  - javascripts/vendor/meridian-halo-wrapper.js
   - javascripts/vendor/mermaid.min.js
   - javascripts/vendor/mathjax.min.js
