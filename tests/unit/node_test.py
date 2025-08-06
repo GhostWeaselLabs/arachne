@@ -23,7 +23,7 @@ class Harness(Node):
 
 class ErrorNode(Node):
     """Node that raises exceptions to test error handling."""
-    
+
     def __init__(self, raise_in_message: bool = False, raise_in_tick: bool = False) -> None:
         super().__init__("ErrorNode", inputs=[], outputs=[])
         self.raise_in_message = raise_in_message
@@ -40,7 +40,7 @@ class ErrorNode(Node):
 
 class MetricsNode(Node):
     """Node with custom metrics to test edge cases."""
-    
+
     def __init__(self) -> None:
         super().__init__("MetricsNode", inputs=[], outputs=[])
         # Override metrics to test None scenarios
@@ -94,7 +94,7 @@ def test_port_map() -> None:
 def test_message_error_handling() -> None:
     """Test error handling in on_message method."""
     error_node = ErrorNode(raise_in_message=True)
-    
+
     # Should raise the exception after recording metrics
     with pytest.raises(RuntimeError, match="Test message error"):
         error_node.on_message("test_port", Message(MessageType.DATA, 1))
@@ -103,7 +103,7 @@ def test_message_error_handling() -> None:
 def test_tick_error_handling() -> None:
     """Test error handling in on_tick method."""
     error_node = ErrorNode(raise_in_tick=True)
-    
+
     # Should raise the exception after recording metrics
     with pytest.raises(RuntimeError, match="Test tick error"):
         error_node.on_tick()
@@ -112,16 +112,16 @@ def test_tick_error_handling() -> None:
 def test_metrics_none_handling() -> None:
     """Test behavior when metrics are None (edge case)."""
     metrics_node = MetricsNode()
-    
+
     # Should not crash when metrics are None
     metrics_node.on_message("test_port", Message(MessageType.DATA, 1))
     metrics_node.on_tick()
-    
+
     # Error handling should also work with None metrics
     error_metrics_node = ErrorNode(raise_in_message=True)
     error_metrics_node._messages_total = None
     error_metrics_node._errors_total = None
-    
+
     with pytest.raises(RuntimeError, match="Test message error"):
         error_metrics_node.on_message("test_port", Message(MessageType.DATA, 1))
 
@@ -130,7 +130,7 @@ def test_tick_error_handling_with_none_metrics() -> None:
     """Test tick error handling when metrics are None."""
     error_metrics_node = ErrorNode(raise_in_tick=True)
     error_metrics_node._errors_total = None
-    
+
     with pytest.raises(RuntimeError, match="Test tick error"):
         error_metrics_node.on_tick()
 

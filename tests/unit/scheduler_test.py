@@ -147,6 +147,7 @@ def test_runtime_mutators() -> None:
 
     # Start scheduler in background
     import threading
+
     thread = threading.Thread(target=sch.run)
     thread.start()
 
@@ -155,7 +156,7 @@ def test_runtime_mutators() -> None:
 
     # Test runtime priority change
     sch.set_priority(edge_id, PriorityBand.CONTROL)
-    
+
     # Test runtime capacity change
     sch.set_capacity(edge_id, 5)
 
@@ -229,9 +230,7 @@ def test_fairness_ratio() -> None:
 
     # Custom fairness ratio
     config = SchedulerConfig(
-        tick_interval_ms=10, 
-        shutdown_timeout_s=0.5,
-        fairness_ratio=(2, 1, 1)  # Different ratio
+        tick_interval_ms=10, shutdown_timeout_s=0.5, fairness_ratio=(2, 1, 1)  # Different ratio
     )
     sch = Scheduler(config)
     sch.register(sg)
@@ -246,30 +245,31 @@ def test_fairness_ratio() -> None:
 def test_registration_validation() -> None:
     """Test registration validation."""
     sch = Scheduler()
-    
+
     # Test registering while running
     producer = Producer("Producer")
     consumer = Consumer("Consumer")
     sg = Subgraph.from_nodes("Test", [producer, consumer])
     sg.connect(("Producer", "out"), ("Consumer", "in"), capacity=10)
-    
+
     sch.register(sg)
-    
+
     # Start scheduler
     import threading
+
     thread = threading.Thread(target=sch.run)
     thread.start()
     time.sleep(0.1)
-    
+
     # Try to register while running - should raise RuntimeError
     another_sg = Subgraph.from_nodes("Another", [Producer("P2")])
-    
+
     try:
         sch.register(another_sg)
         raise AssertionError("Should not allow registration while running")
     except RuntimeError:
         pass  # Expected
-    
+
     sch.shutdown()
     thread.join(timeout=1.0)
 
@@ -277,7 +277,7 @@ def test_registration_validation() -> None:
 def test_priority_validation() -> None:
     """Test priority validation."""
     sch = Scheduler()
-    
+
     # Test invalid priority type
     try:
         sch.set_priority("edge_id", "invalid_priority")  # type: ignore
@@ -289,23 +289,24 @@ def test_priority_validation() -> None:
 def test_priority_change_edge_not_found() -> None:
     """Test priority change when edge doesn't exist."""
     sch = Scheduler()
-    
+
     # Start scheduler
     producer = Producer("Producer")
     consumer = Consumer("Consumer")
     sg = Subgraph.from_nodes("Test", [producer, consumer])
     sg.connect(("Producer", "out"), ("Consumer", "in"), capacity=10)
-    
+
     sch.register(sg)
-    
+
     import threading
+
     thread = threading.Thread(target=sch.run)
     thread.start()
     time.sleep(0.1)
-    
+
     # Try to change priority of non-existent edge
     sch.set_priority("non_existent_edge", PriorityBand.CONTROL)
-    
+
     sch.shutdown()
     thread.join(timeout=1.0)
 
@@ -313,23 +314,24 @@ def test_priority_change_edge_not_found() -> None:
 def test_capacity_change_edge_not_found() -> None:
     """Test capacity change when edge doesn't exist."""
     sch = Scheduler()
-    
+
     # Start scheduler
     producer = Producer("Producer")
     consumer = Consumer("Consumer")
     sg = Subgraph.from_nodes("Test", [producer, consumer])
     sg.connect(("Producer", "out"), ("Consumer", "in"), capacity=10)
-    
+
     sch.register(sg)
-    
+
     import threading
+
     thread = threading.Thread(target=sch.run)
     thread.start()
     time.sleep(0.1)
-    
+
     # Try to change capacity of non-existent edge
     sch.set_capacity("non_existent_edge", 5)
-    
+
     sch.shutdown()
     thread.join(timeout=1.0)
 
@@ -337,19 +339,19 @@ def test_capacity_change_edge_not_found() -> None:
 def test_pending_priority_application() -> None:
     """Test that pending priorities are applied during plan build."""
     sch = Scheduler()
-    
+
     # Set priority before registering
     sch.set_priority("edge_id", PriorityBand.CONTROL)
-    
+
     # Register graph
     producer = Producer("Producer")
     consumer = Consumer("Consumer")
     sg = Subgraph.from_nodes("Test", [producer, consumer])
     edge_id = sg.connect(("Producer", "out"), ("Consumer", "in"), capacity=10)
-    
+
     # The pending priority should be applied during registration
     sch.register(sg)
-    
+
     # Run briefly to ensure it works
     sch.run()
 
@@ -357,23 +359,24 @@ def test_pending_priority_application() -> None:
 def test_scheduler_reentrant_run() -> None:
     """Test that re-entrant run() calls are ignored."""
     sch = Scheduler()
-    
+
     producer = Producer("Producer")
     consumer = Consumer("Consumer")
     sg = Subgraph.from_nodes("Test", [producer, consumer])
     sg.connect(("Producer", "out"), ("Consumer", "in"), capacity=10)
-    
+
     sch.register(sg)
-    
+
     # Start scheduler in background
     import threading
+
     thread = threading.Thread(target=sch.run)
     thread.start()
     time.sleep(0.1)
-    
+
     # Try to run again while already running - should be ignored
     sch.run()
-    
+
     sch.shutdown()
     thread.join(timeout=1.0)
 
@@ -381,31 +384,32 @@ def test_scheduler_reentrant_run() -> None:
 def test_scheduler_stats() -> None:
     """Test scheduler stats retrieval."""
     sch = Scheduler()
-    
+
     # Get stats before running
     stats = sch.get_stats()
     assert "status" in stats
     assert stats["status"] == "stopped"
-    
+
     # Start scheduler
     producer = Producer("Producer")
     consumer = Consumer("Consumer")
     sg = Subgraph.from_nodes("Test", [producer, consumer])
     sg.connect(("Producer", "out"), ("Consumer", "in"), capacity=10)
-    
+
     sch.register(sg)
-    
+
     import threading
+
     thread = threading.Thread(target=sch.run)
     thread.start()
     time.sleep(0.1)
-    
+
     # Get stats while running
     stats = sch.get_stats()
     assert stats["status"] == "running"
     assert "nodes_count" in stats
     assert "edges_count" in stats
     assert "runnable_nodes" in stats
-    
+
     sch.shutdown()
     thread.join(timeout=1.0)
