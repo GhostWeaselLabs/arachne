@@ -6,7 +6,7 @@
 
 **EARS loop**
 
-- Explore: finalize scope, gates, and release workflow
+- Explore: finalize scope, gates, and release workflow (docs deploy gate; PR-only merges to main)
 - Analyze: verify docs/examples, changelog, versioning, policies
 - Implement: release CI, packaging, signing, notes, migration guide
 - Specify checks: dry-run to test index; post-publish smoke; downstream compatibility
@@ -16,25 +16,30 @@
 
 ```bash
 git checkout -b feature/m8-release-1-0-0
+# Version bump in pyproject.toml (and version module if present)
 git add -A && git commit -m "chore(release): bump version and finalize pyproject metadata"
+# Add release CI workflow (tag-based publish)
 git add -A && git commit -m "chore(release): CI workflow for build, test, and publish on tag"
+# Docs: changelog, notes, migration & deprecation policy
 git add -A && git commit -m "docs(release): changelog, release notes, migration and deprecation policy"
+# Integrity: signing, twine checks / Trusted Publisher dry run
 git add -A && git commit -m "chore(release): signing and integrity checks; test publish flow"
+# Validation: downstream smoke and docs build
 git add -A && git commit -m "chore(release): downstream smoke and docs link validation"
 git push -u origin feature/m8-release-1-0-0
+# Open PR; merge to main only via PR after CI is green
+# Tag and push the release
+git tag -a v1.0.0 -m "Release v1.0.0"
+git push origin v1.0.0
 ```
 
 Open PR early; keep commits small and focused
-
-**Status**: Planned  
-**Owner**: Core Maintainers  
-**Duration**: 2–4 days
 
 ---
 
 ## Overview
 
-This milestone delivers the first stable release of Arachne's graph runtime with a SemVer-committed API. It finalizes documentation, artifacts, and release processes, validates compatibility with downstreams, and publishes packages. It also sets the project's maintenance and deprecation policies to ensure dependable adoption.
+This milestone delivers the first stable release of Meridian Runtime's graph runtime with a SemVer-committed API. It finalizes documentation, artifacts, and release processes, validates compatibility with downstreams, and publishes packages. It also sets the project's maintenance and deprecation policies to ensure dependable adoption.
 
 ## EARS Requirements
 
@@ -46,6 +51,7 @@ This milestone delivers the first stable release of Arachne's graph runtime with
 - If any gate (lint, type, tests, coverage) fails, the workflow shall abort without publishing.
 - The system shall provide a migration guide for any changes since RC or beta, including deprecated APIs.
 - The system shall validate that examples run with `uv` and that documentation links are correct at release time.
+- The documentation site shall be built and deployed on GitHub Pages successfully for the tagged release; link checking is enforced on pull requests (not on main) to avoid blocking deploys.
 - The system shall define and document a deprecation policy for future changes.
 - The system shall verify downstream compatibility by running a smoke CI against an integration repository or a minimal consumer project.
 
@@ -114,6 +120,8 @@ This milestone delivers the first stable release of Arachne's graph runtime with
 - [ ] Docs: quickstart, api, patterns, troubleshooting, observability complete
 - [ ] Metric catalog verified against code
 - [ ] Examples: `hello_graph` and `pipeline_demo` validated via `uv run`
+- [ ] GitHub Pages deploy is green for the tagged release (live site loads without errors)
+- [ ] Home page visual polish: Meridian Halo renders and no console errors in DevTools
 - [ ] Docs links validated (no broken references)
 
 ### Security and Compliance
@@ -131,7 +139,7 @@ This milestone delivers the first stable release of Arachne's graph runtime with
 - [ ] Build: sdist and manylinux/macOS wheels built via PEP 517 backend
 - [ ] Sign artifacts (GPG) and/or use trusted publisher flow
 - [ ] Test publish to staging/test index (if available)
-- [ ] Final publish to PyPI
+- [ ] Final publish to PyPI (via Trusted Publisher OIDC if configured, or twine upload with repository tokens stored in CI secrets; never commit credentials)
 - [ ] Verify install: fresh virtual env, `uv sync`, import smoke, example run
 
 ### Downstream Readiness
@@ -152,12 +160,23 @@ This milestone delivers the first stable release of Arachne's graph runtime with
 2. `uv sync` (locked)
 3. Quality gates: ruff, mypy, pytest with coverage
 4. Build artifacts: sdist, wheels
-5. Integrity checks: twine check; optional GPG signing
+5. Integrity checks: twine check; optional GPG signing; verify Trusted Publisher permissions (if used)
 6. Publish to registry (conditional on all prior steps passing)
-7. Create VCS release with notes, changelog excerpt, and artifact links
+7. Create VCS release with notes, changelog excerpt, and artifact links (automated in CI)
 8. Post-publish smoke: create fresh env and install from registry; run `hello_graph`
 
 ---
+
+Add a new CI workflow file (to be created): `.github/workflows/release.yml`
+- on: push tags: ['v*']
+- jobs:
+  - setup Python, uv sync (locked)
+  - quality gates: ruff, mypy, pytest with coverage
+  - build artifacts: sdist + wheels
+  - integrity: twine check; optional GPG sign
+  - publish: PyPI via Trusted Publisher or twine (using repo secrets)
+  - GitHub Release: create and attach notes changelog excerpt
+  - post-publish smoke: fresh env, install from PyPI, run `examples/hello_graph`
 
 ## Release Notes Template
 
@@ -228,6 +247,8 @@ This milestone delivers the first stable release of Arachne's graph runtime with
 
 - `v1.0.0` tag created; artifacts published and signed; release notes available
 - CI pipeline green on tag; post-publish install smoke passes on clean env
-- Examples runnable; docs complete and cross-linked
+- Examples runnable; docs complete and cross-linked; GitHub Pages deploy green for the release tag
+- Home page Halo visible; DevTools console clean (no errors)
+- GitHub Release created with notes and links to live docs (home, API reference)
 - Downstream smoke green with `v1.0.0` pin
 - `CHANGELOG` updated; deprecation and support policies documented
