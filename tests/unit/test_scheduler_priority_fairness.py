@@ -113,9 +113,11 @@ class TestPriorityFairness:
         # CONTROL has been serviced and dominates others when present.
         assert counts[PriorityBand.CONTROL] > 0
         if counts[PriorityBand.HIGH] > 0 and counts[PriorityBand.NORMAL] > 0:
-            assert counts[PriorityBand.CONTROL] >= counts[PriorityBand.HIGH] >= counts[
-                PriorityBand.NORMAL
-            ]
+            assert (
+                counts[PriorityBand.CONTROL]
+                >= counts[PriorityBand.HIGH]
+                >= counts[PriorityBand.NORMAL]
+            )
 
     def test_fallback_picks_any_available_if_ratio_gate_misses(self) -> None:
         # This exercises the branch where ratio-based check might not select a band,

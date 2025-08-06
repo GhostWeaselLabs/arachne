@@ -93,12 +93,16 @@ class HealthyNode(Node):
     def __init__(self, name: str, events: List[Event], produce: bool = False) -> None:
         super().__init__(
             name=name,
-            inputs=[Port("in", PortDirection.INPUT, spec=PortSpec("in", schema=int))]
-            if not produce
-            else [],
-            outputs=[Port("out", PortDirection.OUTPUT, spec=PortSpec("out", schema=int))]
-            if produce
-            else [],
+            inputs=(
+                [Port("in", PortDirection.INPUT, spec=PortSpec("in", schema=int))]
+                if not produce
+                else []
+            ),
+            outputs=(
+                [Port("out", PortDirection.OUTPUT, spec=PortSpec("out", schema=int))]
+                if produce
+                else []
+            ),
         )
         self._events = events
         self._produce = produce

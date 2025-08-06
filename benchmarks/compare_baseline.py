@@ -101,7 +101,6 @@ METRIC_DIRECTIONS = {
     "ops_per_sec_no_metrics": True,
     "ops_per_sec_prom_metrics": True,
     "metrics_overhead_pct": False,  # lower overhead is better
-
     # Scheduler benchmarks
     "iterations_per_second": True,
     "iterations_per_second_estimate": True,  # as emitted by bench_scheduler
@@ -141,6 +140,7 @@ class CompareConfig:
 # JSON helpers
 # ---------------------------
 
+
 def _load_json(path: Path) -> Dict[str, Any]:
     with path.open("r", encoding="utf-8") as f:
         return json.load(f)
@@ -166,6 +166,7 @@ def _get_env_float(name: str, default: float) -> float:
 # ---------------------------
 # Extraction and alignment
 # ---------------------------
+
 
 def _infer_section(current: Dict[str, Any], override: str | None) -> str | None:
     """
@@ -242,6 +243,7 @@ def _get_nested(obj: Dict[str, Any], *keys: str) -> Any:
 # Comparison logic
 # ---------------------------
 
+
 def _compare_metrics(
     section: str,
     baseline: Dict[str, Any],
@@ -264,7 +266,9 @@ def _compare_metrics(
 
     base_section = baseline.get(section, {})
     if not isinstance(base_section, dict):
-        messages["section"] = f"Baseline section '{section}' missing or not an object; skipping comparison."
+        messages["section"] = (
+            f"Baseline section '{section}' missing or not an object; skipping comparison."
+        )
         return True, details, messages  # do not fail if section isn't present
 
     for metric, base_value in base_section.items():
@@ -273,7 +277,9 @@ def _compare_metrics(
 
         cur_value = current_metrics.get(metric)
         if cur_value is None:
-            messages[metric] = f"WARNING: Metric '{metric}' missing in current; baseline={base_value}"
+            messages[metric] = (
+                f"WARNING: Metric '{metric}' missing in current; baseline={base_value}"
+            )
             continue
 
         higher_is_better = METRIC_DIRECTIONS.get(metric, True)
@@ -333,6 +339,7 @@ def _pct_increase(baseline: float, current: float) -> float:
 # I/O and CLI
 # ---------------------------
 
+
 def _parse_args(argv: list[str]) -> CompareConfig:
     parser = argparse.ArgumentParser(
         description="Compare benchmark results to a JSON baseline and detect regressions."
@@ -352,8 +359,8 @@ def _parse_args(argv: list[str]) -> CompareConfig:
         required=False,
         default=None,
         help="Optional baseline section name to compare against "
-             "(e.g., 'edge_put_get' or 'scheduler_loop'). "
-             "If omitted, inferred from current JSON 'name' field.",
+        "(e.g., 'edge_put_get' or 'scheduler_loop'). "
+        "If omitted, inferred from current JSON 'name' field.",
     )
     parser.add_argument(
         "--threshold",
@@ -369,8 +376,10 @@ def _parse_args(argv: list[str]) -> CompareConfig:
 
     args = parser.parse_args(argv)
 
-    threshold = args.threshold if args.threshold is not None else _get_env_float(
-        "MERIDIAN_BENCH_REGRESSION_PCT", DEFAULT_THRESHOLD_PCT
+    threshold = (
+        args.threshold
+        if args.threshold is not None
+        else _get_env_float("MERIDIAN_BENCH_REGRESSION_PCT", DEFAULT_THRESHOLD_PCT)
     )
     warn_only = args.warn_only or _get_env_bool("MERIDIAN_BENCH_WARN_ONLY", False)
 
@@ -405,7 +414,13 @@ def _main(argv: list[str]) -> int:
     if section is None:
         # If we cannot infer, compare all sections that match the current "name" if present,
         # otherwise bail with an informative message.
-        print(json.dumps({"error": "Unable to infer section; provide --section or include 'name' in current JSON"}))
+        print(
+            json.dumps(
+                {
+                    "error": "Unable to infer section; provide --section or include 'name' in current JSON"
+                }
+            )
+        )
         return 1
 
     # Extract metrics from current and compare

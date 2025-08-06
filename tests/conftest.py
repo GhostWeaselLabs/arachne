@@ -118,7 +118,9 @@ def pytest_configure(config: pytest.Config) -> None:
     config.addinivalue_line("markers", "integration: integration tests")
     config.addinivalue_line("markers", "stress: stress tests")
     config.addinivalue_line("markers", "soak: long-running soak tests")
-    config.addinivalue_line("markers", "benchmark: micro/macro benchmarks (use -k 'benchmark' to select)")
+    config.addinivalue_line(
+        "markers", "benchmark: micro/macro benchmarks (use -k 'benchmark' to select)"
+    )
 
 
 @pytest.fixture(scope="session")

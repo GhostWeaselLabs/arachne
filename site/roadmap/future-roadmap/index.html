@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#meridian-runtime-postv1-roadmap" class="md-skip">
+        <a href="#meridian-runtime-future-roadmap" class="md-skip">
           Skip to content
         </a>
       
@@ -2562,10 +2562,7 @@
   
 
 
-<h1 id="meridian-runtime-postv1-roadmap">Meridian Runtime Post‑v1 Roadmap<a class="headerlink" href="#meridian-runtime-postv1-roadmap" title="Anchor link to this section">&para;</a></h1>
-<p><strong>Owner</strong>: GhostWeasel (Lead: <code>doubletap-dave</code>)<br />
-<strong>Status</strong>: Living document<br />
-<strong>Audience</strong>: Contributors, maintainers, integrators</p>
+<h1 id="meridian-runtime-future-roadmap">Meridian Runtime Future Roadmap<a class="headerlink" href="#meridian-runtime-future-roadmap" title="Anchor link to this section">&para;</a></h1>
 <h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Anchor link to this section">&para;</a></h2>
 <p>This roadmap captures high‑value initiatives considered out of scope for v1.0.0 but aligned with Meridian's mission: a composable, asyncio‑native graph runtime with strong observability, predictable scheduling, and privacy‑first error handling. It is organized by time horizon and includes requirements framed with EARS to ensure clarity and testability.</p>
 <h2 id="guiding-themes">Guiding Themes<a class="headerlink" href="#guiding-themes" title="Anchor link to this section">&para;</a></h2>
@@ -2579,18 +2576,18 @@
 <hr />
 <h2 id="horizon-1-nearterm-v1x-series">Horizon 1: Near‑Term (v1.x series)<a class="headerlink" href="#horizon-1-nearterm-v1x-series" title="Anchor link to this section">&para;</a></h2>
 <h3 id="1-cli-enhancements-and-diagnostics">1) CLI Enhancements and Diagnostics<a class="headerlink" href="#1-cli-enhancements-and-diagnostics" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Event-driven:</strong></p>
+<p><strong>Event-driven:</strong></p>
 <ul>
 <li>When a user runs <code>meridian diagnostics collect</code>, the CLI shall gather anonymized runtime metadata, environment info (OS, Python version), configuration checksums, and recent logs into a bundle.</li>
 <li>When a diagnostics bundle is created, the CLI shall apply redaction rules to scrub secrets, tokens, PII, and payload contents by default.</li>
 </ul>
-<p><strong>EARS — Ubiquitous:</strong></p>
+<p><strong>Ubiquitous:</strong></p>
 <ul>
 <li>The CLI shall support subcommands for graph validation, linting, and quick profiling (e.g., edge depths, queue sizes).</li>
 <li>The CLI shall support exporting a machine‑readable snapshot of node/edge schemas and runtime topology.</li>
 </ul>
 <h3 id="2-rust-fast-path-extensions-pyo3">2) Rust Fast Path Extensions (PyO3)<a class="headerlink" href="#2-rust-fast-path-extensions-pyo3" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Ubiquitous:</strong></p>
+<p><strong>Ubiquitous:</strong></p>
 <ul>
 <li>The system shall provide an optional <code>meridian_fast</code> extension backed by Rust (via PyO3/maturin) implementing:<ul>
 <li>A bounded ring buffer for edges with <code>block</code>/<code>drop</code>/<code>latest</code>/<code>coalesce</code> policies.</li>
@@ -2600,7 +2597,7 @@
 </li>
 <li>When <code>meridian_fast</code> is installed, the runtime shall auto‑detect and use the Rust implementations; otherwise, it shall fall back to pure Python.</li>
 </ul>
-<p><strong>EARS — Unwanted:</strong></p>
+<p><strong>Unwanted:</strong></p>
 <ul>
 <li>If the Rust extension is unavailable or fails to load, the system shall degrade gracefully with no behavior change.</li>
 </ul>
@@ -2610,17 +2607,17 @@
 <li>Keep the public API identical; optimize internal data structures and loops.</li>
 </ul>
 <h3 id="3-cpu-topology-awareness-and-affinity">3) CPU Topology Awareness and Affinity<a class="headerlink" href="#3-cpu-topology-awareness-and-affinity" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Event-driven:</strong></p>
+<p><strong>Event-driven:</strong></p>
 <ul>
 <li>At startup, the runtime shall detect logical CPU count and affinity mask, log them, and expose metrics (e.g., <code>runtime_cpu_visible</code>, <code>runtime_cpu_affinity_count</code>).</li>
 <li>When <code>MERIDIAN_SET_CPU_AFFINITY=1</code> is set on Linux, the process shall set its CPU affinity to the full visible set and log the result.</li>
 </ul>
-<p><strong>EARS — Unwanted:</strong></p>
+<p><strong>Unwanted:</strong></p>
 <ul>
 <li>Affinity setting shall be opt‑in and never cause startup failure if the platform doesn't support it.</li>
 </ul>
 <h3 id="4-deterministic-metrics-overhead-minimization">4) Deterministic Metrics Overhead Minimization<a class="headerlink" href="#4-deterministic-metrics-overhead-minimization" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Ubiquitous:</strong></p>
+<p><strong>Ubiquitous:</strong></p>
 <ul>
 <li>The metrics subsystem shall provide a zero‑overhead stub when disabled and batch increments when enabled to keep overhead ≤10% versus no metrics.</li>
 </ul>
@@ -2629,49 +2626,49 @@
 <li>Preserve budget checks in CI; validate with microbenchmarks.</li>
 </ul>
 <h3 id="5-nightly-profiling-artifacts">5) Nightly Profiling Artifacts<a class="headerlink" href="#5-nightly-profiling-artifacts" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Event-driven:</strong></p>
+<p><strong>Event-driven:</strong></p>
 <ul>
 <li>When profiling mode is enabled (<code>MERIDIAN_PROF=1</code>), CI shall capture sampling profiles (<code>py‑spy</code>/<code>perf</code>) during stress tests and upload flamegraphs.</li>
 </ul>
-<p><strong>EARS — Unwanted:</strong></p>
+<p><strong>Unwanted:</strong></p>
 <ul>
 <li>Profiling mode shall not be enabled by default in PR CI to avoid noise.</li>
 </ul>
 <h3 id="6-graph-inspector-textterminal">6) Graph Inspector (Text/Terminal)<a class="headerlink" href="#6-graph-inspector-textterminal" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Ubiquitous:</strong></p>
+<p><strong>Ubiquitous:</strong></p>
 <ul>
 <li>The system shall provide a TUI inspector enabling overview of nodes, edges, queue states, and lifecycle statuses with refresh intervals.</li>
 <li>The inspector shall remain opt‑in and run without impacting runtime performance beyond nominal observation overhead.</li>
 </ul>
 <h3 id="7-runtime-introspection-api">7) Runtime Introspection API<a class="headerlink" href="#7-runtime-introspection-api" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Ubiquitous:</strong></p>
+<p><strong>Ubiquitous:</strong></p>
 <ul>
 <li>The runtime shall expose an introspection surface to enumerate nodes, edge policies, and recent error events with redacted metadata.</li>
 <li>The runtime shall provide structured metrics readers for exporting counters/gauges/histograms to common backends via adapters.</li>
 </ul>
 <h3 id="8-schema-and-validation-ergonomics">8) Schema and Validation Ergonomics<a class="headerlink" href="#8-schema-and-validation-ergonomics" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Ubiquitous:</strong></p>
+<p><strong>Ubiquitous:</strong></p>
 <ul>
 <li>The system shall offer optional validators (<code>TypedDict</code>/<code>Pydantic</code>) with a consistent adapter interface.</li>
 <li>The system shall include validation error mapping to structured runtime error events (no payloads by default).</li>
 </ul>
 <h3 id="9-scheduler-profiling-and-fairness-tuning">9) Scheduler Profiling and Fairness Tuning<a class="headerlink" href="#9-scheduler-profiling-and-fairness-tuning" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Event-driven:</strong></p>
+<p><strong>Event-driven:</strong></p>
 <ul>
 <li>When profiling mode is enabled, the scheduler shall record scheduling latencies, runnable queue lengths, and per‑node execution times with constant‑factor overhead.</li>
 </ul>
-<p><strong>EARS — State-driven:</strong></p>
+<p><strong>State-driven:</strong></p>
 <ul>
 <li>While steady‑state, the scheduler shall support configurable fairness strategies (e.g., round‑robin, weighted) selectable via policy.</li>
 </ul>
 <h3 id="10-persistencefriendly-hooks">10) Persistence‑Friendly Hooks<a class="headerlink" href="#10-persistencefriendly-hooks" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Ubiquitous:</strong></p>
+<p><strong>Ubiquitous:</strong></p>
 <ul>
 <li>The system shall provide extension points for durable inbox/outbox adapters (e.g., SQLite, file‑backed) without making persistence mandatory.</li>
 <li>The system shall document at‑least‑once and at‑most‑once semantics for adapters that opt into persistence.</li>
 </ul>
 <h3 id="11-examples-and-recipes-expansion">11) Examples and Recipes Expansion<a class="headerlink" href="#11-examples-and-recipes-expansion" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Ubiquitous:</strong></p>
+<p><strong>Ubiquitous:</strong></p>
 <ul>
 <li>The repository shall include curated examples demonstrating backpressure policies, redaction strategies, and controlled shutdown.</li>
 <li>The examples shall include "debug mode" scripts that set up structured logs and quick metrics sinks.</li>
@@ -2679,74 +2676,74 @@
 <hr />
 <h2 id="horizon-2-midterm-v2x-series">Horizon 2: Mid‑Term (v2.x series)<a class="headerlink" href="#horizon-2-midterm-v2x-series" title="Anchor link to this section">&para;</a></h2>
 <h3 id="1-visual-graph-inspector-localweb">1) Visual Graph Inspector (Local/Web)<a class="headerlink" href="#1-visual-graph-inspector-localweb" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Ubiquitous:</strong></p>
+<p><strong>Ubiquitous:</strong></p>
 <ul>
 <li>The system shall provide an optional web or local visual inspector for graph topology exploration, node status, and basic metrics overlays.</li>
 </ul>
-<p><strong>EARS — Unwanted:</strong></p>
+<p><strong>Unwanted:</strong></p>
 <ul>
 <li>If the visual inspector is enabled, it shall never expose payload contents by default; sensitive fields shall be masked or omitted.</li>
 </ul>
 <h3 id="2-pluggable-storage-for-edges-advanced">2) Pluggable Storage for Edges (Advanced)<a class="headerlink" href="#2-pluggable-storage-for-edges-advanced" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Ubiquitous:</strong></p>
+<p><strong>Ubiquitous:</strong></p>
 <ul>
 <li>The system shall allow edge queues to use pluggable storage (memory, mmap, local DB) with consistent overflow policies (<code>block</code>, <code>drop</code>, <code>latest</code>, <code>coalesce</code>).</li>
 <li>The system shall document performance and durability trade‑offs for each adapter.</li>
 </ul>
 <h3 id="3-extended-backpressure-strategies">3) Extended Backpressure Strategies<a class="headerlink" href="#3-extended-backpressure-strategies" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Ubiquitous:</strong></p>
+<p><strong>Ubiquitous:</strong></p>
 <ul>
 <li>The system shall support advanced backpressure configurations (e.g., watermarks, adaptive coalescing) that can be selected per edge.</li>
 </ul>
 <h3 id="4-graph-versioning-and-migration-aids">4) Graph Versioning and Migration Aids<a class="headerlink" href="#4-graph-versioning-and-migration-aids" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Event-driven:</strong></p>
+<p><strong>Event-driven:</strong></p>
 <ul>
 <li>When loading a graph with a prior schema version, the system shall support mapping/migration strategies to upgrade definitions with clear errors on incompatibilities.</li>
 </ul>
 <h3 id="5-replay-and-timetravel-debugging-local">5) Replay and Time‑Travel Debugging (Local)<a class="headerlink" href="#5-replay-and-timetravel-debugging-local" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Ubiquitous:</strong></p>
+<p><strong>Ubiquitous:</strong></p>
 <ul>
 <li>The system shall provide opt‑in, local‑only replay from persisted event logs to reproduce behavior, with strong redaction guarantees.</li>
 </ul>
 <h3 id="6-policydriven-error-handling">6) Policy‑Driven Error Handling<a class="headerlink" href="#6-policydriven-error-handling" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Ubiquitous:</strong></p>
+<p><strong>Ubiquitous:</strong></p>
 <ul>
 <li>The system shall offer configurable error policies (e.g., retry with backoff, circuit breaker, quarantine node) expressible in graph definitions.</li>
 </ul>
 <h3 id="7-structured-configuration-layer">7) Structured Configuration Layer<a class="headerlink" href="#7-structured-configuration-layer" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Ubiquitous:</strong></p>
+<p><strong>Ubiquitous:</strong></p>
 <ul>
 <li>The system shall offer a structured config loader (e.g., from TOML/YAML) with strict key validation and environment overrides, remaining optional.</li>
 </ul>
 <hr />
 <h2 id="horizon-3-longterm-v3x">Horizon 3: Long‑Term (v3.x+)<a class="headerlink" href="#horizon-3-longterm-v3x" title="Anchor link to this section">&para;</a></h2>
 <h3 id="1-multiprocessdistributed-execution-rust-bridges">1) Multi‑Process/Distributed Execution (Rust Bridges)<a class="headerlink" href="#1-multiprocessdistributed-execution-rust-bridges" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Ubiquitous:</strong></p>
+<p><strong>Ubiquitous:</strong></p>
 <ul>
 <li>The runtime shall support partitioned execution across processes or hosts with clear delivery guarantees and robust health checks.</li>
 <li>Bridge edges shall be backed by shared memory or lock‑free queues implemented in Rust, with a <code>DistributedEngine</code> composing multiple schedulers.</li>
 </ul>
-<p><strong>EARS — Unwanted:</strong></p>
+<p><strong>Unwanted:</strong></p>
 <ul>
 <li>If a partition becomes isolated, the system shall degrade gracefully with backpressure, clear error events, and recovery paths.</li>
 </ul>
 <h3 id="2-adaptive-scheduling-and-qos">2) Adaptive Scheduling and QoS<a class="headerlink" href="#2-adaptive-scheduling-and-qos" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — State-driven:</strong></p>
+<p><strong>State-driven:</strong></p>
 <ul>
 <li>While under sustained load, the scheduler shall adapt priorities based on configured QoS classes, queue depth, and SLIs.</li>
 </ul>
 <h3 id="3-formal-verification-aids">3) Formal Verification Aids<a class="headerlink" href="#3-formal-verification-aids" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Ubiquitous:</strong></p>
+<p><strong>Ubiquitous:</strong></p>
 <ul>
 <li>The system shall provide optional formal models/specs for critical components (e.g., edge policies) to support verification and model‑checking.</li>
 </ul>
 <h3 id="4-pluggable-security-posture">4) Pluggable Security Posture<a class="headerlink" href="#4-pluggable-security-posture" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Ubiquitous:</strong></p>
+<p><strong>Ubiquitous:</strong></p>
 <ul>
 <li>The system shall support policy modules for encryption at rest for persistent edges, signed configuration bundles, and policy‑as‑code redaction rules.</li>
 </ul>
 <h3 id="5-remote-control-plane">5) Remote Control Plane<a class="headerlink" href="#5-remote-control-plane" title="Anchor link to this section">&para;</a></h3>
-<p><strong>EARS — Event-driven:</strong></p>
+<p><strong>Event-driven:</strong></p>
 <ul>
 <li>When enabled, a remote control plane shall allow safe operations (pause/resume nodes, swap subgraphs, drain edges) with strict auth and audit logs.</li>
 </ul>

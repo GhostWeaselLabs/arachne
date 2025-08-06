@@ -9,8 +9,10 @@ from .producer import ProducerNode
 
 def build_graph(max_count: int = 5) -> tuple[Subgraph, Consumer]:
     consumer = Consumer()
-    sg = Subgraph.from_nodes("hello_graph", [ProducerNode(name="producer", max_count=max_count), consumer])
-    
+    sg = Subgraph.from_nodes(
+        "hello_graph", [ProducerNode(name="producer", max_count=max_count), consumer]
+    )
+
     # Connect producer->consumer with capacity and policy
     sg.connect(("producer", "output"), ("consumer", "in"), capacity=16)
 

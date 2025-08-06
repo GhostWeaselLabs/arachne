@@ -120,7 +120,7 @@ def _run_put_get_once(n_items: int, batch: int, capacity: int) -> Tuple[float, i
         _ = edge.try_get()
         processed += 1
 
-    dt_s = ( _time_now_ns() - start_ns ) / 1e9
+    dt_s = (_time_now_ns() - start_ns) / 1e9
     return dt_s, processed
 
 
