@@ -1,39 +1,63 @@
 site_name: Meridian Runtime
-site_description: Minimal, reusable graph runtime for Python.
+site_description: Minimal, observable graph runtime for Python. Build real-time dataflows from small, single-responsibility nodes connected by typed, bounded edges.
 repo_url: https://github.com/GhostWeaselLabs/meridian-runtime
+repo_name: meridian-runtime
 site_url: https://ghostweasellabs.github.io/meridian-runtime/
 edit_uri: edit/main/
+
+# Documentation configuration
+docs_dir: docs
 
 theme:
   name: material
   language: en
   features:
-    - navigation.instant
+    # Navigation & Structure
+    # - navigation.instant
+    # - navigation.instant.prefetch
+    # - navigation.instant.progress
     - navigation.tracking
     - navigation.tabs
     - navigation.tabs.sticky
     - navigation.sections
     - navigation.indexes
     - navigation.path
+    - navigation.top
+    - navigation.footer
+    - navigation.expand
+    # Content Features
     - content.code.copy
     - content.code.annotate
+    - content.code.select
     - content.action.edit
+    - content.tooltips
+    # Search & TOC
     - toc.follow
     - search.suggest
     - search.highlight
-    - header.autohide
-    # Disable automatic heading anchor/permalink icons
+    - search.share
+    # Disable automatic heading anchor/permalink icons (handled by CSS)
     - content.heading.permalinks: false
   font:
     text: IBM Plex Sans
     code: IBM Plex Mono
   icon:
     repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
   palette:
-    # Dark mode only (IBM gray90)
     - scheme: slate
       primary: black
       accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/white-balance-sunny
+        name: Switch to dark mode
 
 extra_css:
   - styles/overrides.css
@@ -42,62 +66,142 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/GhostWeaselLabs/meridian-runtime
-      name: GitHub
+      name: GitHub Repository
+    - icon: fontawesome/solid/book
+      link: https://ghostweasellabs.github.io/meridian-halo/
+      name: Meridian Halo
   generator: false
+  status:
+    new: Recently added
+    deprecated: Deprecated
 
 nav:
   - Home: index.md
-  - Getting Started: getting-started.md
-  - Quickstart: quickstart.md
-  - Examples: examples.md
+  - Getting started:
+      - Guide: getting-started/guide.md
+      - Quickstart: getting-started/quickstart.md
+  - Guides:
+      - Examples: guides/examples.md
+      - Local Development: guides/local-development.md
+  - Examples:
+      - Overview: examples/index.md
+      - Minimal Hello: examples/minimal-hello.md
+      - Hello Graph: examples/hello-graph.md
+      - Sentiment: examples/sentiment.md
+      - Streaming Coalesce: examples/streaming-coalesce.md
+      - Pipeline Demo: examples/pipeline-demo.md
   - Concepts:
-      - Overview: ABOUT.md
-      - Patterns: patterns.md
-      - Observability: observability.md
-  - API Reference: api.md
-  - Troubleshooting: troubleshooting.md
+      - About: concepts/about.md
+      - Architecture: concepts/architecture.md
+      - Patterns: concepts/patterns.md
+      - Observability: concepts/observability.md
+  - Reference:
+      - API: reference/api.md
+      - Glossary: concepts/glossary.md
+  - Support:
+      - FAQ: support/faq.md
+      - Troubleshooting: support/troubleshooting.md
+      - How to report issues: support/how-to-report-issues.md
   - Contributing:
-      - Guide: contributing/CONTRIBUTING.md
-      - Support: ../SUPPORT.md
-      - Plans & Roadmaps: plan/
+      - Guide: contributing/guide.md
+      - Style Guide: contributing/docs-conventions.md
+      - Releasing: contributing/RELEASING.md
+  - Roadmap:
+      - Overview: roadmap/index.md
+      - EARS requirements and architecture: roadmap/00-ears-requirements-and-architecture.md
+      - Governance & overview: roadmap/governance-and-overview.md
+      - Bootstrap & CI: roadmap/bootstrap-and-ci.md
+      - Core primitives: roadmap/core-primitives.md
+      - Scheduler: roadmap/scheduler.md
+      - Observability: roadmap/observability.md
+      - Utilities & scaffolding: roadmap/utilities-and-scaffolding.md
+      - Examples & documentation: roadmap/examples-and-documentation.md
+      - Testing & hardening: roadmap/testing-and-hardening.md
+      - Release v1.0.0: roadmap/release-v1.0.0.md
+      - Quality pass: roadmap/quality-pass.md
+      - Future roadmap: roadmap/future-roadmap.md
 markdown_extensions:
   # Core MkDocs/Material-friendly extensions
   - admonition
   - toc:
       permalink: true
+      permalink_title: Anchor link to this section
   - attr_list
   - def_list
   - footnotes
   - meta
+  - md_in_html
+  - tables
 
   # PyMdown extensions for richer content features
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.details
   - pymdownx.tabbed:
       alternate_style: true
+      combine_header_slug: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
-  - pymdownx.magiclink
+  - pymdownx.magiclink:
+      repo_url_shortener: true
+      repo_url_shorthand: true
+      social_url_shorthand: true
+      social_url_shortener: true
+      user: GhostWeaselLabs
+      repo: meridian-runtime
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.highlight:
       anchor_linenums: true
-      linenums: false
+      line_spans: __span
+      pygments_lang_class: true
       use_pygments: true
+      auto_title: true
   - pymdownx.inlinehilite
-  - pymdownx.snippets
+  - pymdownx.snippets:
+      check_paths: true
   - pymdownx.arithmatex:
       generic: true
+  - pymdownx.critic:
+      mode: accept
+  - pymdownx.caret
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.tilde
 plugins:
-  - search
+  - search:
+      separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+  - tags
+  # Additional plugins to enable when ready
+  # - social:
+  #     cards_layout_options:
+  #       font_family: IBM Plex Sans
+  # - minify:
+  #     minify_html: true
+  #     minify_js: true
+  #     minify_css: true
+  #     htmlmin_opts:
+  #       remove_comments: true
   # - sitemap:
   #     url: https://ghostweasellabs.github.io/meridian-runtime/
   # - redirects:
   #     redirect_maps:
   #       old/page.md: new/page.md
-  # - minify:
-  #     minify_html: true
-  # - google-analytics:
-  #     tracking_id: UA-XXXXXXXXX-X
-  #     anonymize_ip: true
+
+# Additional JavaScript for enhanced functionality
+extra_javascript:
+  - javascripts/extra.js
+  - javascripts/dynamic-header.js
+  - https://unpkg.com/meridian-halo@latest/dist/meridian-halo.standalone.min.js
+  - https://unpkg.com/mermaid@10/dist/mermaid.min.js
+  # Debug/logging helpers and order notes:
+  # 1) Load Halo CDN before our injector, but our injector is already included above.
+  # 2) Removed polyfill.io (unnecessary and occasionally flaky)
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js

@@ -1,28 +1,19 @@
 from __future__ import annotations
 
-from arachne.core.scheduler import Scheduler
-from arachne.core.subgraph import Subgraph
+from meridian.core import Scheduler, Subgraph, Message, MessageType, Node, PortSpec
+from meridian.core.ports import Port, PortDirection
 
 from .consumer import Consumer
 from .producer import ProducerNode
 
 
 def build_graph(max_count: int = 5) -> tuple[Subgraph, Consumer]:
-    sg = Subgraph(name="hello_graph")
-
-    producer = ProducerNode(name="producer", max_count=max_count)
     consumer = Consumer()
-
-    sg.add_node(producer)
-    sg.add_node(consumer, name="consumer")
-
-    # Port specs are defined within node classes; explicit specs here are unnecessary
-
+    sg = Subgraph.from_nodes("hello_graph", [ProducerNode(name="producer", max_count=max_count), consumer])
+    
     # Connect producer->consumer with capacity and policy
     sg.connect(("producer", "output"), ("consumer", "in"), capacity=16)
 
-    # Validation step (placeholder): Subgraph.validate returns list;
-    # raise_if_error to be implemented
     return sg, consumer
 
 

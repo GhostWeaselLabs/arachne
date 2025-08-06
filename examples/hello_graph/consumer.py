@@ -1,16 +1,17 @@
 from __future__ import annotations
 
-from arachne.core.message import Message
-from arachne.core.node import Node
-from arachne.core.ports import Port, PortDirection, PortSpec
+from meridian.core import Message, Node, PortSpec
+from meridian.core.ports import Port, PortDirection
 
 
 class Consumer(Node):
     def __init__(self) -> None:
-        super().__init__(name="consumer")
+        super().__init__(
+            name="consumer",
+            inputs=[Port("in", PortDirection.INPUT, spec=PortSpec("in", int))],
+            outputs=[],
+        )
         self.values: list[int] = []
-        # define single input port "in"
-        self.inputs = [Port(name="in", direction=PortDirection.INPUT, spec=PortSpec("in", int))]
 
     def _handle_message(self, port: str, msg: Message[int]) -> None:
         if port != "in":

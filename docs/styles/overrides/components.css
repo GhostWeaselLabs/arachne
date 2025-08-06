@@ -1,0 +1,25 @@
+/* 3) Fix Material for MkDocs annotation tooltips */
+.md-tooltip {
+  background-color: var(--md-default-bg-color) !important;
+  border: 1px solid var(--md-default-fg-color--lightest) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  z-index: 100 !important;
+}
+
+.md-tooltip__inner {
+  background-color: transparent !important;
+  color: var(--md-default-fg-color) !important;
+}
+
+.md-tooltip__inner::before {
+  background-color: var(--md-default-bg-color) !important;
+  border-color: var(--md-default-fg-color--lightest) !important;
+}
+
+/* Ensure tooltips don't interfere with navigation */
+.md-nav,
+.md-sidebar,
+.md-header {
+  z-index: 200 !important;
+}

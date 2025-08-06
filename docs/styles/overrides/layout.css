@@ -1,0 +1,125 @@
+/* Meridian Runtime docs — layout overrides (modular placeholder)
+ *
+ * Purpose:
+ * - Control high-level layout concerns: grid widths, spacing rhythm, breakpoints,
+ *   container padding, and section spacing.
+ * - Keep this file focused and under ~100 lines; split further if it grows.
+ *
+ * Guidance:
+ * - Prefer minimal, deliberate changes that complement the Material theme.
+ * - Avoid hard-coding pixel values where possible; prefer rem or variables.
+ * - Test layout changes with both narrow/mobile and wide/desktop viewports.
+ *
+ * Notes:
+ * - This file is imported by styles/overrides.css, which aggregates modular overrides.
+ * - Place typography rules in typography.css, component styling in components.css,
+ *   and header-specific tweaks in header.css.
+ *
+ * Sticky header & anchor offsets
+ * - The following CSS variables and rules ensure that when navigating via the left menu,
+ *   headings don’t hide under the sticky header and tabs bar.
+ * - Tune the variables below if header/tab heights change.
+ */
+:root {
+  /* Adjust these to match your actual computed heights */
+  --meridian-header-height: 64px; /* main header */
+  --meridian-tabs-height: 64px;   /* sticky tabs/secondary bar (0 if disabled) */
+  --meridian-sticky-offset: calc(var(--meridian-header-height) + var(--meridian-tabs-height));
+}
+
+/* Ensure sticky stacking order is sane; content scrolls under, not over */
+.md-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.md-tabs {
+  position: sticky;
+  top: var(--meridian-header-height);
+  z-index: 999;
+}
+
+/* Anchor offset so in-page links and left-nav jumps land below sticky bars */
+.md-content {
+  scroll-margin-top: var(--meridian-sticky-offset);
+}
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4,
+.md-typeset h5,
+.md-typeset h6 {
+  scroll-margin-top: var(--meridian-sticky-offset);
+}
+
+/* Keep sidebars below header/tabs but above content decorations */
+.md-sidebar--primary,
+.md-sidebar--secondary {
+  z-index: 998;
+}
+
+/* 1) Grid/container width
+   Adjust the maximum width of the doc content. Commented by default. */
+/*
+.md-grid {
+  max-width: 1100px;   /* default ~61rem; increase/decrease as needed */
+  padding-inline: 1rem; /* symmetric left/right padding */
+}
+*/
+
+/* 2) Section spacing
+   Tweak vertical rhythm between major sections and headings. */
+/*
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3 {
+  scroll-margin-top: 5rem;  /* ensure anchors aren’t hidden under the header */
+}
+.md-content {
+  padding-block: 1.25rem;   /* top/bottom breathing room for content */
+}
+*/
+
+/* 3) Sidebar and toc width (optional)
+   Adjust widths to suit content density. */
+/*
+.md-sidebar--primary {
+  width: 17rem;
+}
+.md-sidebar--secondary {
+  width: 15rem;
+}
+*/
+
+/* 4) Breakpoints (optional)
+   Provide responsive tweaks for smaller viewports. */
+/*
+@media (max-width: 960px) {
+  .md-grid {
+    padding-inline: 0.75rem;
+  }
+}
+@media (max-width: 720px) {
+  .md-grid {
+    padding-inline: 0.5rem;
+  }
+  .md-sidebar--primary,
+  .md-sidebar--secondary {
+    width: auto;  /* allow theme defaults for mobile */
+  }
+}
+*/
+
+/* 5) Utility spacing hooks (optional)
+   Small utilities to standardize spacing in custom blocks. */
+/*
+:root {
+  --mr-space-1: 0.25rem;
+  --mr-space-2: 0.5rem;
+  --mr-space-3: 0.75rem;
+  --mr-space-4: 1rem;
+}
+.mr-stack > * + * {
+  margin-top: var(--mr-space-3);
+}
+*/

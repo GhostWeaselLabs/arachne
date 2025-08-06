@@ -17,26 +17,26 @@
   },
   "metrics": {
     "counters": {
-      "arachne_edge_dequeued_total{edge_id=prod0:o0->cons0:i0}": 21785.0,
-      "arachne_edge_dequeued_total{edge_id=prod1:o1->cons1:i1}": 21862.0,
-      "arachne_edge_dropped_total{edge_id=prod0:o0->cons0:i0}": 0.0,
-      "arachne_edge_dropped_total{edge_id=prod1:o1->cons1:i1}": 0.0,
-      "arachne_edge_enqueued_total{edge_id=prod0:o0->cons0:i0}": 21785.0,
-      "arachne_edge_enqueued_total{edge_id=prod1:o1->cons1:i1}": 21862.0,
-      "arachne_node_errors_total{node=cons0}": 0.0,
-      "arachne_node_errors_total{node=cons1}": 0.0,
-      "arachne_node_errors_total{node=prod0}": 0.0,
-      "arachne_node_errors_total{node=prod1}": 0.0,
-      "arachne_node_messages_total{node=cons0}": 0.0,
-      "arachne_node_messages_total{node=cons1}": 0.0,
-      "arachne_node_messages_total{node=prod0}": 0.0,
-      "arachne_node_messages_total{node=prod1}": 0.0,
-      "arachne_scheduler_priority_applied_total": 63000.0
+      "meridian_edge_dequeued_total{edge_id=prod0:o0->cons0:i0}": 21785.0,
+      "meridian_edge_dequeued_total{edge_id=prod1:o1->cons1:i1}": 21862.0,
+      "meridian_edge_dropped_total{edge_id=prod0:o0->cons0:i0}": 0.0,
+      "meridian_edge_dropped_total{edge_id=prod1:o1->cons1:i1}": 0.0,
+      "meridian_edge_enqueued_total{edge_id=prod0:o0->cons0:i0}": 21785.0,
+      "meridian_edge_enqueued_total{edge_id=prod1:o1->cons1:i1}": 21862.0,
+      "meridian_node_errors_total{node=cons0}": 0.0,
+      "meridian_node_errors_total{node=cons1}": 0.0,
+      "meridian_node_errors_total{node=prod0}": 0.0,
+      "meridian_node_errors_total{node=prod1}": 0.0,
+      "meridian_node_messages_total{node=cons0}": 0.0,
+      "meridian_node_messages_total{node=cons1}": 0.0,
+      "meridian_node_messages_total{node=prod0}": 0.0,
+      "meridian_node_messages_total{node=prod1}": 0.0,
+      "meridian_scheduler_priority_applied_total": 63000.0
     },
     "gauges": {
-      "arachne_edge_queue_depth{edge_id=prod0:o0->cons0:i0}": 0.0,
-      "arachne_edge_queue_depth{edge_id=prod1:o1->cons1:i1}": 0.0,
-      "arachne_scheduler_runnable_nodes": 0.0
+      "meridian_edge_queue_depth{edge_id=prod0:o0->cons0:i0}": 0.0,
+      "meridian_edge_queue_depth{edge_id=prod1:o1->cons1:i1}": 0.0,
+      "meridian_scheduler_runnable_nodes": 0.0
     },
     "processed_over_time": [
       0,

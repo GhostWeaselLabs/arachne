@@ -187,7 +187,7 @@ def _get_scheduler_latency_histogram(metrics_provider: PrometheusMetrics) -> Tup
     Find the scheduler_loop_latency_seconds histogram in the provided PrometheusMetrics.
     Returns tuple (sum, count, buckets). If not found, returns (0.0, 0, {}).
     """
-    # PrometheusMetrics uses namespaced keys like "arachne_scheduler_loop_latency_seconds{...}"
+    # PrometheusMetrics uses namespaced keys like "meridian-runtime_scheduler_loop_latency_seconds{...}"
     # We match the instrument by suffix.
     hists = metrics_provider.get_all_histograms()
     for key, hist in hists.items():

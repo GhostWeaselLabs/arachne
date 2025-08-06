@@ -47,10 +47,12 @@ help:
 	@echo
 	@echo "Available targets:"
 	@echo "  help                     Show this help"
+	@echo "  demo-minimal             Run the minimal hello world demo"
 	@echo "  demo-sentiment           Run the sentiment pipeline demo"
 	@echo "  demo-sentiment-debug     Run the sentiment demo with --debug"
 	@echo "  demo-coalesce            Run the streaming coalesce demo"
 	@echo "  demo-coalesce-quiet      Run the coalesce demo with --quiet"
+	@echo "  docs-clean               Clean the built site directory"
 	@echo "  docs-build               Build the MkDocs site to ./site"
 	@echo "  docs-serve               Serve the docs locally with live reload"
 	@echo "  docs-check-links         Check links in docs and README using lychee"
@@ -59,6 +61,13 @@ help:
 	@echo "  RATE_HZ=20 TICK_MS=10 make demo-sentiment"
 	@echo "  COAL_RATE_HZ=600 CAP_AGG_TO_SINK=8 make demo-coalesce"
 	@echo
+
+# --------------------------------------------------------------------
+# Minimal Hello World demo
+# --------------------------------------------------------------------
+.PHONY: demo-minimal
+demo-minimal:
+	$(PYTHON) examples/minimal_hello/main.py
 
 # --------------------------------------------------------------------
 # Sentiment demo
@@ -119,8 +128,12 @@ demo-coalesce-quiet:
 # --------------------------------------------------------------------
 # Documentation (MkDocs)
 # --------------------------------------------------------------------
+.PHONY: docs-clean
+docs-clean:
+	rm -rf site/
+
 .PHONY: docs-build
-docs-build:
+docs-build: docs-clean
 	@which mkdocs >/dev/null 2>&1 || (echo "mkdocs not found. Install with: pip install mkdocs mkdocs-material" && exit 1)
 	mkdocs build --strict
 

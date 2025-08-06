@@ -1,0 +1,126 @@
+/* Meridian Runtime docs — typography overrides (modular placeholder)
+ *
+ * Purpose:
+ * - Centralize typography adjustments (headings, body text, links, lists, code)
+ *   in a small, focused module instead of a single monolithic overrides file.
+ *
+ * Guidance:
+ * - Keep this file concise (<100 lines) and split further if it grows.
+ * - Favor readability and hierarchy clarity; avoid aggressive letter-spacing.
+ * - Use relative units (rem/em) where possible; inherit base font sizing.
+ * - Test in both light and dark schemes to maintain contrast and legibility.
+ *
+ * Scope:
+ * - Global text rhythm
+ * - Headings hierarchy
+ * - Paragraph and lists cadence
+ * - Inline code emphasis
+ * - Link appearance
+ *
+ * This file is imported by styles/overrides.css.
+ */
+
+/* 1) Base rhythm and body copy */
+.md-typeset {
+  /* Tweak default line-height and paragraph rhythm slightly if needed */
+  /* line-height: 1.65; */
+}
+
+.md-typeset p {
+  /* margin: 0 0 0.9rem; */
+}
+
+/* 2) Headings hierarchy
+   Tighten or loosen heading rhythm (consistent cadence across levels) */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3 {
+  /* line-height: 1.2; */
+  /* margin-top: 1.6rem; */
+  /* margin-bottom: 0.8rem; */
+}
+
+.md-typeset h4,
+.md-typeset h5,
+.md-typeset h6 {
+  /* line-height: 1.25; */
+  /* margin-top: 1.2rem; */
+  /* margin-bottom: 0.6rem; */
+}
+
+/* Ensure anchored headings don’t hide under fixed header (smooth scroll targets) */
+.md-typeset h1[id],
+.md-typeset h2[id],
+.md-typeset h3[id],
+.md-typeset h4[id],
+.md-typeset h5[id],
+.md-typeset h6[id] {
+  /* scroll-margin-top: 5rem; */
+}
+
+/* 3) Lists
+   Harmonize list spacing without excessive gaps */
+.md-typeset ul,
+.md-typeset ol {
+  /* margin-top: 0.5rem; */
+  /* margin-bottom: 0.9rem; */
+}
+
+.md-typeset li + li {
+  /* margin-top: 0.25rem; */
+}
+
+/* 4) Links
+   Subtle link treatment; adjust color/underline as needed */
+.md-typeset a {
+  /* text-underline-offset: 0.15em; */
+  /* text-decoration-thickness: 0.08em; */
+}
+
+.md-typeset a:hover {
+  /* text-decoration-thickness: 0.12em; */
+}
+
+/* 5) Code (inline and blocks)
+   Improve inline code legibility; keep blocks as-is unless necessary */
+.md-typeset code {
+  /* font-size: 0.95em; */
+  /* padding: 0.1em 0.25em; */
+  /* border-radius: 0.25rem; */
+}
+
+.md-typeset pre > code {
+  /* font-size: 0.95em; */
+}
+
+/* 6) Blockquotes
+   Slight tweak to differentiate quotes without heavy borders */
+.md-typeset blockquote {
+  /* border-left: 0.2rem solid rgba(255,255,255,0.08); */
+  /* padding-left: 1rem; */
+  /* color: var(--md-default-fg-color--light); */
+}
+
+/* 7) Tables
+   Ensure table text remains readable on smaller screens */
+.md-typeset table {
+  /* font-size: 0.95em; */
+}
+
+/* 8) Small utilities (optional)
+   Provide minimal utility classes for consistent ad-hoc typography tweaks */
+.md-typeset .muted {
+  /* color: var(--md-default-fg-color--light); */
+}
+
+.md-typeset .caption {
+  /* font-size: 0.875em; */
+  /* color: var(--md-default-fg-color--light); */
+}
+
+.md-typeset .lead {
+  /* font-size: 1.0625em; */
+  /* line-height: 1.55; */
+}
+
+/* End of typography overrides (expand thoughtfully and split if needed). */

@@ -11,7 +11,7 @@ Owner: GhostWeasel (Lead: doubletap-dave)
 
 ### Added
 - M1 scaffold: `pyproject.toml` with uv-managed workflow; tooling configs for ruff, black, mypy, pytest/coverage.
-- Repository layout: `src/arachne/` package skeletons, `tests/unit` and `tests/integration` smoke tests, `examples/` package placeholder.
+- Repository layout: `src/meridian-runtime/` package skeletons, `tests/unit` and `tests/integration` smoke tests, `examples/` package placeholder.
 - CI: GitHub Actions workflow to run lint, format check, type check, and tests with coverage gate (≥80%).
 - Documentation updates in README for dev loop with uv; BSD 3-Clause `LICENSE`.
 
@@ -72,4 +72,4 @@ References
 
 - Governance and Overview (M0): docs/plan/M0-governance-and-overview.md
 - Releasing Guide: docs/contributing/RELEASING.md
-- Post‑v1 Roadmap: docs/plan/99-post-v1-roadmap.md
+- Future Roadmap: docs/roadmap/future-roadmap.md

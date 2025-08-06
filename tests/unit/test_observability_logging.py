@@ -118,7 +118,7 @@ class TestLogger:
         config = LogConfig(
             level=LogLevel.DEBUG,
             stream=stream,
-            extra_fields={"service": "arachne", "version": "1.0.0"},
+            extra_fields={"service": "meridian-runtime", "version": "1.0.0"},
         )
         logger = Logger(config)
 
@@ -127,7 +127,7 @@ class TestLogger:
         output = stream.getvalue().strip()
         record = json.loads(output)
 
-        assert record["service"] == "arachne"
+        assert record["service"] == "meridian-runtime"
         assert record["version"] == "1.0.0"
 
 

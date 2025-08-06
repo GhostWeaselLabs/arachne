@@ -300,17 +300,7 @@ License
 
 ## FAQ
 
-Is a graph runtime overkill?
-- For simple, linear pipelines a small asyncio app may suffice. Meridian shines when you have multiple interacting flows, need backpressure and priorities, and value observability and reuse.
-
-Does Meridian require a specific web framework or broker?
-- No. It is framework‑agnostic and runs in‑process. Brokers/codecs become relevant in future distributed modes.
-
-Can I use Pydantic/Pyright/MyPy with Meridian?
-- Yes. Arachne encourages explicit typing and can integrate optional schema libraries. Choose what fits your project’s standards.
-
-How do I handle long‑running or blocking work?
-- Prefer async IO; for CPU‑bound tasks, offload to thread/process pools and keep nodes responsive. Use backpressure to prevent overload.
+See our [FAQ page](https://ghostweasellabs.github.io/meridian-runtime/support/faq/) for answers to common questions about Meridian Runtime.
 
 ---
 

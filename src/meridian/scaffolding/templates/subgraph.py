@@ -25,7 +25,7 @@ from meridian.core.scheduler import Scheduler, SchedulerConfig
 from meridian.core.ports import PortSpec
 from meridian.utils.validation import validate_graph, Issue
 # TODO: Import your node classes here
-# from arachne.nodes.your_node import YourNode
+# from meridian-runtime.nodes.your_node import YourNode
 
 
 class {class_name}(Subgraph):

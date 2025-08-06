@@ -7,29 +7,24 @@ Demonstrates tick-based message generation and emit() usage.
 
 from __future__ import annotations
 
-from arachne.core.message import Message, MessageType
-from arachne.core.node import Node
-from arachne.core.ports import Port, PortDirection, PortSpec
-from arachne.observability.logging import get_logger, with_context
+from meridian.core import Message, MessageType, Node, PortSpec
+from meridian.core.ports import Port, PortDirection
+from meridian.observability.logging import get_logger, with_context
 
 
 class ProducerNode(Node):
     """Produces integer messages on tick intervals."""
 
     def __init__(self, name: str, max_count: int = 10, start_value: int = 0):
-        super().__init__(name=name)
+        super().__init__(
+            name=name,
+            inputs=[],
+            outputs=[Port("output", PortDirection.OUTPUT, spec=PortSpec("output", int))],
+        )
         self.max_count = max_count
         self.current_value = start_value
         self.count_emitted = 0
         self._logger = get_logger()
-        # define single output port "output"
-        self.outputs = [
-            Port(
-                name="output",
-                direction=PortDirection.OUTPUT,
-                spec=PortSpec("output", int),
-            )
-        ]
 
     def on_start(self) -> None:
         super().on_start()

@@ -106,7 +106,7 @@ class TestPrometheusMetrics:
 
     def test_metric_naming_with_namespace(self) -> None:
         """Test metric naming with namespace."""
-        config = PrometheusConfig(namespace="arachne")
+        config = PrometheusConfig(namespace="meridian-runtime")
         metrics = PrometheusMetrics(config)
 
         metrics.counter("messages_total", {"node": "test"})
@@ -117,7 +117,7 @@ class TestPrometheusMetrics:
 
         # Check that the key includes the namespace
         key = list(all_counters.keys())[0]
-        assert "arachne_messages_total" in key
+        assert "meridian-runtime_messages_total" in key
 
     def test_metric_key_generation(self) -> None:
         """Test metric key generation with labels."""
@@ -240,7 +240,7 @@ class TestPrometheusConfig:
         """Test default Prometheus configuration."""
         config = PrometheusConfig()
 
-        assert config.namespace == "arachne"
+        assert config.namespace == "meridian-runtime"
         assert len(config.default_buckets) > 0
         assert 0.001 in config.default_buckets
         assert 5.0 in config.default_buckets

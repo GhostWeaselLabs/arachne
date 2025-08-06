@@ -106,7 +106,7 @@ def main() -> None:
     parser.add_argument("--package", default="nodes", help="Package path (dot-separated)")
     parser.add_argument("--inputs", default="", help="Input ports (name:type,name:type)")
     parser.add_argument("--outputs", default="", help="Output ports (name:type,name:type)")
-    parser.add_argument("--dir", default="src/arachne", help="Target directory")
+    parser.add_argument("--dir", default="src/meridian-runtime", help="Target directory")
     parser.add_argument("--force", action="store_true", help="Overwrite existing files")
     parser.add_argument("--include-tests", action="store_true", help="Generate test files")
     parser.add_argument("--policy", default=None, help="Default overflow policy")
