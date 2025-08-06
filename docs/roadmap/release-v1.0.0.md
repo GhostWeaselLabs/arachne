@@ -68,7 +68,11 @@ This milestone delivers the first stable release of Meridian Runtime's graph run
     - Quickstart, API overview, Patterns, Troubleshooting, Observability
     - Release notes and migration guide
 - **Examples**:
-    - `hello_graph`, `pipeline_demo` (priority/backpressure demonstrations)
+    - `minimal_hello` — Basic node creation and lifecycle management
+    - `hello_graph` — Modular design with comprehensive logging
+    - `sentiment` — Real-time text processing with control-plane preemption
+    - `streaming_coalesce` — Deterministic coalescing under bursty load
+    - `pipeline_demo` — Basic pipeline with validation and transformation
 
 ---
 
@@ -99,54 +103,59 @@ This milestone delivers the first stable release of Meridian Runtime's graph run
 
 ### Source and API
 
-- [ ] All public APIs reviewed; docstrings updated; typing consistent and explicit
-- [ ] SRP/DRY and ~200 lines/file guidance verified; split where needed
-- [ ] Optional dependencies (Pydantic, OTEL, Prometheus) guarded and documented
-- [ ] Example code imports from public API surfaces only
+- [x] All public APIs reviewed; docstrings updated; typing consistent and explicit
+- [x] SRP/DRY and ~200 lines/file guidance verified; split where needed
+- [x] Optional dependencies (Pydantic, OTEL, Prometheus) guarded and documented
+- [x] Example code imports from public API surfaces only
 
 ### Quality Gates
 
-- [ ] Lint: ruff passes; formatting consistent
-- [ ] Type: mypy (and/or pyright) passes on `src`
-- [ ] Tests: pytest suites pass; coverage:
+- [x] Lint: ruff passes; formatting consistent
+- [x] Type: mypy (and/or pyright) passes on `src`
+- [x] Tests: pytest suites pass; coverage:
     - core ≥ 90%
     - overall ≥ 80%
-- [ ] Benchmarks: no regressions beyond budget thresholds
-- [ ] Stress/soak: nightly passing; no unbounded memory growth
+- [x] Benchmarks: no regressions beyond budget thresholds
+- [x] Stress/soak: nightly passing; no unbounded memory growth
 
 ### Docs and Examples
 
-- [ ] `README` updated with final quickstart and links
-- [ ] Docs: quickstart, api, patterns, troubleshooting, observability complete
-- [ ] Metric catalog verified against code
-- [ ] Examples: `hello_graph` and `pipeline_demo` validated via `uv run`
-- [ ] GitHub Pages deploy is green for the tagged release (live site loads without errors)
-- [ ] Home page visual polish: Meridian Halo renders and no console errors in DevTools
-- [ ] Docs links validated (no broken references)
+- [x] `README` updated with final quickstart and links
+- [x] Docs: quickstart, api, patterns, troubleshooting, observability complete
+- [x] Metric catalog verified against code
+- [x] Examples: all five examples validated via `uv run`:
+    - `minimal_hello` — Basic node lifecycle
+    - `hello_graph` — Modular design and logging
+    - `sentiment` — Control-plane preemption
+    - `streaming_coalesce` — Burst handling with coalescing
+    - `pipeline_demo` — Validation and transformation
+- [x] GitHub Pages deploy is green for the tagged release (live site loads without errors)
+- [x] Home page visual polish: Meridian Halo renders and no console errors in DevTools
+- [x] Docs links validated (no broken references)
 
 ### Security and Compliance
 
-- [ ] No secrets in repo; example configs do not include credentials
-- [ ] License headers present; `LICENSE` file correct
-- [ ] Supply-chain:
+- [x] No secrets in repo; example configs do not include credentials
+- [x] License headers present; `LICENSE` file correct
+- [x] Supply-chain:
     - Reproducible builds (pinning, hashes)
     - Hash-checking enabled in lock files
-- [ ] Optional: generate SBOM (best-effort) and attach to release
+- [x] Optional: generate SBOM (best-effort) and attach to release
 
 ### Distribution
 
-- [ ] `pyproject` configured with project metadata (name, summary, authors, classifiers)
-- [ ] Build: sdist and manylinux/macOS wheels built via PEP 517 backend
-- [ ] Sign artifacts (GPG) and/or use trusted publisher flow
-- [ ] Test publish to staging/test index (if available)
-- [ ] Final publish to PyPI (via Trusted Publisher OIDC if configured, or twine upload with repository tokens stored in CI secrets; never commit credentials)
-- [ ] Verify install: fresh virtual env, `uv sync`, import smoke, example run
+- [x] `pyproject` configured with project metadata (name, summary, authors, classifiers)
+- [x] Build: sdist and manylinux/macOS wheels built via PEP 517 backend
+- [x] Sign artifacts (GPG) and/or use trusted publisher flow
+- [x] Test publish to staging/test index (if available)
+- [x] Final publish to PyPI (via Trusted Publisher OIDC if configured, or twine upload with repository tokens stored in CI secrets; never commit credentials)
+- [x] Verify install: fresh virtual env, `uv sync`, import smoke, example run
 
 ### Downstream Readiness
 
-- [ ] Update integration guide for downstream (e.g., Kraken) to pin `v1.0.0`
-- [ ] Run compatibility smoke in downstream repo or a minimal consumer
-- [ ] Capture upgrade notes and any breaking changes since RC/beta
+- [x] Update integration guide for downstream (e.g., Kraken) to pin `v1.0.0`
+- [x] Run compatibility smoke in downstream repo or a minimal consumer
+- [x] Capture upgrade notes and any breaking changes since RC/beta
 
 ---
 
@@ -180,7 +189,7 @@ Add a new CI workflow file (to be created): `.github/workflows/release.yml`
 
 ## Release Notes Template
 
-**Title**: Arachne `v1.0.0` — Minimal, Reusable Graph Runtime for Python
+**Title**: Meridian Runtime `v1.0.0` — Minimal, Reusable Graph Runtime for Python
 
 **Summary**:
 
@@ -194,7 +203,15 @@ Add a new CI workflow file (to be created): `.github/workflows/release.yml`
 
 - Performance and fairness under load; priority preemption for kill switch
 - Strong typing, SRP/DRY-friendly structure (~200 lines/file)
-- `uv`-native dev workflow and examples
+- `uv`-native dev workflow and comprehensive examples
+
+**Examples Included**:
+
+- `minimal_hello` — Basic node creation and lifecycle management
+- `hello_graph` — Modular design with comprehensive logging
+- `sentiment` — Real-time text processing with control-plane preemption
+- `streaming_coalesce` — Deterministic coalescing under bursty load
+- `pipeline_demo` — Basic pipeline with validation and transformation
 
 **Breaking Changes**:
 
@@ -222,7 +239,7 @@ Add a new CI workflow file (to be created): `.github/workflows/release.yml`
 
 ## Post-Release Tasks
 
-- [ ] Announce release (`README` badge, repo release, internal comms)
+- [x] Announce release (`README` badge, repo release, internal comms)
 - [ ] Open `v1.x` milestone; triage backlog into minor/patch candidates
 - [ ] Create docs for deprecation policy and contribution guidelines update
 - [ ] Establish version pinning recommendations for downstreams
@@ -245,10 +262,10 @@ Add a new CI workflow file (to be created): `.github/workflows/release.yml`
 
 ## Acceptance Criteria
 
-- `v1.0.0` tag created; artifacts published and signed; release notes available
-- CI pipeline green on tag; post-publish install smoke passes on clean env
-- Examples runnable; docs complete and cross-linked; GitHub Pages deploy green for the release tag
-- Home page Halo visible; DevTools console clean (no errors)
-- GitHub Release created with notes and links to live docs (home, API reference)
-- Downstream smoke green with `v1.0.0` pin
-- `CHANGELOG` updated; deprecation and support policies documented
+- [x] `v1.0.0` tag created; artifacts published and signed; release notes available
+- [x] CI pipeline green on tag; post-publish install smoke passes on clean env
+- [x] All five examples runnable; docs complete and cross-linked; GitHub Pages deploy green for the release tag
+- [x] Home page Halo visible; DevTools console clean (no errors)
+- [x] GitHub Release created with notes and links to live docs (home, API reference)
+- [x] Downstream smoke green with `v1.0.0` pin
+- [x] `CHANGELOG` updated; deprecation and support policies documented
