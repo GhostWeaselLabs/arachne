@@ -141,4 +141,4 @@ jobs:
           Workflow: ${{ github.workflow }}"
           
           # Push to the target repository using GitHub CLI
-          gh repo sync
+          gh repo sync --force
