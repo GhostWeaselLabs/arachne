@@ -503,7 +503,7 @@ If a problem isn't covered here, open an issue with full context (OS, Python, co
 
 ## **See also**
 
-- [How to report issues](./how-to-report-issues.md)
+- [How to report issues](./HOW-TO-REPORT-ISSUES.md)
 - [Contributing guide](../contributing/guide.md)
 - [API Reference](../reference/api.md)
 - [Concepts overview](../concepts/about.md)

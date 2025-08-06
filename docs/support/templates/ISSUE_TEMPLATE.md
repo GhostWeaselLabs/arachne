@@ -71,7 +71,7 @@
 - [ ] I clearly described observed vs expected behavior.
 
 # References
-- Troubleshooting: `docs/support/troubleshooting.md`
+- Troubleshooting: `docs/support/TROUBLESHOOTING.md`
 - How to Report Issues: `docs/support/HOW-TO-REPORT-ISSUES.md`
 - Governance and Overview: `docs/roadmap/governance-and-overview.md`
 - Contributing Guide: `docs/contributing/guide.md`

@@ -1225,7 +1225,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../troubleshooting/" class="md-nav__link">
+      <a href="../../TROUBLESHOOTING/" class="md-nav__link">
         
   
   
@@ -1248,7 +1248,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../how-to-report-issues/" class="md-nav__link">
+      <a href="../../HOW-TO-REPORT-ISSUES/" class="md-nav__link">
         
   
   
@@ -1820,9 +1820,9 @@
 <ul>
 <li>OS: (e.g., macOS 14.5 / Ubuntu 22.04 / Windows 11)</li>
 <li>Python: 3.11.x</li>
-<li>Meridian: x.y.z</li>
-<li>Install/Tooling: (e.g., uv version, ruff/mypy/pytest versions)</li>
-<li>How installed: (pip/uv/source)</li>
+<li>Meridian Runtime: x.y.z</li>
+<li>Install/Tooling: (e.g., <code>uv</code> version, <code>ruff</code>/<code>mypy</code>/<code>pytest</code> versions)</li>
+<li>How installed: (<code>pip</code>/<code>uv</code>/source)</li>
 </ul>
 <h2 id="3-reproduction-steps">3) Reproduction Steps<a class="headerlink" href="#3-reproduction-steps" title="Anchor link to this section">&para;</a></h2>
 <!-- Provide the smallest reproduction you can. Keep it sanitized—no payload contents. -->
@@ -1832,12 +1832,12 @@
 <h3 id="minimal-repro-sanitized">Minimal Repro (Sanitized)<a class="headerlink" href="#minimal-repro-sanitized" title="Anchor link to this section">&para;</a></h3>
 <!-- Replace data with placeholders. Share shapes/schemas, not values. -->
 <ul>
-<li>Graph summary: number of nodes/edges, relevant edges’ bounds and overflow policies (block/drop/latest/coalesce).</li>
-<li>Relevant node lifecycle hooks: on_start / on_message / on_tick / on_stop.</li>
-<li>Validation in use (optional): TypedDict / Pydantic (schema names only).</li>
+<li>Graph summary: number of nodes/edges, relevant edges' bounds and overflow policies (<code>block</code>/<code>drop</code>/<code>latest</code>/<code>coalesce</code>).</li>
+<li>Relevant node lifecycle hooks: <code>on_start</code> / <code>on_message</code> / <code>on_tick</code> / <code>on_stop</code>.</li>
+<li>Validation in use (optional): <code>TypedDict</code> / <code>Pydantic</code> (schema names only).</li>
 </ul>
 <p>Example (conceptual, no real data):
-- Edge E_A: bound=10, policy="drop"
+- Edge E_A: <code>bound=10</code>, <code>policy="drop"</code>
 - Node N_input -&gt; Edge E_A -&gt; Node N_worker</p>
 <h2 id="4-observed-behavior">4) Observed Behavior<a class="headerlink" href="#4-observed-behavior" title="Anchor link to this section">&para;</a></h2>
 <!-- What actually happened. Include redacted logs/errors. -->
@@ -1847,8 +1847,8 @@
 <li>Redacted errors/stack traces (if any):</li>
 <li>…</li>
 <li>Relevant structured logs (redacted values, keep keys):</li>
-<li>event="edge_overflow", edge_id="E_A", policy="drop", dropped=123</li>
-<li>event="node_error", node_id="N_worker", error_type="ValueError", message="<REDACTED>"</li>
+<li><code>event="edge_overflow", edge_id="E_A", policy="drop", dropped=123</code></li>
+<li><code>event="node_error", node_id="N_worker", error_type="ValueError", message="&lt;REDACTED&gt;"</code></li>
 </ul>
 <h2 id="5-expected-behavior">5) Expected Behavior<a class="headerlink" href="#5-expected-behavior" title="Anchor link to this section">&para;</a></h2>
 <!-- What you expected to happen instead. Be specific. -->
@@ -1859,9 +1859,9 @@
 <!-- Keep it privacy‑safe. Never share payload contents, secrets, or PII. -->
 <ul>
 <li>Metrics snapshot (numbers only; avoid PII in labels):</li>
-<li>queue_depth=, overflow_count=, processed_total=, error_total=</li>
+<li><code>queue_depth=</code>, <code>overflow_count=</code>, <code>processed_total=</code>, <code>error_total=</code></li>
 <li>Config highlights (redacted):</li>
-<li>Relevant keys and enum/boolean values; replace secrets with <REDACTED> or CHECKSUM(...)</li>
+<li>Relevant keys and enum/boolean values; replace secrets with <code>&lt;REDACTED&gt;</code> or <code>CHECKSUM(...)</code></li>
 <li>Timing/frequency:</li>
 <li>Intermittent vs consistent; began after version/change</li>
 <li>Workarounds tried:</li>
@@ -1893,14 +1893,14 @@
 - Secrets: API keys, tokens, passwords, private URLs.
 - PII: names, emails, phone numbers, addresses, IDs.
 - Payload contents: message/body data, records; share only schemas/field names if necessary.
-- Hostnames/IPs: replace with HOST_A or 203.0.113.10.
-- Internal IDs: replace with opaque placeholders (ID_123 → ID_A).</p>
+- Hostnames/IPs: replace with <code>HOST_A</code> or <code>203.0.113.10</code>.
+- Internal IDs: replace with opaque placeholders (<code>ID_123</code> → <code>ID_A</code>).</p>
 <p>Best practices:
-- Prefer schemas over data (example: {user_id: str, balance_cents: int}).
-- Keep log structure and keys; replace values with <REDACTED> or representative shapes.
+- Prefer schemas over data (example: <code>{user_id: str, balance_cents: int}</code>).
+- Keep log structure and keys; replace values with <code>&lt;REDACTED&gt;</code> or representative shapes.
 - For configs, include only relevant keys and non-sensitive values; mask secrets entirely.
 - If you must differentiate distinct secret/config values without exposing them, use checksums:
-  - DB_PASSWORD: CHECKSUM(sha256:abcd...)</p>
+  - <code>DB_PASSWORD: CHECKSUM(sha256:abcd...)</code></p>
 <p>What not to share:
 - Raw payloads or domain data
 - Credentials or tokens
@@ -1908,17 +1908,17 @@
 <h2 id="11-checklist">11) Checklist<a class="headerlink" href="#11-checklist" title="Anchor link to this section">&para;</a></h2>
 <ul class="task-list">
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Removed payload contents, secrets, tokens, and PII</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Included OS/Python/Arachne versions and install method</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Included OS/Python/Meridian Runtime versions and install method</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Added minimal, sanitized reproduction steps</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Provided redacted logs/errors and metrics snapshots if relevant</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Described observed vs expected behavior</li>
 </ul>
 <h2 id="references">References<a class="headerlink" href="#references" title="Anchor link to this section">&para;</a></h2>
 <ul>
-<li>Troubleshooting: docs/support/TROUBLESHOOTING.md</li>
-<li>How to Report Issues: docs/support/HOW-TO-REPORT-ISSUES.md</li>
-<li>Governance and Overview (M0): docs/plan/M0-governance-and-overview.md</li>
-<li>Contributing Guide: docs/contributing/CONTRIBUTING.md</li>
+<li>Troubleshooting: <code>docs/support/TROUBLESHOOTING.md</code></li>
+<li>How to Report Issues: <code>docs/support/HOW-TO-REPORT-ISSUES.md</code></li>
+<li>Governance and Overview: <code>docs/roadmap/governance-and-overview.md</code></li>
+<li>Contributing Guide: <code>docs/contributing/guide.md</code></li>
 </ul>
 
 
@@ -1997,6 +1997,12 @@
       <script src="../../../assets/javascripts/bundle.50899def.min.js"></script>
       
         <script src="../../../javascripts/extra.js"></script>
+      
+        <script src="../../../javascripts/vendor/meridian-halo.standalone.min.js"></script>
+      
+        <script src="../../../javascripts/vendor/meridian-halo-wrapper.js"></script>
+      
+        <script src="../../../javascripts/dynamic-header.js"></script>
       
     
   </body>

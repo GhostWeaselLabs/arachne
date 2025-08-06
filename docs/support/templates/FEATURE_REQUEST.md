@@ -110,5 +110,5 @@ Example:
 - Governance and Overview: `docs/roadmap/governance-and-overview.md`
 - Future Roadmap: `docs/roadmap/future-roadmap.md`
 - Contributing Guide: `docs/contributing/guide.md`
-- Troubleshooting: `docs/support/troubleshooting.md`
+- Troubleshooting: `docs/support/TROUBLESHOOTING.md`
 - How to Report Issues: `docs/support/HOW-TO-REPORT-ISSUES.md`

@@ -93,7 +93,7 @@ Read the guides:
 - [API Reference](reference/api.md)
 - [Patterns](concepts/patterns.md)
 - [Observability](concepts/observability.md)
-- [Troubleshooting](support/troubleshooting.md)
+- [Troubleshooting](support/TROUBLESHOOTING.md)
 
 Contribute and plan:
 

@@ -282,7 +282,7 @@ Check the edge policy configuration and monitor drop counters in metrics.
 
 ## Still Have Questions?
 
-- Check the [troubleshooting guide](./troubleshooting.md) for common issues
+- Check the [troubleshooting guide](./TROUBLESHOOTING.md) for common issues
 - Review the [API documentation](../reference/api.md) for detailed usage
 - Search [existing issues](https://github.com/GhostWeaselLabs/meridian-runtime/issues) for similar questions
 - Open a new issue if your question isn't covered here
