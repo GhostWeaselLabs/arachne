@@ -200,7 +200,7 @@ plugins:
 extra_javascript:
   - javascripts/extra.js
   - javascripts/dynamic-header.js
-  # External CDN resources (may fail in CI environment)
-  # - https://unpkg.com/meridian-halo@latest/dist/meridian-halo.standalone.min.js
-  # - https://unpkg.com/mermaid@10/dist/mermaid.min.js
-  # - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  # Local vendor scripts (self-contained, no external dependencies)
+  - javascripts/vendor/meridian-halo.standalone.min.js
+  - javascripts/vendor/mermaid.min.js
+  - javascripts/vendor/mathjax.min.js
