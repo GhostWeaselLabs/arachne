@@ -134,11 +134,17 @@ jobs:
           
           # Add all files and commit
           git add -A
-          git commit -m "Deploy docs from meridian-runtime@${{ github.sha }}
           
-          Built from: ${{ github.repository }}@${{ github.sha }}
-          Triggered by: ${{ github.event_name }}
-          Workflow: ${{ github.workflow }}"
-          
-          # Push to the target repository using GitHub CLI
-          gh repo sync --force
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit - docs are already up to date"
+          else
+            git commit -m "Deploy docs from meridian-runtime@${{ github.sha }}
+            
+            Built from: ${{ github.repository }}@${{ github.sha }}
+            Triggered by: ${{ github.event_name }}
+            Workflow: ${{ github.workflow }}"
+            
+            # Push to the target repository using GitHub CLI
+            gh repo sync --force
+          fi
