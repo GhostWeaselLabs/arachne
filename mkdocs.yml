@@ -198,10 +198,10 @@ plugins:
 # Additional JavaScript for enhanced functionality
 extra_javascript:
   - javascripts/extra.js
-  # Meridian Halo animation for the logo
-  - javascripts/vendor/meridian-halo.standalone.min.js
-  - javascripts/vendor/meridian-halo-wrapper.js
-  - javascripts/dynamic-header.js
+  # Temporarily disabled for CI compatibility - Meridian Halo animation for the logo
+  # - javascripts/vendor/meridian-halo.standalone.min.js
+  # - javascripts/vendor/meridian-halo-wrapper.js
+  # - javascripts/dynamic-header.js
   # Additional vendor scripts (self-contained, no external dependencies)
   # - javascripts/vendor/mermaid.min.js
   # - javascripts/vendor/mathjax.min.js
