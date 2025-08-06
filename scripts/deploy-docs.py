@@ -11,10 +11,10 @@ import tempfile
 import shutil
 from pathlib import Path
 
-def run_command(cmd, cwd=None):
+def run_command(cmd, cwd=None, env=None):
     """Run a command and return the result."""
     print(f"Running: {cmd}")
-    result = subprocess.run(cmd, shell=True, cwd=cwd, capture_output=True, text=True)
+    result = subprocess.run(cmd, shell=True, cwd=cwd, capture_output=True, text=True, env=env)
     if result.returncode != 0:
         print(f"Error: {result.stderr}")
         return False
@@ -40,14 +40,14 @@ def main():
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_path = Path(temp_dir)
         
-        # Clone the target repository
+        # Clone the target repository using the token
         clone_url = f"https://x-access-token:{token}@github.com/{target_repo}.git"
         if not run_command(f"git clone {clone_url} target-repo", cwd=temp_path):
             sys.exit(1)
         
         target_path = temp_path / "target-repo"
         
-        # Remove all existing content
+        # Remove all existing content except .git
         for item in target_path.iterdir():
             if item.name != ".git":
                 if item.is_file():
@@ -62,20 +62,35 @@ def main():
             else:
                 shutil.copytree(item, target_path / item.name)
         
-        # Configure git
-        run_command("git config user.name 'github-actions[bot]'", cwd=target_path)
-        run_command("git config user.email 'github-actions[bot]@users.noreply.github.com'", cwd=target_path)
+        # Configure git with the token
+        env = os.environ.copy()
+        env['GIT_AUTHOR_NAME'] = 'github-actions[bot]'
+        env['GIT_AUTHOR_EMAIL'] = 'github-actions[bot]@users.noreply.github.com'
+        env['GIT_COMMITTER_NAME'] = 'github-actions[bot]'
+        env['GIT_COMMITTER_EMAIL'] = 'github-actions[bot]@users.noreply.github.com'
         
-        # Add and commit
-        if not run_command("git add -A", cwd=target_path):
+        # Configure the remote URL with the token
+        remote_url = f"https://x-access-token:{token}@github.com/{target_repo}.git"
+        if not run_command(f"git remote set-url origin {remote_url}", cwd=target_path, env=env):
             sys.exit(1)
         
+        # Add all files
+        if not run_command("git add -A", cwd=target_path, env=env):
+            sys.exit(1)
+        
+        # Check if there are changes to commit
+        result = subprocess.run("git status --porcelain", shell=True, cwd=target_path, capture_output=True, text=True)
+        if not result.stdout.strip():
+            print("No changes to commit")
+            return
+        
+        # Commit
         commit_msg = f"Deploy docs from meridian-runtime@$(git rev-parse HEAD)"
-        if not run_command(f'git commit -m "{commit_msg}"', cwd=target_path):
+        if not run_command(f'git commit -m "{commit_msg}"', cwd=target_path, env=env):
             sys.exit(1)
         
         # Push
-        if not run_command("git push origin main", cwd=target_path):
+        if not run_command("git push origin main", cwd=target_path, env=env):
             sys.exit(1)
     
     print("Deployment completed successfully!")
