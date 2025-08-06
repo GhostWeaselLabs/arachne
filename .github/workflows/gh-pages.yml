@@ -17,7 +17,6 @@ on:
 
 permissions:
   contents: read
-  pages: write
   id-token: write
 
 concurrency:
@@ -61,12 +60,14 @@ jobs:
           mkdocs build
         env:
           # Helps mkdocs know the site URL if set
-          MKDOCS_SITE_URL: ${{ vars.SITE_URL || 'https://ghostweasellabs.github.io/meridian-runtime/' }}
+          MKDOCS_SITE_URL: ${{ vars.SITE_URL || 'https://ghostweasellabs.github.io/meridian-runtime-docs/' }}
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
+          name: site-build
           path: site
+          retention-days: 1
 
   link-check:
     name: Link check (deploy)
@@ -102,15 +103,39 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy:
-    name: Deploy to GitHub Pages
+    name: Deploy to meridian-runtime-docs
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: [build]
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Download site artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site-build
+          path: site
+
+      - name: Deploy to meridian-runtime-docs repository
+        run: |
+          # Configure git for the target repository
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          
+          # Clone the target repository
+          git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/GhostWeaselLabs/meridian-runtime-docs.git target-repo
+          cd target-repo
+          
+          # Remove all existing content and copy new site
+          rm -rf *
+          cp -r ../site/* .
+          
+          # Add all files and commit
+          git add -A
+          git commit -m "Deploy docs from meridian-runtime@${{ github.sha }}
+          
+          Built from: ${{ github.repository }}@${{ github.sha }}
+          Triggered by: ${{ github.event_name }}
+          Workflow: ${{ github.workflow }}"
+          
+          # Push to the target repository
+          git push origin main

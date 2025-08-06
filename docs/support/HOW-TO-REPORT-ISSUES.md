@@ -18,7 +18,7 @@ This guide explains how to file effective bug reports and feature requests for M
 1. Check the docs
 
     - `README` and `docs/plan/` for intended behavior.
-    - `docs/support/troubleshooting.md` for known issues and fixes.
+    - `docs/support/TROUBLESHOOTING.md` for known issues and fixes.
 
 2. Search existing issues/discussions
 

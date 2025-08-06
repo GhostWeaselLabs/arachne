@@ -2,7 +2,7 @@ site_name: Meridian Runtime
 site_description: Minimal, observable graph runtime for Python. Build real-time dataflows from small, single-responsibility nodes connected by typed, bounded edges.
 repo_url: https://github.com/GhostWeaselLabs/meridian-runtime
 repo_name: meridian-runtime
-site_url: https://ghostweasellabs.github.io/meridian-runtime/
+site_url: https://ghostweasellabs.github.io/meridian-runtime-docs/
 edit_uri: edit/main/
 
 # Documentation configuration
