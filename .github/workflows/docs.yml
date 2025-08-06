@@ -1,20 +1,17 @@
-name: Docs
+name: Docs (deploy)
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
-      - 'docs/**'
-      - 'mkdocs.yml'
-      - 'README.md'
-      - '.github/workflows/docs.yml'
+      - "docs/**"
+      - "mkdocs.yml"
+      - "README.md"
+      - ".github/workflows/docs.yml"
   pull_request:
-    branches: [ main ]
-    paths:
-      - 'docs/**'
-      - 'mkdocs.yml'
-      - 'README.md'
-      - '.github/workflows/docs.yml'
+    branches: [main]
+    paths-ignore:
+      - "**"
   workflow_dispatch: {}
 
 permissions:
@@ -28,7 +25,7 @@ concurrency:
 
 jobs:
   build:
-    name: Build docs
+    name: Build docs (deploy)
     runs-on: ubuntu-latest
 
     steps:
@@ -38,7 +35,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install MkDocs and plugins
         run: |
@@ -63,7 +60,7 @@ jobs:
           path: site
 
   link-check:
-    name: Link check
+    name: Link check (deploy)
     runs-on: ubuntu-latest
 
     steps:
@@ -96,7 +93,7 @@ jobs:
   deploy:
     name: Deploy to GitHub Pages
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [ build, link-check ]
+    needs: [build, link-check]
     runs-on: ubuntu-latest
 
     environment:

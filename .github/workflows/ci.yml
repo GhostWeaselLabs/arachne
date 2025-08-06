@@ -175,7 +175,7 @@ jobs:
           fi
 
   docs-snippets:
-    name: Validate docs commands
+    name: CI/Docs snippets (examples smoke)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -299,7 +299,7 @@ jobs:
           MERIDIAN_BENCH_WARN_ONLY=0 uv run pytest -q -k "benchmark" --maxfail=1
 
   docs-build:
-    name: Build MkDocs site
+    name: CI/Docs build (strict)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -316,7 +316,7 @@ jobs:
         run: mkdocs build --strict
 
   link-check:
-    name: Check links (lychee)
+    name: CI/Docs link check (lychee)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
