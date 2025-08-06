@@ -128,6 +128,9 @@ jobs:
           gh repo clone ghostweasellabs/meridian-runtime-docs target-repo
           cd target-repo
           
+          # Configure the remote URL with authentication
+          git remote set-url origin https://x-access-token:${{ github.token }}@github.com/ghostweasellabs/meridian-runtime-docs.git
+          
           # Remove all existing content and copy new site
           rm -rf *
           cp -r ../site/* .
