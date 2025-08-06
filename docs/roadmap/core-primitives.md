@@ -44,7 +44,7 @@ Deliver the foundational runtime types and behaviors: Message, PortSpec, overflo
 - If an edge reaches capacity and policy is latest, the system shall retain only the newest message.
 - If an edge reaches capacity and policy is coalesce, the system shall combine messages using a supplied function.
 - The system shall be asyncio-friendly and avoid forcing blocking operations within core structures.
-- The system shall remain framework-agnostic and keep files ~200 LOC with SRP/DRY.
+- The system shall remain framework-agnostic and keep files ~200 lines with SRP/DRY.
 
 ## Deliverables
 
@@ -81,7 +81,7 @@ Deliver the foundational runtime types and behaviors: Message, PortSpec, overflo
 - **Backpressure semantics**: `put()` for block policy must be awaitable-friendly in M3 scheduler integration; for now, expose non-blocking `try_put` and a BLOCKED result for callers to cooperatively yield.
 - **Coalesce function contract**: `fn(old: T, new: T) -> T` must be pure and fast; document that long operations are forbidden inside coalesce.
 - **Error surfaces**: Avoid raising from hot paths for flow control; use return codes/enums where performance matters, exceptions for programmer errors.
-- **Strict SRP**: Keep each file close to ~200 LOC; extract helpers into utils when approaching limits.
+- **Strict SRP**: Keep each file close to ~200 lines; extract helpers into utils when approaching limits.
 
 ## Public API Sketches (Non-normative)
 
@@ -166,7 +166,7 @@ Deliver the foundational runtime types and behaviors: Message, PortSpec, overflo
 
 ## Acceptance Criteria
 
-- All deliverables implemented with typing and docstrings; files adhere to ~200 LOC guidance. [DONE]
+- All deliverables implemented with typing and docstrings; files adhere to ~200 lines guidance. [DONE]
 - Unit tests for all modules pass; integration smoke passes. [DONE]
 - Coverage for core modules ≥90% (edge, policies, ports, message, node, subgraph). [MOSTLY DONE]
 - Public APIs match the README/report drafts, or deviations are documented. [DONE]

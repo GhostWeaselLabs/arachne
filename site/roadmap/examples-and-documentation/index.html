@@ -2454,11 +2454,11 @@
 <p><strong>Branch</strong>: main (merged from <code>feature/m6-examples-docs</code>)</p>
 <hr />
 <h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Anchor link to this section">&para;</a></h2>
-<p>Deliver runnable, composable examples and concise documentation that demonstrate core runtime behaviors: lifecycle, composition, backpressure and overflow policies, control‑plane priority, and observability. Adhere to SRP/DRY and small‑file guidance (~200 LOC/file).</p>
+<p>Deliver runnable, composable examples and concise documentation that demonstrate core runtime behaviors: lifecycle, composition, backpressure and overflow policies, control‑plane priority, and observability. Adhere to SRP/DRY and small‑file guidance (~200 lines/file).</p>
 <hr />
 <h2 id="standards-alignment">Standards Alignment<a class="headerlink" href="#standards-alignment" title="Anchor link to this section">&para;</a></h2>
 <ul>
-<li><strong>Modularity</strong>: ≤ ~200 LOC/file; single‑responsibility modules; avoid hidden coupling.</li>
+<li><strong>Modularity</strong>: ≤ ~200 lines/file; single‑responsibility modules; avoid hidden coupling.</li>
 <li><strong>SRP/DRY</strong>: Factor shared helpers; reuse patterns; eliminate duplication across examples/docs.</li>
 <li><strong>Composability</strong>: Favor subgraphs and clear port contracts; validate wiring before run.</li>
 <li><strong>Docs style</strong>: Concise pages with copy‑paste commands; cross‑link milestones; EARS‑framed requirements.</li>
@@ -2513,7 +2513,7 @@
 <h2 id="example-authoring-template">Example Authoring Template<a class="headerlink" href="#example-authoring-template" title="Anchor link to this section">&para;</a></h2>
 <h3 id="file-size-and-structure">File size and structure<a class="headerlink" href="#file-size-and-structure" title="Anchor link to this section">&para;</a></h3>
 <ul>
-<li>≤ ~200 LOC/file; one cohesive class/module per node or subgraph.</li>
+<li>≤ ~200 lines/file; one cohesive class/module per node or subgraph.</li>
 <li><code>__init__.py</code> optional; expose run entry points if needed.</li>
 <li>Top‑level docstring includes: Purpose; Ports (name:type, policy); Capacity/priorities; Run command (<code>uv run ...</code>).</li>
 </ul>
@@ -2529,7 +2529,7 @@
 <hr />
 <h2 id="example-checklist">Example Checklist<a class="headerlink" href="#example-checklist" title="Anchor link to this section">&para;</a></h2>
 <ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Files ≤ ~200 LOC; SRP respected.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Files ≤ ~200 lines; SRP respected.</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Docstring with purpose, ports, capacities, policies, priorities.</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> <code>uv run</code> command included and tested.</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Edge validates <code>Message.payload</code> against <code>PortSpec.schema</code> (Message-wrapped types supported).</li>
@@ -2761,14 +2761,6 @@
       <script src="../../assets/javascripts/bundle.50899def.min.js"></script>
       
         <script src="../../javascripts/extra.js"></script>
-      
-        <script src="../../javascripts/dynamic-header.js"></script>
-      
-        <script src="https://unpkg.com/meridian-halo@latest/dist/meridian-halo.standalone.min.js"></script>
-      
-        <script src="https://unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
-      
-        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       
     
   </body>

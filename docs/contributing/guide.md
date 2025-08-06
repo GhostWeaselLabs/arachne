@@ -28,7 +28,7 @@ Thanks for your interest in Meridian Runtime! This document explains how to set 
 - **Predictable execution**: fairness, backpressure, bounded edges
 - **Observability**: structured logs, metrics, optional tracing
 - **Privacy‑first**: no payloads in errors by default; redaction hooks
-- **Maintainability**: small, testable modules (~200 LOC/file guidance)
+- **Maintainability**: small, testable modules (~200 lines/file guidance)
 - **Platform‑agnostic**: no assumptions about specific hosting services
 - **Docs‑as‑product**: plans, support docs, and examples are first‑class
 

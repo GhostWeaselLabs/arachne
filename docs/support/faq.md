@@ -55,7 +55,7 @@ Meridian Runtime promotes a modular and composable approach to application struc
 
 - **Graph of Nodes and Edges**: Applications are modeled as directed graphs where individual `Node`s (single-responsibility processing units) are connected by typed, bounded `Edge`s.
 - **Subgraph Composition**: `Subgraph`s are reusable composite units that encapsulate a set of nodes and edges with defined input and output ports. This allows for hierarchical composition, where smaller subgraphs can be nested into larger ones, promoting reusability and local reasoning about performance and failure modes.
-- **Clear Boundaries**: Each component (`Node`, `Edge`, `Subgraph`, `Scheduler`) has a clear, narrow purpose, adhering to the Single Responsibility Principle (SRP). This design philosophy leads to smaller, more testable modules (guidance of ~200 LOC per file) and avoids hidden domain coupling.
+- **Clear Boundaries**: Each component (`Node`, `Edge`, `Subgraph`, `Scheduler`) has a clear, narrow purpose, adhering to the Single Responsibility Principle (SRP). This design philosophy leads to smaller, more testable modules (guidance of ~200 lines per file) and avoids hidden domain coupling.
 - **Explicit Wiring and Validation**: Connections between nodes within a subgraph, and exposed ports of subgraphs, are explicitly defined. The system performs comprehensive validation during graph composition (e.g., unique names, port existence, schema compatibility, positive capacities, consistent policies) to ensure structural integrity and refuse to run invalid graphs.
 - **Framework-Agnostic and In-Process**: The runtime is designed to be framework-agnostic and in-process, providing APIs that are friendly to asyncio usage without requiring it, enhancing its portability and ease of integration into existing Python applications.
 
@@ -147,13 +147,13 @@ Each milestone should link to a tracking issue or project board; individual item
 
 ### What's the file size guidance for contributions?
 
-Keep files small (~200 LOC) and responsibilities focused. Include unit tests for core changes; add integration tests for subgraph behavior.
+Keep files small (~200 lines) and responsibilities focused. Include unit tests for core changes; add integration tests for subgraph behavior.
 
 ### How does Meridian Runtime prioritize quality and maintainability?
 
 Meridian Runtime is built with a strong emphasis on quality and maintainability, driven by clear principles and continuous integration practices:
 
-- **Single Responsibility Principle (SRP) and DRY**: Components are designed with a clear, narrow purpose, and the codebase adheres to SRP and "Don't Repeat Yourself" (DRY) principles, with a guidance of keeping files small (~200 LOC per file).
+- **Single Responsibility Principle (SRP) and DRY**: Components are designed with a clear, narrow purpose, and the codebase adheres to SRP and "Don't Repeat Yourself" (DRY) principles, with a guidance of keeping files small (~200 lines per file).
 - **Async-Friendly and Framework-Agnostic**: Implemented in Python 3.11+, the system is designed to be asyncio-friendly without imposing asyncio requirements, enhancing its adaptability and reducing coupling. It avoids global mutable state, preferring explicit dependency injection.
 - **Comprehensive Testing**: The project maintains high code coverage (≥90% for core modules, ≥80% overall), enforced by CI gates. This includes extensive unit tests for core primitives, integration tests for end-to-end scenarios (e.g., backpressure propagation, control-plane priority, graceful shutdown), and plans for stress and soak tests to validate performance and detect resource leaks under load.
 - **Static Analysis and Linting**: CI checks enforce code quality through linting (`ruff`), formatting (`black`), and static type analysis (`mypy`) to ensure consistency and catch errors early.

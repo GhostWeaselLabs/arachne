@@ -2407,7 +2407,7 @@
 <p>Open PR early; keep commits small and focused</p>
 <hr />
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Anchor link to this section">&para;</a></h2>
-<p>Provide developer utilities and project scaffolding to accelerate consistent, SRP/DRY-friendly node and subgraph creation. Utilities include time helpers, correlation ID generation, and validation helpers for types and graph contracts. Scaffolding includes generators to create node and subgraph skeletons conforming to Meridian conventions (~200 LOC/file, explicit typing, docstrings, tests).</p>
+<p>Provide developer utilities and project scaffolding to accelerate consistent, SRP/DRY-friendly node and subgraph creation. Utilities include time helpers, correlation ID generation, and validation helpers for types and graph contracts. Scaffolding includes generators to create node and subgraph skeletons conforming to Meridian conventions (~200 lines/file, explicit typing, docstrings, tests).</p>
 <h2 id="ears-requirements">EARS Requirements<a class="headerlink" href="#ears-requirements" title="Anchor link to this section">&para;</a></h2>
 <ul>
 <li>The system shall provide utilities for correlation ID generation, monotonic time, and validation helpers for ports and graphs.</li>
@@ -2445,7 +2445,7 @@
 <li>Options: <code>--name</code>, <code>--package</code>, <code>--dir</code>, <code>--force</code>, <code>--include-tests</code>.</li>
 </ul>
 </li>
-<li>Template files (inline within generators or small template directory) that adhere to ~200 LOC/file guidance.</li>
+<li>Template files (inline within generators or small template directory) that adhere to ~200 lines/file guidance.</li>
 <li>Documentation updates:<ul>
 <li>Scaffolding usage guide with examples.</li>
 <li>Utilities reference and examples for ids/time/validation.</li>
@@ -2559,7 +2559,7 @@
 <hr />
 <h2 id="developer-experience-and-conventions">Developer Experience and Conventions<a class="headerlink" href="#developer-experience-and-conventions" title="Anchor link to this section">&para;</a></h2>
 <ul>
-<li>Generated code adheres to ~200 LOC/file guideline; split if expanding.</li>
+<li>Generated code adheres to ~200 lines/file guideline; split if expanding.</li>
 <li>All public methods strictly typed; docstrings explain contracts.</li>
 <li>Avoid runtime reflection/magic in templates; keep it explicit and easy to test.</li>
 <li>Scaffolding creates minimal viable code that passes lint, type-check, and unit tests immediately.</li>
@@ -2610,7 +2610,7 @@
 <li>Utilities (ids, time, validation) implemented with docstrings and typing; unit tests pass and coverage ≥90% for utilities.</li>
 <li>Scaffolding CLIs generate runnable, typed skeletons and tests that pass lint/type/test on creation.</li>
 <li>Documentation for scaffolding and utilities is added and links from README.</li>
-<li>Generated files conform to conventions (naming, typing, ~200 LOC guidance).</li>
+<li>Generated files conform to conventions (naming, typing, ~200 lines guidance).</li>
 <li>CI includes a job that runs scaffolding smoke tests in a temporary workspace.</li>
 </ul>
 <hr />
@@ -2768,14 +2768,6 @@
       <script src="../../assets/javascripts/bundle.50899def.min.js"></script>
       
         <script src="../../javascripts/extra.js"></script>
-      
-        <script src="../../javascripts/dynamic-header.js"></script>
-      
-        <script src="https://unpkg.com/meridian-halo@latest/dist/meridian-halo.standalone.min.js"></script>
-      
-        <script src="https://unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
-      
-        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       
     
   </body>

@@ -21,7 +21,7 @@ This document codifies the essential requirements using the EARS pattern and est
 - **Ubiquitous**: The system shall model applications as graphs of Nodes connected by typed Edges and composed into Subgraphs.
 - **Ubiquitous**: The system shall expose public APIs for Node, Edge, Subgraph, Scheduler, Message, PortSpec, and Policies.
 - **Ubiquitous**: The system shall be framework‑agnostic and in‑process, with APIs friendly to asyncio usage without requiring it.
-- **Ubiquitous**: The system shall prefer small files (~200 LOC/file) and SRP/DRY throughout the codebase.
+- **Ubiquitous**: The system shall prefer small files (~200 lines/file) and SRP/DRY throughout the codebase.
 - **Ubiquitous**: The system shall provide reproducible development with a `uv`‑native workflow (init, lock, sync, run).
 
 ### 1.2 Node Lifecycle and Behavior

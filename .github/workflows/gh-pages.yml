@@ -1,8 +1,19 @@
-name: Docs
+name: Docs (deploy)
 
 on:
   push:
     branches: [main]
+    # Optional tightening: only rebuild when docs or mkdocs config changes
+    paths:
+      - "docs/**"
+      - "mkdocs.yml"
+      - "README.md"
+      - ".github/workflows/gh-pages.yml"
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - "**"
+  workflow_dispatch: {}
 
 permissions:
   contents: read
@@ -10,17 +21,23 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages-${{ github.ref }}
+  group: docs-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   build:
+    name: Build docs (deploy)
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
       - name: Cache pip
         uses: actions/cache@v4
         with:
@@ -28,23 +45,70 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/mkdocs.yml') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-      - name: Install MkDocs
+
+      - name: Install MkDocs and plugins
         run: |
-          python -m pip install --upgrade pip
-          pip install "mkdocs==1.5.3" "mkdocs-material==9.5.17" "mkdocs-git-revision-date-localized-plugin==1.2.4"
+          pip install --upgrade pip
+          pip install \
+            mkdocs==1.* \
+            mkdocs-material==9.* \
+            mkdocs-awesome-pages-plugin==2.* \
+            mkdocs-git-revision-date-localized-plugin==1.* \
+            mkdocs-minify-plugin==0.*
+
       - name: Build site
         run: |
-          mkdocs build
+          mkdocs build --strict
+        env:
+          # Helps mkdocs know the site URL if set
+          MKDOCS_SITE_URL: ${{ vars.SITE_URL || 'https://ghostweasellabs.github.io/meridian-runtime/' }}
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
+
+  link-check:
+    name: Link check (deploy)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install lychee (link checker)
+        uses: lycheeverse/lychee-action@v2
+        with:
+          # We install only; run step follows to control args and use ignore file
+          args: --version
+
+      - name: Run lychee
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >
+            --no-progress
+            --max-concurrency 8
+            --exclude-all-private
+            --accept 200,429
+            --retry-wait-time 2
+            --retry-count 2
+            --timeout 20
+            --base ./
+            --format markdown
+            .
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   deploy:
-    needs: build
+    name: Deploy to GitHub Pages
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [build, link-check]
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
-      - id: deployment
+      - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4

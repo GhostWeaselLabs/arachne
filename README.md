@@ -13,7 +13,7 @@ Key features
 - Bounded edges with configurable overflow policies (block, drop, latest, coalesce)
 - Control‑plane priority for critical flows (kill switch, admin, rate‑limit signals)
 - First‑class observability (structured logs, metrics, trace hooks)
-- Small‑file, SRP/DRY‑friendly codebase (aim for ~200 LOC per file)
+- Small‑file, SRP/DRY‑friendly codebase (aim for ~200 lines per file)
 - uv‑native development workflow (fast, reproducible)
 
 Use cases
@@ -197,7 +197,7 @@ uv run python -m examples.hello_graph.main
 ## Patterns and Guidance
 
 File size and modularity
-- Target ~200 LOC per file. Split responsibilities into multiple nodes or utilities.
+- Target ~200 lines per file. Split responsibilities into multiple nodes or utilities.
 - SRP and DRY: nodes do one thing; share common helpers in utils/.
 - Prefer small subgraphs over monolith graphs for composition and reuse.
 
@@ -288,7 +288,7 @@ uv run python -m examples.hello_graph.main
 ```
 
 Contributing
-- Keep files small (~200 LOC) and responsibilities focused.
+- Keep files small (~200 lines) and responsibilities focused.
 - Include unit tests for core changes; add integration tests for subgraph behavior.
 - Update examples and docs for user‑facing features.
 - Follow SemVer and add entries to CHANGELOG for notable changes.

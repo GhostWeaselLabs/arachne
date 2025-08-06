@@ -409,7 +409,7 @@ class TestGeneratedCodeQuality:
                 pytest.skip("mypy not available or timeout")
 
     def test_generated_code_line_count(self):
-        """Test that generated code adheres to ~200 LOC guideline."""
+        """Test that generated code adheres to ~200 lines guideline."""
         with tempfile.TemporaryDirectory() as temp_dir:
             # Generate a complex node
             run_cli(

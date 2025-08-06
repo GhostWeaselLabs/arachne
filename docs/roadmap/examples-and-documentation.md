@@ -6,13 +6,13 @@
 
 ## Purpose
 
-Deliver runnable, composable examples and concise documentation that demonstrate core runtime behaviors: lifecycle, composition, backpressure and overflow policies, control‑plane priority, and observability. Adhere to SRP/DRY and small‑file guidance (~200 LOC/file).
+Deliver runnable, composable examples and concise documentation that demonstrate core runtime behaviors: lifecycle, composition, backpressure and overflow policies, control‑plane priority, and observability. Adhere to SRP/DRY and small‑file guidance (~200 lines/file).
 
 ---
 
 ## Standards Alignment
 
-- **Modularity**: ≤ ~200 LOC/file; single‑responsibility modules; avoid hidden coupling.
+- **Modularity**: ≤ ~200 lines/file; single‑responsibility modules; avoid hidden coupling.
 - **SRP/DRY**: Factor shared helpers; reuse patterns; eliminate duplication across examples/docs.
 - **Composability**: Favor subgraphs and clear port contracts; validate wiring before run.
 - **Docs style**: Concise pages with copy‑paste commands; cross‑link milestones; EARS‑framed requirements.
@@ -66,7 +66,7 @@ Deliver runnable, composable examples and concise documentation that demonstrate
 
 ### File size and structure
 
-- ≤ ~200 LOC/file; one cohesive class/module per node or subgraph.
+- ≤ ~200 lines/file; one cohesive class/module per node or subgraph.
 - `__init__.py` optional; expose run entry points if needed.
 - Top‑level docstring includes: Purpose; Ports (name:type, policy); Capacity/priorities; Run command (`uv run ...`).
 
@@ -83,7 +83,7 @@ Deliver runnable, composable examples and concise documentation that demonstrate
 
 ## Example Checklist
 
-- [x] Files ≤ ~200 LOC; SRP respected.
+- [x] Files ≤ ~200 lines; SRP respected.
 - [x] Docstring with purpose, ports, capacities, policies, priorities.
 - [x] `uv run` command included and tested.
 - [x] Edge validates `Message.payload` against `PortSpec.schema` (Message-wrapped types supported).
