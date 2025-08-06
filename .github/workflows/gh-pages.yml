@@ -117,6 +117,8 @@ jobs:
           path: site
 
       - name: Deploy to meridian-runtime-docs repository
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           # Configure git for the target repository
           git config --global user.name 'github-actions[bot]'
