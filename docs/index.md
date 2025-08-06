@@ -116,7 +116,7 @@ tests/
 
 ## Design principles
 
-- Small, composable files (~200 LOC target)
+- Small, composable files (~200 lines target)
 - Single responsibility, explicit contracts
 - Backpressure first; overflow policies are explicit
 - Prioritize control‑plane messages

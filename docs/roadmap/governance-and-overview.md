@@ -11,7 +11,7 @@ This document establishes the governance model, scope boundaries, quality bar, a
 - **Predictable execution**: fairness, backpressure, bounded edges.
 - **Observability by default**: structured logs, metrics, optional tracing.
 - **Safety and privacy**: no payloads in errors by default, redaction hooks.
-- **Maintainability**: small, testable modules (~200 LOC/file guidance).
+- **Maintainability**: small, testable modules (~200 lines/file guidance).
 - **Platform-agnostic**: no host-specific assumptions (e.g., not GitHub-only).
 - **Docs-as-product**: plans, support docs, and examples are first-class.
 

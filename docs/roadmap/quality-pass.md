@@ -18,7 +18,7 @@ Elevate overall project quality before the next milestone by ensuring:
 
 ### Standards (EARS: Ubiquitous)
 
-- The project shall follow SRP/DRY and ~200 LOC/file guidance for maintainability.
+- The project shall follow SRP/DRY and ~200 lines/file guidance for maintainability.
 - The codebase shall expose discoverable, typed public APIs with module/class/function docstrings and usage notes.
 - The documentation shall render without layout/formatting surprises on both GitHub (Markdown viewer) and MkDocs (Material theme).
 - CI shall validate docs build and perform link checks, and optionally verify example/snippet execution where reasonable.

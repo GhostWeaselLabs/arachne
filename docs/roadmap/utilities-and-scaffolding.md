@@ -30,7 +30,7 @@ Open PR early; keep commits small and focused
 
 ## Overview
 
-Provide developer utilities and project scaffolding to accelerate consistent, SRP/DRY-friendly node and subgraph creation. Utilities include time helpers, correlation ID generation, and validation helpers for types and graph contracts. Scaffolding includes generators to create node and subgraph skeletons conforming to Meridian conventions (~200 LOC/file, explicit typing, docstrings, tests).
+Provide developer utilities and project scaffolding to accelerate consistent, SRP/DRY-friendly node and subgraph creation. Utilities include time helpers, correlation ID generation, and validation helpers for types and graph contracts. Scaffolding includes generators to create node and subgraph skeletons conforming to Meridian conventions (~200 lines/file, explicit typing, docstrings, tests).
 
 ## EARS Requirements
 
@@ -59,7 +59,7 @@ Provide developer utilities and project scaffolding to accelerate consistent, SR
 - `src/meridian/scaffolding/generate_subgraph.py`
     - CLI for generating subgraph modules with exposed ports, connect wiring stubs, and tests.
     - Options: `--name`, `--package`, `--dir`, `--force`, `--include-tests`.
-- Template files (inline within generators or small template directory) that adhere to ~200 LOC/file guidance.
+- Template files (inline within generators or small template directory) that adhere to ~200 lines/file guidance.
 - Documentation updates:
     - Scaffolding usage guide with examples.
     - Utilities reference and examples for ids/time/validation.
@@ -195,7 +195,7 @@ Issue dataclass:
 
 ## Developer Experience and Conventions
 
-- Generated code adheres to ~200 LOC/file guideline; split if expanding.
+- Generated code adheres to ~200 lines/file guideline; split if expanding.
 - All public methods strictly typed; docstrings explain contracts.
 - Avoid runtime reflection/magic in templates; keep it explicit and easy to test.
 - Scaffolding creates minimal viable code that passes lint, type-check, and unit tests immediately.
@@ -245,7 +245,7 @@ Issue dataclass:
 - Utilities (ids, time, validation) implemented with docstrings and typing; unit tests pass and coverage ≥90% for utilities.
 - Scaffolding CLIs generate runnable, typed skeletons and tests that pass lint/type/test on creation.
 - Documentation for scaffolding and utilities is added and links from README.
-- Generated files conform to conventions (naming, typing, ~200 LOC guidance).
+- Generated files conform to conventions (naming, typing, ~200 lines guidance).
 - CI includes a job that runs scaffolding smoke tests in a temporary workspace.
 
 ---

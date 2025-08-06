@@ -2,7 +2,7 @@
 
 ## Overview
 
-Establish the repository scaffold, development workflow, and CI guardrails to enable rapid, consistent iteration. This milestone sets conventions (SRP/DRY, ~200 LOC per file), pins toolchain versions, and ensures all contributors can build, lint, type-check, and test locally and in CI using `uv`.
+Establish the repository scaffold, development workflow, and CI guardrails to enable rapid, consistent iteration. This milestone sets conventions (SRP/DRY, ~200 lines per file), pins toolchain versions, and ensures all contributors can build, lint, type-check, and test locally and in CI using `uv`.
 
 ## Goals (EARS)
 
@@ -108,7 +108,7 @@ Establish the repository scaffold, development workflow, and CI guardrails to en
 - `README` sections:
     - Quickstart (`uv` commands)
     - Development (lint, type, test)
-    - Contributing conventions (SRP/DRY, ~200 LOC/file, typing)
+    - Contributing conventions (SRP/DRY, ~200 lines/file, typing)
 - `CHANGELOG.md` initialized with Unreleased section
 - `LICENSE` file added
 

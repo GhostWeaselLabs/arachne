@@ -2253,7 +2253,7 @@
 <li>If an edge reaches capacity and policy is latest, the system shall retain only the newest message.</li>
 <li>If an edge reaches capacity and policy is coalesce, the system shall combine messages using a supplied function.</li>
 <li>The system shall be asyncio-friendly and avoid forcing blocking operations within core structures.</li>
-<li>The system shall remain framework-agnostic and keep files ~200 LOC with SRP/DRY.</li>
+<li>The system shall remain framework-agnostic and keep files ~200 lines with SRP/DRY.</li>
 </ul>
 <h2 id="deliverables">Deliverables<a class="headerlink" href="#deliverables" title="Anchor link to this section">&para;</a></h2>
 <ul>
@@ -2302,7 +2302,7 @@
 <li><strong>Backpressure semantics</strong>: <code>put()</code> for block policy must be awaitable-friendly in M3 scheduler integration; for now, expose non-blocking <code>try_put</code> and a BLOCKED result for callers to cooperatively yield.</li>
 <li><strong>Coalesce function contract</strong>: <code>fn(old: T, new: T) -&gt; T</code> must be pure and fast; document that long operations are forbidden inside coalesce.</li>
 <li><strong>Error surfaces</strong>: Avoid raising from hot paths for flow control; use return codes/enums where performance matters, exceptions for programmer errors.</li>
-<li><strong>Strict SRP</strong>: Keep each file close to ~200 LOC; extract helpers into utils when approaching limits.</li>
+<li><strong>Strict SRP</strong>: Keep each file close to ~200 lines; extract helpers into utils when approaching limits.</li>
 </ul>
 <h2 id="public-api-sketches-non-normative">Public API Sketches (Non-normative)<a class="headerlink" href="#public-api-sketches-non-normative" title="Anchor link to this section">&para;</a></h2>
 <ul>
@@ -2408,7 +2408,7 @@
 </ul>
 <h2 id="acceptance-criteria">Acceptance Criteria<a class="headerlink" href="#acceptance-criteria" title="Anchor link to this section">&para;</a></h2>
 <ul>
-<li>All deliverables implemented with typing and docstrings; files adhere to ~200 LOC guidance. [DONE]</li>
+<li>All deliverables implemented with typing and docstrings; files adhere to ~200 lines guidance. [DONE]</li>
 <li>Unit tests for all modules pass; integration smoke passes. [DONE]</li>
 <li>Coverage for core modules ≥90% (edge, policies, ports, message, node, subgraph). [MOSTLY DONE]</li>
 <li>Public APIs match the README/report drafts, or deviations are documented. [DONE]</li>
@@ -2560,14 +2560,6 @@
       <script src="../../assets/javascripts/bundle.50899def.min.js"></script>
       
         <script src="../../javascripts/extra.js"></script>
-      
-        <script src="../../javascripts/dynamic-header.js"></script>
-      
-        <script src="https://unpkg.com/meridian-halo@latest/dist/meridian-halo.standalone.min.js"></script>
-      
-        <script src="https://unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
-      
-        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       
     
   </body>

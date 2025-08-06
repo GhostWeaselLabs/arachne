@@ -6,5 +6,5 @@ A minimal producer → consumer pipeline demonstrating:
 - Simple message pass-through
 - End-to-end execution via scheduler
 
-This example follows the ~200 LOC/file guidance and SRP principles.
+This example follows the ~200 lines/file guidance and SRP principles.
 """

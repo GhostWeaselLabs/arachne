@@ -94,7 +94,7 @@ This milestone delivers the first stable release of Arachne's graph runtime with
 ### Source and API
 
 - [ ] All public APIs reviewed; docstrings updated; typing consistent and explicit
-- [ ] SRP/DRY and ~200 LOC/file guidance verified; split where needed
+- [ ] SRP/DRY and ~200 lines/file guidance verified; split where needed
 - [ ] Optional dependencies (Pydantic, OTEL, Prometheus) guarded and documented
 - [ ] Example code imports from public API surfaces only
 
@@ -174,7 +174,7 @@ This milestone delivers the first stable release of Arachne's graph runtime with
 **Highlights**:
 
 - Performance and fairness under load; priority preemption for kill switch
-- Strong typing, SRP/DRY-friendly structure (~200 LOC/file)
+- Strong typing, SRP/DRY-friendly structure (~200 lines/file)
 - `uv`-native dev workflow and examples
 
 **Breaking Changes**:
