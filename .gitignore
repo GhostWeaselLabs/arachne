@@ -103,3 +103,4 @@ Arachne/docs/**/diagrams/*.png
 # ---- Crush tooling cache ----
 .crush/
 .cursor/
+.meridian/artifacts/
