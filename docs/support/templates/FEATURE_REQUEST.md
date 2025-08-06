@@ -1,6 +1,6 @@
-# Arachne Feature Request Template (Privacy‑First)
+# Meridian Runtime Feature Request Template (Privacy‑First)
 # Owner: GhostWeasel (Lead: doubletap-dave)
-# Purpose: Propose improvements that align with Arachne’s goals—composability, predictability, observability, and privacy.
+# Purpose: Propose improvements that align with Meridian Runtime's goals—composability, predictability, observability, and privacy.
 
 ## 1) Summary
 <!-- 1–3 sentences describing the feature at a high level. What problem does it solve? Who benefits? -->
@@ -49,10 +49,10 @@
 
 ## 8) Acceptance Criteria (EARS‑style)
 <!-- Use clear, testable statements. -->
-- Ubiquitous: “The system shall …”
-- Event‑driven: “When <event>, the system shall …”
-- State‑driven: “While <state>, the system shall …”
-- Unwanted: “If <failure>, the system shall …”
+- Ubiquitous: "The system shall …"
+- Event‑driven: "When <event>, the system shall …"
+- State‑driven: "While <state>, the system shall …"
+- Unwanted: "If <failure>, the system shall …"
 
 Example:
 - The system shall provide a CLI subcommand `meridian-runtime diagnostics collect` that creates a redacted bundle by default.
@@ -67,7 +67,7 @@ Example:
   2) …
   3) …
 - Expected structured logs (redacted values; stable keys):
-  - event="feature_event", component="...", status="success"
+  - `event="feature_event", component="...", status="success"`
 
 ## 10) Risks and Mitigations
 <!-- Privacy, security, operational, and maintenance risks with proposed mitigations. -->
@@ -84,7 +84,7 @@ Example:
   - Regression/compatibility:
 - Documentation:
   - README changes:
-  - docs/plan or Decision Record:
+  - `docs/plan` or Decision Record:
   - Examples/recipes:
 
 ## 12) Dependencies and Compatibility
@@ -107,8 +107,8 @@ Example:
 - [ ] Testing and docs plan sketched
 
 # References
-- Governance and Overview: docs/roadmap/governance-and-overview.md
-- Future Roadmap: docs/roadmap/future-roadmap.md
-- Contributing Guide: docs/contributing/CONTRIBUTING.md
-- Troubleshooting: docs/support/TROUBLESHOOTING.md
-- How to Report Issues: docs/support/HOW-TO-REPORT-ISSUES.md
+- Governance and Overview: `docs/roadmap/governance-and-overview.md`
+- Future Roadmap: `docs/roadmap/future-roadmap.md`
+- Contributing Guide: `docs/contributing/guide.md`
+- Troubleshooting: `docs/support/troubleshooting.md`
+- How to Report Issues: `docs/support/HOW-TO-REPORT-ISSUES.md`

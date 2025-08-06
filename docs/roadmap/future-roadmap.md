@@ -1,5 +1,9 @@
 # Meridian Runtime Future Roadmap
 
+**Owner**: GhostWeasel (Lead: `doubletap-dave`)  
+**Status**: Living document  
+**Audience**: Contributors, maintainers, integrators
+
 ## Purpose
 
 This roadmap captures high‑value initiatives considered out of scope for v1.0.0 but aligned with Meridian's mission: a composable, asyncio‑native graph runtime with strong observability, predictable scheduling, and privacy‑first error handling. It is organized by time horizon and includes requirements framed with EARS to ensure clarity and testability.

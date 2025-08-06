@@ -5,6 +5,7 @@
 Minimal, reusable graph runtime for Python. Build real-time, observable dataflows from small, single‑responsibility nodes connected by typed, bounded edges.
 
 Meridian gives you:
+
 - A tiny, composable runtime (nodes, edges, subgraphs, scheduler)
 - Backpressure by default with configurable overflow policies
 - Control‑plane priorities (e.g., kill switch) for predictable behavior under load
@@ -13,9 +14,9 @@ Meridian gives you:
 
 Get the source: https://github.com/GhostWeaselLabs/meridian-runtime
 
-For an overview of how this documentation is organized, see About these docs: ./ABOUT.md
+For an overview of how this documentation is organized, see [About these docs](concepts/about.md)
 
-***
+---
 
 ## What can you build?
 
@@ -25,21 +26,24 @@ For an overview of how this documentation is organized, see About these docs: ./
 - Control planes with prioritized signals
 - Any real‑time graph that needs predictable flow control and visibility
 
-***
+---
 
 ## Quick start
 
-Prereqs
-- Python 3.11+
-- uv (https://github.com/astral-sh/uv)
+### Prereqs
 
-Initialize environment
+- Python 3.11+
+- `uv` (https://github.com/astral-sh/uv)
+
+### Initialize environment
+
 ```bash
 uv lock
 uv sync
 ```
 
-Dev loop
+### Dev loop
+
 ```bash
 # Lint
 uv run ruff check .
@@ -54,7 +58,8 @@ uv run mypy src
 uv run pytest --cov=src --cov-fail-under=80
 ```
 
-Run the examples
+### Run the examples
+
 ```bash
 # Hello graph (minimal)
 uv run python -m examples.hello_graph.main
@@ -66,35 +71,37 @@ uv run python examples/sentiment/main.py --human --timeout-s 6.0
 uv run python examples/streaming_coalesce/main.py --human --timeout-s 5.0
 ```
 
-***
+---
 
 ## Core ideas in 30 seconds
 
-- Node: single‑responsibility unit with typed inputs/outputs
-- Edge: bounded queue with overflow policy (block, drop, latest, coalesce)
-- Subgraph: reusable composition exposing its own inputs/outputs
-- Scheduler: fairness + priorities; drives ticks and graceful shutdown
-- Observability: logs, metrics, trace hooks embedded in the runtime
+- **Node**: single‑responsibility unit with typed inputs/outputs
+- **Edge**: bounded queue with overflow policy (`block`, `drop`, `latest`, `coalesce`)
+- **Subgraph**: reusable composition exposing its own inputs/outputs
+- **Scheduler**: fairness + priorities; drives ticks and graceful shutdown
+- **Observability**: logs, metrics, trace hooks embedded in the runtime
 
 These primitives keep graphs explicit, testable, and easy to evolve.
 
-***
+---
 
 ## Next steps
 
 Read the guides:
-- Quickstart: ./quickstart.md
-- API Reference: ./api.md
-- Patterns: ./patterns.md
-- Observability: ./observability.md
-- Troubleshooting: ./troubleshooting.md
+
+- [Quickstart](getting-started/quickstart.md)
+- [API Reference](reference/api.md)
+- [Patterns](concepts/patterns.md)
+- [Observability](concepts/observability.md)
+- [Troubleshooting](support/troubleshooting.md)
 
 Contribute and plan:
-- Contributing Guide: ./contributing/CONTRIBUTING.md
-- Release Process: ./contributing/RELEASING.md
-- Governance & Roadmaps: ./plan/
 
-***
+- [Contributing Guide](contributing/guide.md)
+- [Release Process](contributing/RELEASING.md)
+- [Governance & Roadmaps](roadmap/index.md)
+
+---
 
 ## Example layout
 
@@ -112,7 +119,7 @@ tests/
   integration/    # end-to-end graph tests
 ```
 
-***
+---
 
 ## Design principles
 
@@ -122,12 +129,10 @@ tests/
 - Prioritize control‑plane messages
 - Observability is not an afterthought
 
-***
+---
 
 ## Links
 
 - Repo: https://github.com/GhostWeaselLabs/meridian-runtime
 - Issues: https://github.com/GhostWeaselLabs/meridian-runtime/issues
 - Discussions: https://github.com/GhostWeaselLabs/meridian-runtime/discussions
-
-Happy weaving.
