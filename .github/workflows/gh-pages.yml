@@ -140,5 +140,5 @@ jobs:
           Triggered by: ${{ github.event_name }}
           Workflow: ${{ github.workflow }}"
           
-          # Push to the target repository using GitHub CLI
-          gh repo sync --force
+          # Push to the target repository using git directly
+          git push origin main --force
