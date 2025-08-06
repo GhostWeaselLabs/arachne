@@ -34,7 +34,7 @@ dependencies = ["mkdocs>=1.6.1", "mkdocs-material>=9.6.16"]
 [project.urls]
 Homepage = "https://ghostweasellabs.github.io/meridian-runtime"
 Repository = "https://github.com/ghostweasellabs/meridian-runtime.git"
-Changelog = "CHANGELOG.md"
+Changelog = "https://github.com/ghostweasellabs/meridian-runtime/blob/main/CHANGELOG.md"
 Documentation = "https://ghostweasellabs.github.io/meridian-runtime"
 
 [project.optional-dependencies]
