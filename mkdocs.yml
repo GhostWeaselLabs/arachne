@@ -41,6 +41,7 @@ theme:
   font:
     text: IBM Plex Sans
     code: IBM Plex Mono
+  logo: assets/images/logo.svg
   icon:
     repo: fontawesome/brands/github
     edit: material/pencil
@@ -199,10 +200,9 @@ plugins:
 extra_javascript:
   - javascripts/extra.js
   - javascripts/dynamic-header.js
-  # Temporarily disabled external CDN links for CI compatibility
-  # - https://unpkg.com/meridian-halo@latest/dist/meridian-halo.standalone.min.js
-  # - https://unpkg.com/mermaid@10/dist/mermaid.min.js
+  - https://unpkg.com/meridian-halo@latest/dist/meridian-halo.standalone.min.js
+  - https://unpkg.com/mermaid@10/dist/mermaid.min.js
   # Debug/logging helpers and order notes:
   # 1) Load Halo CDN before our injector, but our injector is already included above.
   # 2) Removed polyfill.io (unnecessary and occasionally flaky)
-  # - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
