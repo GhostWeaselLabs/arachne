@@ -118,30 +118,6 @@ jobs:
 
       - name: Deploy to meridian-runtime-docs repository
         env:
-          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Configure git for the target repository
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          
-          # Use GitHub CLI to clone and push to the target repository
-          gh repo clone ghostweasellabs/meridian-runtime-docs target-repo
-          cd target-repo
-          
-          # Configure the remote URL with authentication
-          git remote set-url origin https://x-access-token:${{ github.token }}@github.com/ghostweasellabs/meridian-runtime-docs.git
-          
-          # Remove all existing content and copy new site
-          rm -rf *
-          cp -r ../site/* .
-          
-          # Add all files and commit
-          git add -A
-          git commit -m "Deploy docs from meridian-runtime@${{ github.sha }}
-          
-          Built from: ${{ github.repository }}@${{ github.sha }}
-          Triggered by: ${{ github.event_name }}
-          Workflow: ${{ github.workflow }}"
-          
-          # Push to the target repository using git directly
-          git push origin main --force
+          python scripts/deploy-docs.py
