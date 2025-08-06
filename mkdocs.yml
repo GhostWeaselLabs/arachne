@@ -100,8 +100,8 @@ nav:
       - Glossary: concepts/glossary.md
   - Support:
       - FAQ: support/faq.md
-      - Troubleshooting: support/troubleshooting.md
-      - How to report issues: support/how-to-report-issues.md
+      - Troubleshooting: support/TROUBLESHOOTING.md
+      - How to report issues: support/HOW-TO-REPORT-ISSUES.md
   - Contributing:
       - Guide: contributing/guide.md
       - Style Guide: contributing/docs-conventions.md

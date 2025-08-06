@@ -76,6 +76,6 @@ This documentation provides comprehensive information about **Meridian Runtime**
 ## Issues and support
 
 - Open issues at: https://github.com/GhostWeaselLabs/meridian-runtime/issues
-- See support guidance in: [report an issue](../support/how-to-report-issues.md)
+- See support guidance in: [report an issue](../support/HOW-TO-REPORT-ISSUES.md)
 
 Thank you for helping improve the Meridian Runtime docs! 

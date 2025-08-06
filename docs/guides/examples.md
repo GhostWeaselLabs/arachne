@@ -194,7 +194,7 @@ Each example includes:
 - Patterns: ../concepts/patterns.md
 - Observability: ../concepts/observability.md
 - API reference: ../reference/api.md
-- Troubleshooting: ../support/troubleshooting.md
+- Troubleshooting: ../support/TROUBLESHOOTING.md
 
 ---
 

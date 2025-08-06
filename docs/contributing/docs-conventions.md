@@ -324,6 +324,6 @@ We avoid YAML front‑matter for standard docs pages. Page titles are the H1. Na
 - [API Overview](../reference/api.md)
 - [Patterns](../concepts/patterns.md)
 - [Observability](../concepts/observability.md)
-- [Troubleshooting](../support/troubleshooting.md)
+- [Troubleshooting](../support/TROUBLESHOOTING.md)
 
 By following these conventions, we keep Meridian Runtime's docs predictable, readable, and contributor‑friendly across GitHub and the generated site.

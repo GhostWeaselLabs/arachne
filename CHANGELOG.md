@@ -10,10 +10,7 @@ Owner: GhostWeasel (Lead: doubletap-dave)
 ## [Unreleased]
 
 ### Added
-- M1 scaffold: `pyproject.toml` with uv-managed workflow; tooling configs for ruff, black, mypy, pytest/coverage.
-- Repository layout: `src/meridian-runtime/` package skeletons, `tests/unit` and `tests/integration` smoke tests, `examples/` package placeholder.
-- CI: GitHub Actions workflow to run lint, format check, type check, and tests with coverage gate (≥80%).
-- Documentation updates in README for dev loop with uv; BSD 3-Clause `LICENSE`.
+- Placeholder for upcoming changes after v1.0.0.
 
 ### Changed
 - README Quickstart aligned to M1: dev loop commands (ruff, black, mypy, pytest) and scaffolded layout.
@@ -30,26 +27,33 @@ Owner: GhostWeasel (Lead: doubletap-dave)
 ### Security
 - N/A
 
-## [0.0.0] - YYYY-MM-DD
-Bootstrap version placeholder. Replace with the first tagged release entry.
+## [1.0.0] - 2025-08-06
+First stable release of Meridian Runtime with a SemVer-committed API and complete documentation.
 
 ### Added
-- Project skeleton and documentation map in README.
+- Core primitives: Node, Edge, Subgraph, Scheduler, Message, PortSpec, Policies with bounded edges and explicit overflow policies (block, drop, latest, coalesce).
+- Observability: structured logging and metrics interface; tracing adapter hooks.
+- Utilities: ids, time, validation; scaffolding tools for generate_node.py and generate_subgraph.py.
+- Documentation: Quickstart, API overview, Patterns, Troubleshooting, Observability, and Roadmap.
+- Examples: hello_graph, pipeline_demo (control-plane priorities/backpressure), streaming_coalesce, minimal_hello.
+- GitHub Pages site with Material for MkDocs; improved UX scripts and Meridian Halo initialization.
+- CI: docs deploy workflow; release workflow for PyPI Trusted Publishing (OIDC) triggered on v* tags; post-publish smoke install.
 
 ### Changed
-- N/A
+- Consolidated docs structure and navigation; fixed internal links and added robust client-side enhancements.
 
 ### Deprecated
-- N/A
+- None.
 
 ### Removed
-- N/A
+- Pre-1.0 placeholders and legacy planning docs superseded by roadmap.
 
 ### Fixed
-- N/A
+- Deterministic scheduler edge cases; message header semantics; examples and documentation alignment.
+- Broken nav/link warnings that previously blocked strict builds (deploy workflow relaxed to avoid blocking on warnings).
 
 ### Security
-- N/A
+- Adopted PyPI Trusted Publisher (OIDC) for secretless releases; integrity checks (twine check) in release workflow.
 
 --------------------------------------------------------------------------------
 

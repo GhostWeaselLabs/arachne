@@ -11,8 +11,8 @@ Thanks for your interest in Meridian Runtime! This document explains how to set 
 
 - [Governance and overview](../roadmap/governance-and-overview.md)
 - [Milestones and plans](../roadmap/index.md)
-- [How to report issues](../support/how-to-report-issues.md)
-- [Troubleshooting](../support/troubleshooting.md)
+- [How to report issues](../support/HOW-TO-REPORT-ISSUES.md)
+- [Troubleshooting](../support/TROUBLESHOOTING.md)
 - [CI triage and ownership](./CI-TRIAGE.md)
 - [Docs style guide](./docs-conventions.md)
 
@@ -311,7 +311,7 @@ For major updates, open an issue or small PR to validate impact. Keep dependency
 
 ### Diagnostics
 
-- A future CLI command `meridian diagnostics collect` will generate redacted bundles. Until then, follow [How to Report Issues](../support/how-to-report-issues.md) and [Troubleshooting](../support/troubleshooting.md) for safe data sharing.
+- A future CLI command `meridian diagnostics collect` will generate redacted bundles. Until then, follow [How to Report Issues](../support/HOW-TO-REPORT-ISSUES.md) and [Troubleshooting](../support/TROUBLESHOOTING.md) for safe data sharing.
 
 ---
 
@@ -337,8 +337,8 @@ For major updates, open an issue or small PR to validate impact. Keep dependency
 
 ## Getting Help {#help}
 
-- For how to report issues and request features: [How to Report Issues](../support/how-to-report-issues.md)
-- For common problems: [Troubleshooting](../support/troubleshooting.md)
+- For how to report issues and request features: [How to Report Issues](../support/HOW-TO-REPORT-ISSUES.md)
+- For common problems: [Troubleshooting](../support/TROUBLESHOOTING.md)
 - For templates: [Support Templates](../support/templates/)
 - If you're blocked by a decision or unclear policy, open a discussion or small PR to propose a path forward and request maintainer guidance.
 

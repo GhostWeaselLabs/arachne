@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "meridian-runtime"
-version = "0.0.0"
+version = "1.0.0"
 description = "A minimal, reusable graph runtime for Python with bounded edges, fairness, and observability."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -19,7 +19,7 @@ keywords = [
   "python",
 ]
 classifiers = [
-  "Development Status :: 2 - Pre-Alpha",
+  "Development Status :: 5 - Production/Stable",
   "License :: OSI Approved :: BSD License",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.11",
@@ -29,16 +29,13 @@ classifiers = [
   "Topic :: System :: Distributed Computing",
   "Typing :: Typed",
 ]
-dependencies = [
-    "mkdocs>=1.6.1",
-    "mkdocs-material>=9.6.16",
-]
+dependencies = ["mkdocs>=1.6.1", "mkdocs-material>=9.6.16"]
 
 [project.urls]
 Homepage = "https://ghostweasellabs.github.io/meridian-runtime"
 Repository = "https://github.com/ghostweasellabs/meridian-runtime.git"
-Changelog = "CHANGELOG.md"
-Documentation = "docs/plan/M0-governance-and-overview.md"
+Changelog = "https://github.com/ghostweasellabs/meridian-runtime/blob/main/CHANGELOG.md"
+Documentation = "https://ghostweasellabs.github.io/meridian-runtime"
 
 [project.optional-dependencies]
 dev = [

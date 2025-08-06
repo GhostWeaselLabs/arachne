@@ -1231,7 +1231,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../support/troubleshooting/" class="md-nav__link">
+      <a href="../../support/TROUBLESHOOTING/" class="md-nav__link">
         
   
   
@@ -1254,7 +1254,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../support/how-to-report-issues/" class="md-nav__link">
+      <a href="../../support/HOW-TO-REPORT-ISSUES/" class="md-nav__link">
         
   
   
@@ -2209,7 +2209,7 @@
 <p><strong>Branch name</strong>: <code>feature/m8-release-1-0-0</code></p>
 <p><strong>EARS loop</strong></p>
 <ul>
-<li>Explore: finalize scope, gates, and release workflow</li>
+<li>Explore: finalize scope, gates, and release workflow (docs deploy gate; PR-only merges to main)</li>
 <li>Analyze: verify docs/examples, changelog, versioning, policies</li>
 <li>Implement: release CI, packaging, signing, notes, migration guide</li>
 <li>Specify checks: dry-run to test index; post-publish smoke; downstream compatibility</li>
@@ -2217,20 +2217,26 @@
 </ul>
 <p><strong>Git commands</strong></p>
 <div class="language-bash highlight"><span class="filename">Bash</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>feature/m8-release-1-0-0
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>git<span class="w"> </span>add<span class="w"> </span>-A<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;chore(release): bump version and finalize pyproject metadata&quot;</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>git<span class="w"> </span>add<span class="w"> </span>-A<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;chore(release): CI workflow for build, test, and publish on tag&quot;</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>git<span class="w"> </span>add<span class="w"> </span>-A<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;docs(release): changelog, release notes, migration and deprecation policy&quot;</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>git<span class="w"> </span>add<span class="w"> </span>-A<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;chore(release): signing and integrity checks; test publish flow&quot;</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>git<span class="w"> </span>add<span class="w"> </span>-A<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;chore(release): downstream smoke and docs link validation&quot;</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>feature/m8-release-1-0-0
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># Version bump in pyproject.toml (and version module if present)</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>git<span class="w"> </span>add<span class="w"> </span>-A<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;chore(release): bump version and finalize pyproject metadata&quot;</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Add release CI workflow (tag-based publish)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>git<span class="w"> </span>add<span class="w"> </span>-A<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;chore(release): CI workflow for build, test, and publish on tag&quot;</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># Docs: changelog, notes, migration &amp; deprecation policy</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>git<span class="w"> </span>add<span class="w"> </span>-A<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;docs(release): changelog, release notes, migration and deprecation policy&quot;</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1"># Integrity: signing, twine checks / Trusted Publisher dry run</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>git<span class="w"> </span>add<span class="w"> </span>-A<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;chore(release): signing and integrity checks; test publish flow&quot;</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Validation: downstream smoke and docs build</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>git<span class="w"> </span>add<span class="w"> </span>-A<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;chore(release): downstream smoke and docs link validation&quot;</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>feature/m8-release-1-0-0
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="c1"># Open PR; merge to main only via PR after CI is green</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="c1"># Tag and push the release</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span>v1.0.0<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Release v1.0.0&quot;</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>v1.0.0
 </span></code></pre></div>
 <p>Open PR early; keep commits small and focused</p>
-<p><strong>Status</strong>: Planned<br />
-<strong>Owner</strong>: Core Maintainers<br />
-<strong>Duration</strong>: 2–4 days</p>
 <hr />
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Anchor link to this section">&para;</a></h2>
-<p>This milestone delivers the first stable release of Arachne's graph runtime with a SemVer-committed API. It finalizes documentation, artifacts, and release processes, validates compatibility with downstreams, and publishes packages. It also sets the project's maintenance and deprecation policies to ensure dependable adoption.</p>
+<p>This milestone delivers the first stable release of Meridian Runtime's graph runtime with a SemVer-committed API. It finalizes documentation, artifacts, and release processes, validates compatibility with downstreams, and publishes packages. It also sets the project's maintenance and deprecation policies to ensure dependable adoption.</p>
 <h2 id="ears-requirements">EARS Requirements<a class="headerlink" href="#ears-requirements" title="Anchor link to this section">&para;</a></h2>
 <ul>
 <li>The system shall be versioned following Semantic Versioning, starting at <code>v1.0.0</code>.</li>
@@ -2241,6 +2247,7 @@
 <li>If any gate (lint, type, tests, coverage) fails, the workflow shall abort without publishing.</li>
 <li>The system shall provide a migration guide for any changes since RC or beta, including deprecated APIs.</li>
 <li>The system shall validate that examples run with <code>uv</code> and that documentation links are correct at release time.</li>
+<li>The documentation site shall be built and deployed on GitHub Pages successfully for the tagged release; link checking is enforced on pull requests (not on main) to avoid blocking deploys.</li>
 <li>The system shall define and document a deprecation policy for future changes.</li>
 <li>The system shall verify downstream compatibility by running a smoke CI against an integration repository or a minimal consumer project.</li>
 </ul>
@@ -2318,6 +2325,8 @@
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Docs: quickstart, api, patterns, troubleshooting, observability complete</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Metric catalog verified against code</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Examples: <code>hello_graph</code> and <code>pipeline_demo</code> validated via <code>uv run</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> GitHub Pages deploy is green for the tagged release (live site loads without errors)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Home page visual polish: Meridian Halo renders and no console errors in DevTools</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Docs links validated (no broken references)</li>
 </ul>
 <h3 id="security-and-compliance">Security and Compliance<a class="headerlink" href="#security-and-compliance" title="Anchor link to this section">&para;</a></h3>
@@ -2337,7 +2346,7 @@
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Build: sdist and manylinux/macOS wheels built via PEP 517 backend</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Sign artifacts (GPG) and/or use trusted publisher flow</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Test publish to staging/test index (if available)</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Final publish to PyPI</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Final publish to PyPI (via Trusted Publisher OIDC if configured, or twine upload with repository tokens stored in CI secrets; never commit credentials)</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Verify install: fresh virtual env, <code>uv sync</code>, import smoke, example run</li>
 </ul>
 <h3 id="downstream-readiness">Downstream Readiness<a class="headerlink" href="#downstream-readiness" title="Anchor link to this section">&para;</a></h3>
@@ -2355,12 +2364,22 @@
 <li><code>uv sync</code> (locked)</li>
 <li>Quality gates: ruff, mypy, pytest with coverage</li>
 <li>Build artifacts: sdist, wheels</li>
-<li>Integrity checks: twine check; optional GPG signing</li>
+<li>Integrity checks: twine check; optional GPG signing; verify Trusted Publisher permissions (if used)</li>
 <li>Publish to registry (conditional on all prior steps passing)</li>
-<li>Create VCS release with notes, changelog excerpt, and artifact links</li>
+<li>Create VCS release with notes, changelog excerpt, and artifact links (automated in CI)</li>
 <li>Post-publish smoke: create fresh env and install from registry; run <code>hello_graph</code></li>
 </ol>
 <hr />
+<p>Add a new CI workflow file (to be created): <code>.github/workflows/release.yml</code>
+- on: push tags: ['v*']
+- jobs:
+  - setup Python, uv sync (locked)
+  - quality gates: ruff, mypy, pytest with coverage
+  - build artifacts: sdist + wheels
+  - integrity: twine check; optional GPG sign
+  - publish: PyPI via Trusted Publisher or twine (using repo secrets)
+  - GitHub Release: create and attach notes changelog excerpt
+  - post-publish smoke: fresh env, install from PyPI, run <code>examples/hello_graph</code></p>
 <h2 id="release-notes-template">Release Notes Template<a class="headerlink" href="#release-notes-template" title="Anchor link to this section">&para;</a></h2>
 <p><strong>Title</strong>: Arachne <code>v1.0.0</code> — Minimal, Reusable Graph Runtime for Python</p>
 <p><strong>Summary</strong>:</p>
@@ -2433,7 +2452,9 @@
 <ul>
 <li><code>v1.0.0</code> tag created; artifacts published and signed; release notes available</li>
 <li>CI pipeline green on tag; post-publish install smoke passes on clean env</li>
-<li>Examples runnable; docs complete and cross-linked</li>
+<li>Examples runnable; docs complete and cross-linked; GitHub Pages deploy green for the release tag</li>
+<li>Home page Halo visible; DevTools console clean (no errors)</li>
+<li>GitHub Release created with notes and links to live docs (home, API reference)</li>
 <li>Downstream smoke green with <code>v1.0.0</code> pin</li>
 <li><code>CHANGELOG</code> updated; deprecation and support policies documented</li>
 </ul>
@@ -2552,6 +2573,12 @@
       <script src="../../assets/javascripts/bundle.50899def.min.js"></script>
       
         <script src="../../javascripts/extra.js"></script>
+      
+        <script src="../../javascripts/vendor/meridian-halo.standalone.min.js"></script>
+      
+        <script src="../../javascripts/vendor/meridian-halo-wrapper.js"></script>
+      
+        <script src="../../javascripts/dynamic-header.js"></script>
       
     
   </body>

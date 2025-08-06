@@ -1,0 +1,83 @@
+name: Release (PyPI trusted publishing)
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+  id-token: write # Required for PyPI Trusted Publishing (OIDC)
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-and-publish:
+    name: Build and publish to PyPI
+    runs-on: ubuntu-latest
+
+    env:
+      # Set to '1' to enable verbose build logs if needed
+      VERBOSE: "0"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install build backend
+        run: python -m pip install build
+
+      # Optional quality gates: uncomment to enforce before publish
+      # - name: Install dev tools (ruff, mypy, pytest)
+      #   run: |
+      #     python -m pip install -e .
+      #     python -m pip install ruff mypy pytest pytest-cov
+      #
+      # - name: Lint
+      #   run: ruff check .
+      #
+      # - name: Type-check
+      #   run: mypy src
+      #
+      # - name: Tests
+      #   run: pytest --cov=src --cov-report=term-missing
+
+      - name: Build distributions (sdist + wheels)
+        run: |
+          python -m build
+          ls -al dist
+
+      - name: Verify distributions metadata
+        run: |
+          python -m pip install twine
+          python -m twine check dist/*
+
+      # Publish to PyPI via Trusted Publisher (OIDC). No API token required.
+      # Ensure PyPI Trusted Publisher is configured for this repository and workflow filename.
+      - name: Publish to PyPI (Trusted Publisher)
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true
+
+      - name: Post-publish smoke (install from PyPI)
+        if: ${{ success() }}
+        run: |
+          python -m venv .venv-smoke
+          source .venv-smoke/bin/activate
+          python -m pip install --upgrade pip
+          # Install the exact version from the tag (strip the leading 'v')
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "Installing meridian-runtime==${VERSION}"
+          python -m pip install "meridian-runtime==${VERSION}"
+          python -c "import meridian; print('Imported meridian ok, version:', getattr(meridian, '__version__', 'unknown'))"

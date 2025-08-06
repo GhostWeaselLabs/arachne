@@ -20,7 +20,7 @@
     
     
       
-        <title>Arachne Issue Template (Generic) - Meridian Runtime</title>
+        <title>Meridian Runtime Issue Template (Generic) - Meridian Runtime</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#arachne-issue-template-generic" class="md-skip">
+        <a href="#meridian-runtime-issue-template-generic" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Arachne Issue Template (Generic)
+              Meridian Runtime Issue Template (Generic)
             
           </span>
         </div>
@@ -1225,7 +1225,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../troubleshooting/" class="md-nav__link">
+      <a href="../../TROUBLESHOOTING/" class="md-nav__link">
         
   
   
@@ -1248,7 +1248,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../how-to-report-issues/" class="md-nav__link">
+      <a href="../../HOW-TO-REPORT-ISSUES/" class="md-nav__link">
         
   
   
@@ -1809,7 +1809,7 @@
   
 
 
-<h1 id="arachne-issue-template-generic">Arachne Issue Template (Generic)<a class="headerlink" href="#arachne-issue-template-generic" title="Anchor link to this section">&para;</a></h1>
+<h1 id="meridian-runtime-issue-template-generic">Meridian Runtime Issue Template (Generic)<a class="headerlink" href="#meridian-runtime-issue-template-generic" title="Anchor link to this section">&para;</a></h1>
 <h1 id="owner-ghostweasel-lead-doubletap-dave">Owner: GhostWeasel (Lead: doubletap-dave)<a class="headerlink" href="#owner-ghostweasel-lead-doubletap-dave" title="Anchor link to this section">&para;</a></h1>
 <h1 id="audience-users-and-contributors">Audience: Users and contributors<a class="headerlink" href="#audience-users-and-contributors" title="Anchor link to this section">&para;</a></h1>
 <h1 id="purpose-provide-a-concise-privacyfirst-structure-for-reporting-any-issue-bug-question-usability-concern-docs-gap-etc">Purpose: Provide a concise, privacy‑first structure for reporting any issue (bug, question, usability concern, docs gap, etc.)<a class="headerlink" href="#purpose-provide-a-concise-privacyfirst-structure-for-reporting-any-issue-bug-question-usability-concern-docs-gap-etc" title="Anchor link to this section">&para;</a></h1>
@@ -1832,9 +1832,9 @@
 <ul>
 <li>OS: (e.g., macOS 14.5 / Ubuntu 22.04 / Windows 11)</li>
 <li>Python: 3.11.x</li>
-<li>Arachne version: x.y.z</li>
-<li>Tooling (if relevant): uv version, ruff/mypy/pytest versions</li>
-<li>Installation method: (e.g., pip/uv/local build)</li>
+<li>Meridian Runtime version: x.y.z</li>
+<li>Tooling (if relevant): <code>uv</code> version, <code>ruff</code>/<code>mypy</code>/<code>pytest</code> versions</li>
+<li>Installation method: (e.g., <code>pip</code>/<code>uv</code>/local build)</li>
 </ul>
 <h2 id="4-reproduction-context">4) Reproduction / Context<a class="headerlink" href="#4-reproduction-context" title="Anchor link to this section">&para;</a></h2>
 <!-- Keep it minimal and privacy‑safe. Use sanitized examples and no payload contents. -->
@@ -1844,16 +1844,16 @@
   2.
   3.</li>
 <li>Minimal repro snippet (sanitized; schemas or field names only, no real data):</li>
-<li>Node/edge definitions, bounds, overflow policy (block/drop/latest/coalesce)</li>
-<li>Any relevant lifecycle hooks (on_start/on_message/on_tick/on_stop)</li>
+<li>Node/edge definitions, bounds, overflow policy (<code>block</code>/<code>drop</code>/<code>latest</code>/<code>coalesce</code>)</li>
+<li>Any relevant lifecycle hooks (<code>on_start</code>/<code>on_message</code>/<code>on_tick</code>/<code>on_stop</code>)</li>
 </ul>
 <h2 id="5-observed-vs-expected">5) Observed vs Expected<a class="headerlink" href="#5-observed-vs-expected" title="Anchor link to this section">&para;</a></h2>
 <ul>
 <li>Observed:</li>
 <li>What happened, including any redacted stack traces or error summaries.</li>
 <li>Example structured logs (redact values; keep keys):<ul>
-<li>event="edge_overflow", edge_id="EDGE_A", policy="drop", dropped=123</li>
-<li>event="node_error", node_id="NODE_X", error_type="ValueError", message="<REDACTED>"</li>
+<li><code>event="edge_overflow", edge_id="EDGE_A", policy="drop", dropped=123</code></li>
+<li><code>event="node_error", node_id="NODE_X", error_type="ValueError", message="&lt;REDACTED&gt;"</code></li>
 </ul>
 </li>
 <li>Expected:</li>
@@ -1863,11 +1863,11 @@
 <!-- Include only privacy‑safe artifacts; redact all sensitive data. -->
 <ul>
 <li>Metrics snapshot (counters/gauges; avoid PII in labels):</li>
-<li>queue_depth_example=, overflow_count_example=</li>
+<li><code>queue_depth_example=</code>, <code>overflow_count_example=</code></li>
 <li>Config highlights (redacted):</li>
-<li>Relevant keys and enum/boolean values only. Replace secrets with <REDACTED> or CHECKSUM(...).</li>
+<li>Relevant keys and enum/boolean values only. Replace secrets with <code>&lt;REDACTED&gt;</code> or <code>CHECKSUM(...)</code>.</li>
 <li>Frequency/timing:</li>
-<li>Intermittent/consistent; started after <version/change>.</li>
+<li>Intermittent/consistent; started after <code>&lt;version/change&gt;</code>.</li>
 <li>Workarounds tried:</li>
 <li>What you attempted and results.</li>
 </ul>
@@ -1885,15 +1885,15 @@
 <ul class="task-list">
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I removed payload contents, secrets, tokens, PII, and proprietary identifiers.</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I provided a minimal reproduction or the smallest set of redacted artifacts possible.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I included OS/Python/Arachne versions and relevant tooling info.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I included OS/Python/Meridian Runtime versions and relevant tooling info.</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> I clearly described observed vs expected behavior.</li>
 </ul>
 <h1 id="references">References<a class="headerlink" href="#references" title="Anchor link to this section">&para;</a></h1>
 <ul>
-<li>Troubleshooting: docs/support/TROUBLESHOOTING.md</li>
-<li>How to Report Issues: docs/support/HOW-TO-REPORT-ISSUES.md</li>
-<li>Governance and Overview (M0): docs/plan/M0-governance-and-overview.md</li>
-<li>Contributing Guide: docs/contributing/CONTRIBUTING.md</li>
+<li>Troubleshooting: <code>docs/support/TROUBLESHOOTING.md</code></li>
+<li>How to Report Issues: <code>docs/support/HOW-TO-REPORT-ISSUES.md</code></li>
+<li>Governance and Overview: <code>docs/roadmap/governance-and-overview.md</code></li>
+<li>Contributing Guide: <code>docs/contributing/guide.md</code></li>
 </ul>
 
 
@@ -1972,6 +1972,12 @@
       <script src="../../../assets/javascripts/bundle.50899def.min.js"></script>
       
         <script src="../../../javascripts/extra.js"></script>
+      
+        <script src="../../../javascripts/vendor/meridian-halo.standalone.min.js"></script>
+      
+        <script src="../../../javascripts/vendor/meridian-halo-wrapper.js"></script>
+      
+        <script src="../../../javascripts/dynamic-header.js"></script>
       
     
   </body>
