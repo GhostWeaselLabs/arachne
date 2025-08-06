@@ -18,6 +18,7 @@ on:
 permissions:
   contents: read
   id-token: write
+  pages: write
 
 concurrency:
   group: docs-${{ github.ref }}
@@ -121,8 +122,8 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           
-          # Clone the target repository
-          git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/GhostWeaselLabs/meridian-runtime-docs.git target-repo
+          # Use GitHub CLI to clone and push to the target repository
+          gh repo clone ghostweasellabs/meridian-runtime-docs target-repo
           cd target-repo
           
           # Remove all existing content and copy new site
@@ -137,5 +138,5 @@ jobs:
           Triggered by: ${{ github.event_name }}
           Workflow: ${{ github.workflow }}"
           
-          # Push to the target repository
-          git push origin main
+          # Push to the target repository using GitHub CLI
+          gh repo sync
