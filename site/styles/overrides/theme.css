@@ -1,0 +1,36 @@
+/* Meridian Runtime docs — theme overrides (modular placeholder)
+ *
+ * Purpose:
+ * - Declare palette nudges, CSS variables, and dark/light scheme specifics
+ *   without dumping everything into a single monolithic overrides file.
+ *
+ * Guidance:
+ * - Keep this file small and focused on theme-level tokens (colors, shadows,
+ *   radii, spacing scales) and global variables only.
+ * - Place component-specific rules in components.css, layout tweaks in
+ *   layout.css, typography rules in typography.css, and header-specific rules
+ *   in header.css.
+ *
+ * Suggested usage:
+ * :root {
+ *   --mr-radius-sm: 6px;
+ *   --mr-radius-md: 10px;
+ *   --mr-radius-lg: 14px;
+ *
+ *   /* Example: nudge Material variables if desired (uncomment to use) */
+ *   /* --md-primary-fg-color: #0d0d0d; */
+ *   /* --md-accent-fg-color:  #3f51b5; */
+ *   /* --md-code-bg-color:    rgba(255,255,255,0.04); */
+ * }
+ *
+ * @media (prefers-color-scheme: dark) {
+ *   :root {
+ *     /* Dark-only tokens or adjustments */
+ *     /* --mr-surface-elev-1: rgba(255,255,255,0.02); */
+ *     /* --mr-surface-elev-2: rgba(255,255,255,0.04); */
+ *   }
+ * }
+ */
+
+/* Add theme-level variables or minimal global adjustments below this line. */
+/* Keep this file under ~100 lines; split if it grows beyond that. */

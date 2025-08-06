@@ -55,7 +55,7 @@
 - Unwanted: “If <failure>, the system shall …”
 
 Example:
-- The system shall provide a CLI subcommand `arachne diagnostics collect` that creates a redacted bundle by default.
+- The system shall provide a CLI subcommand `meridian-runtime diagnostics collect` that creates a redacted bundle by default.
 - When a user runs the command, the CLI shall omit secrets and payload contents and include environment summaries.
 - While running under minimal permissions, the CLI shall degrade gracefully and indicate missing non‑essential data.
 - If redaction fails for any field, the system shall default to omission rather than inclusion.
@@ -107,8 +107,8 @@ Example:
 - [ ] Testing and docs plan sketched
 
 # References
-- Governance and Overview (M0): docs/plan/M0-governance-and-overview.md
-- Post‑v1 Roadmap: docs/plan/post-v1-roadmap.md
+- Governance and Overview: docs/roadmap/governance-and-overview.md
+- Future Roadmap: docs/roadmap/future-roadmap.md
 - Contributing Guide: docs/contributing/CONTRIBUTING.md
 - Troubleshooting: docs/support/TROUBLESHOOTING.md
 - How to Report Issues: docs/support/HOW-TO-REPORT-ISSUES.md

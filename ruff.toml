@@ -25,8 +25,25 @@ select = ["E", "F", "I", "UP", "B"]
 # Compatibility with Black's slicing rules, etc.
 ignore = ["E203"]
 
+# Targeted ignores for non-shipping assets (benchmarks, examples, helper scripts, tests)
+[lint.per-file-ignores]
+"benchmarks/*.py" = ["E501", "I001", "UP006", "UP035", "UP038"]
+"examples/**/*.py" = ["I001", "F401", "E501", "UP006", "UP035"]
+"tests/**/*.py" = [
+  "E501",
+  "I001",
+  "UP006",
+  "UP035",
+  "F401",
+  "E402",
+  "F841",
+  "UP038",
+]
+"scripts/check_bare_fences.py" = ["I001", "UP006", "UP035"]
+"src/meridian/core/runtime_plan.py" = ["E501"]
+
 [lint.isort]
-known-first-party = ["arachne"]
+known-first-party = ["meridian-runtime"]
 combine-as-imports = true
 force-sort-within-sections = true
 

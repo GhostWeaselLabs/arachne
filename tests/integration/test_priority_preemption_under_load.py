@@ -191,9 +191,9 @@ def test_priority_preemption_under_load() -> None:
 
     # Interleaving heuristic: some CONTROL should appear before the very end under sustained DATA load
     latest_allowed = max(0, total - max(1, total // 10))
-    assert any(pos < latest_allowed for pos in control_positions), (
-        "CONTROL messages appear only at the tail; expected preemption to interleave CONTROL earlier"
-    )
+    assert any(
+        pos < latest_allowed for pos in control_positions
+    ), "CONTROL messages appear only at the tail; expected preemption to interleave CONTROL earlier"
 
     # Latency bound heuristic:
     # As the control producer emits every 5 ticks, and tick_interval_ms=2, typical spacing is ~10ms.

@@ -1,4 +1,4 @@
-"""Unit tests for arachne.scaffolding.generate_subgraph module."""
+"""Unit tests for meridian-runtime.scaffolding.generate_subgraph module."""
 
 from pathlib import Path
 import tempfile

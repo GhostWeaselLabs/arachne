@@ -1,0 +1,94 @@
+/* Meridian Runtime docs style overrides (modular)
+ *
+ * This file is a thin aggregator that imports small, focused override modules.
+ * Keep each module concise (<100 lines) and scoped to a single concern.
+ *
+ * Order matters — import layout/theme first, then components, then header last
+ * so header-specific rules can reliably override defaults if necessary.
+ */
+
+/* 1) Layout and theme tokens */
+@import "overrides/theme.css";
+@import "overrides/layout.css";
+
+/* 2) Typography and content styling */
+@import "overrides/typography.css";
+
+/* 3) Components (admonitions, tables, code, search, etc.) */
+@import "overrides/components.css";
+
+/* 4) Header-specific tweaks (logo suppression, halo spacing, nav tabs) */
+@import "overrides/header.css";
+
+/* --- Placeholders & guidance -------------------------------------------------
+
+Create the following files under docs/styles/overrides/ if they don't exist yet:
+
+- theme.css
+  Purpose:
+    - Palette nudges, CSS variables, and dark/light scheme specifics.
+  Suggested skeleton:
+    :root {
+      /* Example tokens (adjust to match Material palette if needed) */
+      /* --md-primary-fg-color: #000000; */
+      /* --md-accent-fg-color:  #3f51b5; */
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        /* Dark-specific overrides */
+      }
+    }
+
+- layout.css
+  Purpose:
+    - Grid, container widths, spacing rhythm, responsive breakpoints.
+  Suggested skeleton:
+    .md-grid {
+      /* max-width: 1100px; */
+      /* padding-inline: 16px; */
+    }
+
+- typography.css
+  Purpose:
+    - Headings, body copy, link styles, lists.
+  Suggested skeleton:
+    :root {
+      /* --mr-font-size-base: 16px; */
+    }
+    .md-typeset h1,
+    .md-typeset h2,
+    .md-typeset h3 {
+      /* line-height: 1.2; */
+    }
+
+- components.css
+  Purpose:
+    - Admonitions, tables, code blocks, cards, tabs, details.
+  Suggested skeleton:
+    .md-typeset .admonition {
+      /* border-radius: 6px; */
+    }
+    .md-typeset code {
+      /* font-size: .95em; */
+    }
+
+- header.css
+  Purpose:
+    - Header-specific overrides, including hiding the default logo on first paint,
+      halo mount spacing/z-index, and nav tabs tweaks.
+  Suggested skeleton (with a real rule we rely on):
+    /* Hide the default left header logo immediately to prevent flash.
+       The Halo replaces it via JS. */
+    .md-header__inner > .md-header__button.md-logo {
+      display: none !important;
+    }
+
+    /* Optional: tune spacing between halo and title, or tabs behavior */
+    /* .md-header .md-header__title { gap: 10px; } */
+
+Notes:
+- Keep each module small and focused. If a module grows past ~150 lines, split it.
+- Prefer CSS variables and comments that explain the intent over magic values.
+- Test overrides with both light and dark schemes (Material’s slate theme).
+- When adjusting header behavior, ensure it doesn’t cause layout shifts.
+--------------------------------------------------------------------------- */

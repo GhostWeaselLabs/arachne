@@ -172,7 +172,9 @@ def test_mixed_overflow_policies_under_burst_load() -> None:
     if len(latest_vals) > 3:
         sorted_unique = sorted(set(latest_vals))
         expected_len_if_contiguous = sorted_unique[-1] - sorted_unique[0] + 1
-        assert len(sorted_unique) < expected_len_if_contiguous, "Latest edge appears contiguous unexpectedly"
+        assert (
+            len(sorted_unique) < expected_len_if_contiguous
+        ), "Latest edge appears contiguous unexpectedly"
     # Ensure monotonic non-decreasing trend is plausible (replacement favors latest).
     # We allow occasional out-of-order due to interleaving of ports, so keep this weak:
     assert max(latest_vals) >= latest_vals[-1]
@@ -184,7 +186,9 @@ def test_mixed_overflow_policies_under_burst_load() -> None:
     if len(drop_vals) > 3:
         sorted_unique = sorted(set(drop_vals))
         expected_len_if_contiguous = sorted_unique[-1] - sorted_unique[0] + 1
-        assert len(sorted_unique) < expected_len_if_contiguous, "Drop edge appears contiguous unexpectedly"
+        assert (
+            len(sorted_unique) < expected_len_if_contiguous
+        ), "Drop edge appears contiguous unexpectedly"
 
     # Boundedness: consumption cannot exceed production.
     assert len(drop_vals) <= dprod.sent

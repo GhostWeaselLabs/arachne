@@ -56,8 +56,8 @@ class ThroughputConfig:
     capacity: int = 1024
     run_seconds: float = 3.0
     producer_burst_max: int = 8  # producer emits [1..burst] items per tick with random burst size
-    producer_sleep_ms: int = 0   # optional per-producer sleep to simulate pacing
-    consumer_batch_max: int = 16 # consumer drains up to N per tick
+    producer_sleep_ms: int = 0  # optional per-producer sleep to simulate pacing
+    consumer_batch_max: int = 16  # consumer drains up to N per tick
     fairness_ratio: Tuple[int, int, int] = (4, 2, 1)  # control, high, normal
     max_batch_per_node: int = 128
     idle_sleep_ms: int = 0
@@ -182,12 +182,14 @@ def _histogram_p95_from_buckets(buckets: Dict[float, int], total: int) -> float:
     return float("inf")
 
 
-def _get_scheduler_latency_histogram(metrics_provider: PrometheusMetrics) -> Tuple[float, int, Dict[float, int]]:
+def _get_scheduler_latency_histogram(
+    metrics_provider: PrometheusMetrics,
+) -> Tuple[float, int, Dict[float, int]]:
     """
     Find the scheduler_loop_latency_seconds histogram in the provided PrometheusMetrics.
     Returns tuple (sum, count, buckets). If not found, returns (0.0, 0, {}).
     """
-    # PrometheusMetrics uses namespaced keys like "arachne_scheduler_loop_latency_seconds{...}"
+    # PrometheusMetrics uses namespaced keys like "meridian-runtime_scheduler_loop_latency_seconds{...}"
     # We match the instrument by suffix.
     hists = metrics_provider.get_all_histograms()
     for key, hist in hists.items():
@@ -214,7 +216,9 @@ def _mk_subgraph(cfg: ThroughputConfig) -> Tuple[Subgraph, List[Consumer]]:
 
     # We reuse ports round-robin to keep the topology small yet active.
     for p in range(cfg.producers):
-        producers.append(Producer(f"prod{p}", outs[p % len(outs)], cfg.producer_burst_max, cfg.producer_sleep_ms))
+        producers.append(
+            Producer(f"prod{p}", outs[p % len(outs)], cfg.producer_burst_max, cfg.producer_sleep_ms)
+        )
     for c in range(cfg.consumers):
         consumers.append(Consumer(f"cons{c}", ins[c % len(ins)], cfg.consumer_batch_max))
 
@@ -351,7 +355,11 @@ def test_scheduler_throughput_and_latency_budget_and_artifacts() -> None:
         "budgets": {
             "sched_p95_ms": budget_ms,
         },
-        "result": "pass" if (budget_ms is None or (not math.isnan(p95_s) and p95_s * 1000.0 <= budget_ms)) else "fail",
+        "result": (
+            "pass"
+            if (budget_ms is None or (not math.isnan(p95_s) and p95_s * 1000.0 <= budget_ms))
+            else "fail"
+        ),
     }
     _export_json(export_json, "stress", "throughput_and_latency", artifact_payload)
 

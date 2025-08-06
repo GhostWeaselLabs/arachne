@@ -29,7 +29,10 @@ classifiers = [
   "Topic :: System :: Distributed Computing",
   "Typing :: Typed",
 ]
-dependencies = []
+dependencies = [
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.6.16",
+]
 
 [project.urls]
 Homepage = "https://ghostweasellabs.github.io/meridian-runtime"

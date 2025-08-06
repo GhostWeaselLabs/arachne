@@ -87,12 +87,12 @@ class PrometheusConfig:
 
     Attributes:
       namespace:
-        Prefix applied to metric names (e.g., "arachne_edge_enqueued_total").
+        Prefix applied to metric names (e.g., "meridian-runtime_edge_enqueued_total").
       default_buckets:
         Default histogram buckets used when constructing histograms without explicit buckets.
     """
 
-    namespace: str = "arachne"
+    namespace: str = "meridian-runtime"
     default_buckets: Sequence[float] = field(default_factory=lambda: DEFAULT_LATENCY_BUCKETS)
 
 

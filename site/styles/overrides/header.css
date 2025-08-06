@@ -1,0 +1,45 @@
+/* Meridian Runtime docs — header overrides
+ *
+ * Purpose:
+ * - Prevent the default MkDocs Material logo (“md-logo”) from flashing at first paint.
+ * - Provide a focused place for header-related tweaks (halo spacing, tabs, etc.).
+ *
+ * Notes:
+ * - The animated Meridian Halo is inserted via JavaScript and replaces the md-logo.
+ * - Hiding the md-logo here avoids a jarring flicker before the JS runs.
+ * - Keep this file small and focused; put general styles in other override modules.
+ */
+
+/* 1) Suppress the default left header logo immediately (no flash before Halo mounts) */
+.md-header__inner > .md-header__button.md-logo {
+  display: none !important;
+}
+
+/* 2) Optional: fine‑tune spacing between the Halo and the title
+   (the script also injects minimal styles; uncomment if you want to force it here) */
+/*
+.md-header .md-header__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;  /* adjust as needed */
+}
+*/
+
+/* 3) Optional: ensure the Halo mount has priority stacking without color changes
+   (kept here as a fallback; JS also applies inline z-index and positioning) */
+/*
+.mr-halo-wrap {
+  position: relative;
+  z-index: 2147483647;
+  pointer-events: none;
+}
+*/
+
+/* 4) Optional: nav tabs tweaks (visible when navigation.tabs is enabled) */
+/*
+.md-tabs {
+  /* Example tweaks */
+  /* backdrop-filter: blur(2px); */
+  /* border-bottom: 1px solid rgba(255,255,255,0.06); */
+}
+*/

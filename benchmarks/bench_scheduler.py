@@ -80,7 +80,9 @@ def _artifact_path() -> Path:
     return path
 
 
-def _percentile_from_histogram_cumulative(buckets: Dict[float, int], total: int, pct: float) -> float:
+def _percentile_from_histogram_cumulative(
+    buckets: Dict[float, int], total: int, pct: float
+) -> float:
     """
     Estimate percentile from a cumulative histogram mapping (upper_bound -> cumulative count).
     Includes +Inf as float('inf').

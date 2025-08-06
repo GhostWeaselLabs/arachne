@@ -120,7 +120,9 @@ def test_with_headers_can_override_trace_id() -> None:
         ({"trace_id": "t", "timestamp": 1.23}, {"trace_id", "timestamp"}),
     ],
 )
-def test_header_normalization_matrix(initial_headers: dict[str, Any], expected_present_keys: set[str]) -> None:
+def test_header_normalization_matrix(
+    initial_headers: dict[str, Any], expected_present_keys: set[str]
+) -> None:
     m = Message(type=MessageType.DATA, payload="ok", headers=initial_headers)
     for k in expected_present_keys:
         assert k in m.headers

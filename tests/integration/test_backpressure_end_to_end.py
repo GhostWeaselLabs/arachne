@@ -118,11 +118,11 @@ def test_producer_slowed_by_block_policy_slow_consumer(monkeypatch: pytest.Monke
 
     # Construct scheduler with tight timing and explicit shutdown behavior
     cfg = SchedulerConfig(
-        tick_interval_ms=2,   # very frequent ticks for the producer
+        tick_interval_ms=2,  # very frequent ticks for the producer
         fairness_ratio=(4, 2, 1),
         max_batch_per_node=4,
-        idle_sleep_ms=0,      # minimize idle sleeps to keep test short
-        shutdown_timeout_s=5, # high ceiling; we will request shutdown explicitly
+        idle_sleep_ms=0,  # minimize idle sleeps to keep test short
+        shutdown_timeout_s=5,  # high ceiling; we will request shutdown explicitly
     )
     sched = Scheduler(cfg)
     # Ensure the edge delivering to the consumer is treated as CONTROL band so the

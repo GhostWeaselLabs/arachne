@@ -25,7 +25,7 @@ class Logger:  # pragma: no cover - placeholder to satisfy imports
     - Redaction policies for sensitive fields
     """
 
-    def __init__(self, name: str = "arachne"):
+    def __init__(self, name: str = "meridian-runtime"):
         self._name = name
 
     @property
@@ -50,7 +50,7 @@ class Logger:  # pragma: no cover - placeholder to satisfy imports
         self._emit("DEBUG", event, **fields)
 
 
-def get_logger(name: str = "arachne") -> Logger:  # pragma: no cover
+def get_logger(name: str = "meridian-runtime") -> Logger:  # pragma: no cover
     """
     Factory for a structured logger. In later milestones:
     - Bind contextual fields (e.g., node, subgraph, scheduler)

@@ -25,7 +25,7 @@ class ObservabilityConfig:
         Enable metrics collection when True; a Prometheus-like in-memory provider
         is configured by default.
       metrics_namespace:
-        Namespace/prefix applied to metric names (e.g., "arachne_edge_enqueued_total").
+        Namespace/prefix applied to metric names (e.g., "meridian-runtime_edge_enqueued_total").
 
       tracing_enabled:
         Enable tracing when True.
@@ -42,7 +42,7 @@ class ObservabilityConfig:
 
     # Metrics configuration
     metrics_enabled: bool = False
-    metrics_namespace: str = "arachne"
+    metrics_namespace: str = "meridian-runtime"
 
     # Tracing configuration
     tracing_enabled: bool = False

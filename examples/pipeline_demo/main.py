@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-# Policies imported where used within nodes; no direct use in this module
-# PortSpec usage is encapsulated within node classes; not needed here
-from arachne.core.scheduler import Scheduler
-from arachne.core.subgraph import Subgraph
+from meridian.core import Scheduler, Subgraph, Message, MessageType, Node, PortSpec
+from meridian.core.ports import Port, PortDirection
 
 from .control import KillSwitch
 from .sink import SlowSink
@@ -12,17 +10,8 @@ from .validator import Validator
 
 
 def build_graph() -> tuple[Subgraph, SlowSink]:
-    sg = Subgraph(name="pipeline_demo")
-
-    validator = Validator()
-    transformer = Transformer()
     sink = SlowSink(delay_s=0.01)
-    control = KillSwitch()
-
-    sg.add_node(validator, name="validator")
-    sg.add_node(transformer, name="transformer")
-    sg.add_node(sink, name="sink")
-    sg.add_node(control, name="control")
+    sg = Subgraph.from_nodes("pipeline_demo", [Validator(), Transformer(), sink, KillSwitch()])
 
     # Wire nodes by port names (policies applied in scheduler/edge layer)
     sg.connect(("validator", "out"), ("transformer", "in"), capacity=64)

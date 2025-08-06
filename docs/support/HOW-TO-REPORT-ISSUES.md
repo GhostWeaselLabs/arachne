@@ -1,92 +1,98 @@
 # How to Report Issues (Privacy‑First)
 
-Owner: GhostWeasel (Lead: doubletap-dave)
-Audience: Users and contributors
-Status: Stable
+## Summary
 
 This guide explains how to file effective bug reports and feature requests for Meridian Runtime while protecting sensitive information. It provides step‑by‑step instructions, redaction guidance, and copy‑paste templates.
 
-Key principles
+## Key principles
+
 - Safety by default: avoid sharing secrets, tokens, PII, or domain data payloads.
 - Reproducibility: provide enough context (versions, platform, steps) to reproduce.
 - Precision: include observed vs expected behavior and the smallest failing example you can.
 - Optional diagnostics: prefer anonymized, redacted bundles when sharing runtime context.
 
--------------------------------------------------------------------------------
+---
 
-1) Before You File
+## Before You File
 
 1. Check the docs
-   - README and docs/plan/ for intended behavior.
-   - docs/support/TROUBLESHOOTING.md for known issues and fixes.
+
+    - `README` and `docs/plan/` for intended behavior.
+    - `docs/support/troubleshooting.md` for known issues and fixes.
 
 2. Search existing issues/discussions
-   - Your issue may be known, have a workaround, or be in progress.
+
+    - Your issue may be known, have a workaround, or be in progress.
 
 3. Prepare a minimal reproduction
-   - Reduce your graph to the smallest example that still fails.
-   - Use fake or anonymized data. Do not include payload contents.
 
--------------------------------------------------------------------------------
+    - Reduce your graph to the smallest example that still fails.
+    - Use fake or anonymized data. Do not include payload contents.
 
-2) Information to Include
+## Information to Include
 
-Required
+### Required
+
 - Summary: 1–3 sentences describing the issue or request.
 - Environment: OS, Python version (3.11+), Meridian version.
 - Reproduction: clear steps and minimal, anonymized example (no payload contents).
 - Observed vs Expected: what happened vs what you expected.
 - Logs/errors (redacted): structured logs or error messages with sensitive data removed.
 
-Helpful
+### Helpful
+
 - Scheduler/graph details: edge bounds and overflow policy, node lifecycle hooks in use.
 - Configuration snippets: anonymized and redacted, or checksums if content is sensitive.
-- Metrics snapshots: counts/gauges/histograms as numbers; avoid labels with PII.
-- Timeline: when the problem started, whether it’s intermittent or consistent.
-- Workarounds tried: what you’ve already tested.
+- Metrics snapshots: `counts`/`gauges`/`histograms` as numbers; avoid labels with PII.
+- Timeline: when the problem started, whether it's intermittent or consistent.
+- Workarounds tried: what you've already tested.
 
-Out of scope for reports
+### Out of scope for reports
+
 - Secrets, tokens, credentials, PII, or raw domain payloads.
 - Production‑only identifiers (use placeholders).
 
--------------------------------------------------------------------------------
+## Redaction Guidance
 
-3) Redaction Guidance
+### Always remove or replace
 
-Always remove or replace:
 - Secrets: API keys, tokens, passwords, private URLs.
 - PII: names, emails, phone numbers, addresses, IDs.
 - Payloads: message bodies and data records. If necessary, share schema or field names only.
-- Hostnames and IPs: replace with HOST_A, 203.0.113.10, etc.
-- Internal IDs: replace with opaque placeholders (ID_123 → ID_A).
+- Hostnames and IPs: replace with `HOST_A`, `203.0.113.10`, etc.
+- Internal IDs: replace with opaque placeholders (`ID_123` → `ID_A`).
 
-Best practices:
-- Prefer schemas over data. Example: {user_id: str, balance_cents: int}.
-- For logs, keep structure and keys; replace values with <REDACTED> or representative shapes.
+### Best practices
+
+- Prefer schemas over data. Example: `{user_id: str, balance_cents: int}`.
+- For logs, keep structure and keys; replace values with `<REDACTED>` or representative shapes.
 - For configs, show only relevant keys; mask secrets entirely.
 
--------------------------------------------------------------------------------
+---
 
-4) Optional: Diagnostics Bundle (Planned CLI)
+## Optional: Diagnostics Bundle (Planned CLI)
 
-Planned command: meridian diagnostics collect
+### Planned command: `meridian diagnostics collect`
+
 - Purpose: gather anonymized runtime metadata, environment info, config checksums, recent logs, and a redacted graph/scheduler snapshot.
 - Default posture: privacy‑first. Payload contents are not included by default; sensitive fields are scrubbed.
 - Output: a timestamped archive that you can attach to your issue.
 
-Until the CLI is available:
+### Until the CLI is available:
+
 - Provide a manual bundle with:
-  - Environment: OS, Python, Meridian version.
-  - Graph topology snapshot: node/edge counts, edge bounds and overflow policy (no payload schemas required).
-  - Logs: last 200–500 lines of structured logs, redacted.
-  - Config: relevant settings as key names and boolean/enum values; omit secrets or replace with CHECKSUM(...) if you need to show distinct values without exposing them.
-  - Minimal repro: a small, sanitized script or snippet demonstrating the issue.
 
--------------------------------------------------------------------------------
+    - Environment: OS, Python, Meridian version.
+    - Graph topology snapshot: node/edge counts, edge bounds and overflow policy (no payload schemas required).
+    - Logs: last 200–500 lines of structured logs, redacted.
+    - Config: relevant settings as key names and `boolean`/`enum` values; omit secrets or replace with `CHECKSUM(...)` if you need to show distinct values without exposing them.
+    - Minimal repro: a small, sanitized script or snippet demonstrating the issue.
 
-5) Templates
+## Templates
 
-Bug Report
+### Bug Report
+
+```text
 Title: [Bug] Short description
 
 Summary
@@ -120,9 +126,11 @@ Additional Context (optional)
 - Metrics counters/gauges (no sensitive labels)
 - Workarounds tried
 - Frequency and timing
+```
 
+### Feature Request
 
-Feature Request
+```text
 Title: [Feature] Short description
 
 Summary
@@ -141,33 +149,30 @@ Alternatives Considered
 Impact and Scope
 - Affected modules (runtime, scheduler, observability, CLI).
 - Backward compatibility considerations.
+```
 
--------------------------------------------------------------------------------
+### Examples of Good vs Poor Reports
 
-6) Examples of Good vs Poor Reports
+**Good**
 
-Good
 - Includes versions, OS, and tooling.
 - Provides a minimal repro with redacted logs.
 - Specifies observed vs expected behavior.
 - Avoids payload contents and sensitive details.
 
-Poor
-- “It doesn’t work” without a repro or environment info.
+**Poor**
+
+- "It doesn't work" without a repro or environment info.
 - Shares raw production data or secrets.
 - Vague expectations or no description of the failure mode.
 
--------------------------------------------------------------------------------
+### Where and How to Submit
 
-7) Where and How to Submit
-
-- Use your organization’s chosen issue tracker or discussion forum.
+- Use your organization's chosen issue tracker or discussion forum.
 - If a private channel exists for sensitive cases, prefer it for sharing any diagnostics bundle.
 - If you email or chat, paste the template with redacted content and attach the sanitized bundle.
 
--------------------------------------------------------------------------------
-
-8) Maintainer Process (What to Expect)
+### Maintainer Process (What to Expect)
 
 - Triage: confirm receipt, label, and request missing info if needed.
 - Reproduce: attempt to reproduce with your minimal example.
@@ -175,31 +180,19 @@ Poor
 - Fix/Decision: propose a fix, workaround, or an RFC/DR for larger changes.
 - Verify: ask you to validate a patch or a pre‑release build when applicable.
 
--------------------------------------------------------------------------------
+### Quick Checklist
 
-9) FAQ
+- [x] Read `troubleshooting.md` and search existing issues
+- [x] Collected environment details (OS, Python, Meridian version)
+- [x] Prepared minimal, sanitized reproduction
+- [x] Redacted logs and configs (no secrets, no payload contents)
+- [x] Wrote clear observed vs expected behavior
+- [x] Attached optional sanitized diagnostics bundle (manual for now)
 
-Q: Can I share payload data if it seems harmless?
-A: No. Share schemas or field names only. Keep values redacted.
+### FAQ
 
-Q: I can’t create a minimal repro. What should I do?
-A: Provide the smallest set of sanitized logs, graph configuration details (edge bounds/policies), and environment info you can. Maintainers may suggest a narrowed test based on your description.
+See our [FAQ page](./faq.md) for answers to common questions about issue reporting and support.
 
-Q: What if the issue is security‑sensitive?
-A: Use a private reporting channel if available. Do not share details publicly. Briefly describe impact and request a secure handoff.
+---
 
-Q: Will maintainers sign NDAs?
-A: The project is designed to avoid the need for sensitive data. We strongly prefer anonymized, redacted artifacts.
-
--------------------------------------------------------------------------------
-
-10) Quick Checklist
-
-- [ ] Read TROUBLESHOOTING and search existing issues
-- [ ] Collected environment details (OS, Python, Meridian version)
-- [ ] Prepared minimal, sanitized reproduction
-- [ ] Redacted logs and configs (no secrets, no payload contents)
-- [ ] Wrote clear observed vs expected behavior
-- [ ] Attached optional sanitized diagnostics bundle (manual for now)
-
-Thank you for helping improve Meridian Runtime while keeping your data safe.
+**Thank you for helping improve Meridian Runtime while keeping your data safe.**

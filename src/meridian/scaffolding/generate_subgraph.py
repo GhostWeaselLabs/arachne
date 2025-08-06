@@ -88,7 +88,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Generate Arachne subgraph templates")
     parser.add_argument("--name", required=True, help="Subgraph class name (PascalCase)")
     parser.add_argument("--package", default="subgraphs", help="Package path (dot-separated)")
-    parser.add_argument("--dir", default="src/arachne", help="Target directory")
+    parser.add_argument("--dir", default="src/meridian-runtime", help="Target directory")
     parser.add_argument("--force", action="store_true", help="Overwrite existing files")
     parser.add_argument("--include-tests", action="store_true", help="Generate test files")
 

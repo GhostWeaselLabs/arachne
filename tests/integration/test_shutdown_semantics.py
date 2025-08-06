@@ -203,7 +203,11 @@ def test_shutdown_semantics_and_lifecycle_ordering() -> None:
 
     # Basic sanity: on_start seen for all nodes
     starts = [ev for ev in events if ev[1] == "on_start"]
-    assert set(starts) >= {("producer", "on_start"), ("processor", "on_start"), ("consumer", "on_start")}
+    assert set(starts) >= {
+        ("producer", "on_start"),
+        ("processor", "on_start"),
+        ("consumer", "on_start"),
+    }
 
     # on_stop seen exactly once per node
     stops = [ev for ev in events if ev[1] == "on_stop"]
@@ -227,7 +231,9 @@ def test_shutdown_semantics_and_lifecycle_ordering() -> None:
     # Find the on_stop occurrences in chronological order and check relative ordering.
     stop_order = [n for (n, e) in events if e == "on_stop"]
     # We only assert relative order, not exact adjacency.
-    assert stop_order.index("consumer") < stop_order.index("processor") < stop_order.index("producer")
+    assert (
+        stop_order.index("consumer") < stop_order.index("processor") < stop_order.index("producer")
+    )
 
     # Progress happened: producer sent something, consumer likely received some items.
     assert prod.sent >= 1
