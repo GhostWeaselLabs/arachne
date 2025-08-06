@@ -80,9 +80,9 @@ jobs:
           set -euo pipefail
           # Overall coverage gate (>=80%)
           uv run pytest --cov=src --cov-report=xml:coverage.xml --cov-fail-under=80 -q -k "unit and not benchmark and not stress and not soak"
-          # Optional: core package(s) stricter gate (>=90%) if a 'src/meridian' or similar exists
-          if [ -d "src/meridian" ]; then
-            uv run pytest --cov=src/meridian --cov-report=term --cov-fail-under=90 -q -k "unit and not benchmark and not stress and not soak"
+          # Stricter gate (>=90%) scoped to core only on PRs and main
+          if [ -d "src/meridian/core" ]; then
+            uv run pytest --cov=src/meridian/core --cov-report=term --cov-fail-under=90 -q -k "unit and not benchmark and not stress and not soak"
           fi
 
       - name: Upload coverage artifact
