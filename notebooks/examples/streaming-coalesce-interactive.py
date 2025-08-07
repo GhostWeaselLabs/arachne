@@ -280,10 +280,8 @@ def run_streaming_coalesce_pipeline(b):
                 cap_agg_to_sink=cap_agg_to_sink_slider.value,
             )
 
-        # Run in a separate thread to keep notebook interactive
-        pipeline_thread = threading.Thread(target=sched.run)
-        pipeline_thread.start()
-        pipeline_thread.join() # Wait for pipeline to complete
+        # Run the pipeline
+        sched.run()
 
         with with_context(node="driver"):
             logger.info("demo.stop", "Streaming coalesce demo stopped")

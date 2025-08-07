@@ -24,14 +24,14 @@ class TracingConfig:
         Tracing backend identifier. Supported values:
           - "noop": disable spans (no-op tracer)
           - "inmemory": in-memory tracer for development/testing
-          - "opentelemetry": placeholder for future integration
+          - "opentelemetry": OpenTelemetry integration for production use
       sample_rate:
         Fraction (0.0–1.0) indicating the portion of operations sampled.
-        Note: Sampling behavior depends on the provider implementation.
+        Used by OpenTelemetry tracer; other providers may ignore this setting.
     """
 
     enabled: bool = False
-    provider: str = "noop"  # "opentelemetry" | "noop"
+    provider: str = "noop"  # "opentelemetry" | "inmemory" | "noop"
     sample_rate: float = 0.0
 
 
@@ -91,7 +91,16 @@ class Tracer:
         self._config = config
 
     def start_span(self, name: str, attributes: dict[str, Any] | None = None) -> Span:
-        """Start a new span."""
+        """
+        Start a new span.
+        
+        Parameters:
+          name: Name of the operation being traced.
+          attributes: Optional key-value attributes to attach to the span.
+          
+        Returns:
+          A Span instance for the traced operation.
+        """
         raise NotImplementedError
 
     def is_enabled(self) -> bool:
@@ -149,6 +158,111 @@ class InMemoryTracer(Tracer):
         self.spans.clear()
 
 
+class OpenTelemetryTracer(Tracer):
+    """
+    OpenTelemetry tracer implementation.
+
+    Semantics:
+      - Integrates with OpenTelemetry SDK when available.
+      - Falls back to NoopSpan when OpenTelemetry is not installed or disabled.
+      - Respects sampling configuration from TracingConfig.
+    """
+
+    def __init__(self, config: TracingConfig) -> None:
+        super().__init__(config)
+        self._otel_tracer = None
+        self._initialize_otel()
+
+    def _initialize_otel(self) -> None:
+        """Initialize OpenTelemetry tracer if available."""
+        if not self._config.enabled:
+            return
+
+        try:
+            # Try to import OpenTelemetry
+            from opentelemetry import trace
+            from opentelemetry.sdk.trace import TracerProvider
+            from opentelemetry.sdk.trace.sampling import TraceIdRatioBasedSampler
+            
+            # Configure sampling based on config
+            sampler = TraceIdRatioBasedSampler(self._config.sample_rate)
+            
+            # Set up tracer provider if not already configured
+            if not isinstance(trace.get_tracer_provider(), TracerProvider):
+                trace.set_tracer_provider(TracerProvider(sampler=sampler))
+            
+            # Get tracer instance
+            self._otel_tracer = trace.get_tracer("meridian-runtime")
+            
+        except ImportError:
+            # OpenTelemetry not available, will fall back to NoopSpan
+            pass
+        except Exception:
+            # Any other error in OpenTelemetry setup, fall back gracefully
+            pass
+
+    def start_span(self, name: str, attributes: dict[str, Any] | None = None) -> Span:
+        if not self._config.enabled or self._otel_tracer is None:
+            return NoopSpan(name)
+
+        try:
+            # Start OpenTelemetry span
+            otel_span = self._otel_tracer.start_span(name)
+            
+            # Set attributes if provided
+            if attributes:
+                for key, value in attributes.items():
+                    otel_span.set_attribute(key, str(value))
+            
+            # Extract trace and span IDs
+            span_context = otel_span.get_span_context()
+            trace_id = format(span_context.trace_id, '032x')
+            span_id = format(span_context.span_id, '016x')
+            
+            # Create our span wrapper
+            span = OpenTelemetrySpan(name, trace_id, span_id, otel_span, attributes)
+            return span
+            
+        except Exception:
+            # Fall back to NoopSpan on any error
+            return NoopSpan(name)
+
+
+class OpenTelemetrySpan(Span):
+    """Span implementation that wraps an OpenTelemetry span."""
+
+    def __init__(
+        self,
+        name: str,
+        trace_id: str,
+        span_id: str,
+        otel_span: Any,
+        attributes: dict[str, Any] | None = None,
+    ) -> None:
+        super().__init__(name, trace_id, span_id, attributes)
+        self._otel_span = otel_span
+
+    def set_attribute(self, key: str, value: Any) -> None:
+        """Set an attribute on both our span and the OpenTelemetry span."""
+        if not self._finished:
+            self.attributes[key] = value
+            try:
+                self._otel_span.set_attribute(key, str(value))
+            except Exception:
+                # Ignore errors in OpenTelemetry attribute setting
+                pass
+
+    def finish(self) -> None:
+        """Mark the span as finished and end the OpenTelemetry span."""
+        if not self._finished:
+            self._finished = True
+            try:
+                self._otel_span.end()
+            except Exception:
+                # Ignore errors in OpenTelemetry span ending
+                pass
+
+
 # Global tracer instance
 _global_tracer: Tracer = NoopTracer(TracingConfig())
 
@@ -168,15 +282,19 @@ def configure_tracing(config: TracingConfig) -> None:
 
     Provider mapping:
       - "inmemory": use InMemoryTracer (development/testing)
+      - "opentelemetry": use OpenTelemetryTracer (production)
       - any other value: use NoopTracer (disabled)
 
     Notes:
-      - Future providers (e.g., OpenTelemetry) can extend this mapping.
+      - OpenTelemetry tracer requires the opentelemetry-sdk package to be installed.
+      - If OpenTelemetry is not available, falls back to NoopTracer gracefully.
     """
     global _global_tracer
 
     if config.provider == "inmemory":
         _global_tracer = InMemoryTracer(config)
+    elif config.provider == "opentelemetry":
+        _global_tracer = OpenTelemetryTracer(config)
     else:
         _global_tracer = NoopTracer(config)
 

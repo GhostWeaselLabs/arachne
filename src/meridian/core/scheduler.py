@@ -470,7 +470,12 @@ class Scheduler:
             # Try to put the message
             result = edge.try_put(msg, policy)
 
-            with with_context(node=node.name, port=port, edge_id=edge._edge_id(), message_type=msg.type.value):
+            with with_context(
+                node=node.name, 
+                port=port, 
+                edge_id=edge._edge_id(), 
+                message_type=msg.type.value
+            ):
                 if result == PutResult.BLOCKED:
                     logger.debug("scheduler.backpressure", "Message blocked, applying backpressure")
                     # Mark the SOURCE node as blocked on this edge to prevent further emissions
@@ -484,12 +489,16 @@ class Scheduler:
                         "target_node": edge.target_node,
                         "edge_id": edge._edge_id()
                     }
-                    backpressure_counter = self._metrics.counter("scheduler_backpressure_events_total", backpressure_labels)
+                    backpressure_counter = self._metrics.counter(
+                        "scheduler_backpressure_events_total", backpressure_labels
+                    )
                     backpressure_counter.inc(1)
                     
                     # CRITICAL: Raise an exception to signal backpressure to the emitting node
                     # This will cause the node's emit() call to fail, implementing true backpressure
-                    raise RuntimeError(f"Backpressure: Edge {edge._edge_id()} is full (capacity: {edge.capacity})")
+                    raise RuntimeError(
+                        f"Backpressure: Edge {edge._edge_id()} is full (capacity: {edge.capacity})"
+                    )
                     
                 elif result == PutResult.DROPPED:
                     logger.warn(

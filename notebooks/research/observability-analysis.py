@@ -1,5 +1,4 @@
 
-
 # ---
 # jupyter:
 #   jupytext:
@@ -46,6 +45,7 @@ import threading
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+from IPython.display import display
 
 from meridian.core import Node, Message, MessageType, Port, PortDirection, PortSpec, Subgraph, Scheduler, SchedulerConfig
 from meridian.observability.config import ObservabilityConfig, configure_observability
@@ -93,9 +93,6 @@ class DataProducer(Node):
         if self._i < self._n:
             self.emit("out", Message(type=MessageType.DATA, payload=self._i))
             self._i += 1
-        else:
-            # Stop the producer when done
-            self.stop()
 
 class DataProcessor(Node):
     def __init__(self):
@@ -128,6 +125,57 @@ class DataConsumer(Node):
 # We'll run the graph and collect all logs and metrics generated during its execution.
 
 # +
+class VisualizingScheduler(Scheduler):
+    def __init__(self, config: SchedulerConfig | None = None):
+        super().__init__(config)
+        self.queue_depth_history = {}
+        self.message_counts_history = {}
+        self.timestamps = []
+        self._start_time = time.monotonic()
+
+    def _run_main_loop(self) -> None:
+        # Call the original main loop, but also collect metrics periodically
+        loop_start_time = time.monotonic()
+        last_metric_collection_time = loop_start_time
+        
+        while not self._shutdown:
+            # Collect metrics snapshot
+            current_time = time.monotonic() - self._start_time
+            self.timestamps.append(current_time)
+
+            # Collect queue depths
+            for edge_ref in self._plan.edges.values():
+                edge_id = edge_ref.edge._edge_id()
+                if edge_id not in self.queue_depth_history:
+                    self.queue_depth_history[edge_id] = []
+                self.queue_depth_history[edge_id].append(edge_ref.edge.depth())
+
+            # Collect message counts (counters)
+            for metric_key, counter_obj in metrics.get_all_counters().items():
+                if metric_key.startswith('demo_app_node_messages_total'):
+                    node_name = counter_obj._labels.get('node', 'unknown')
+                    if node_name not in self.message_counts_history:
+                        self.message_counts_history[node_name] = []
+                    self.message_counts_history[node_name].append(counter_obj.value)
+
+            # Run a single iteration of the scheduler's main loop logic
+            super()._run_main_loop_single_iteration() # Assuming such a method exists or can be extracted
+
+            # Sleep to control loop frequency and allow time for external events
+            sleep_time = self._cfg.tick_interval_ms / 1000.0
+            time.sleep(sleep_time)
+
+        # Ensure all history lists have the same length for plotting
+        max_len = max(len(q) for q in self.queue_depth_history.values())
+        for q in self.queue_depth_history.values():
+            while len(q) < max_len:
+                q.append(q[-1] if q else 0) # Pad with last value or 0
+
+        max_len = max(len(q) for q in self.message_counts_history.values())
+        for q in self.message_counts_history.values():
+            while len(q) < max_len:
+                q.append(q[-1] if q else 0) # Pad with last value or 0
+
 def run_simulation_and_collect_data(num_messages=100, capacity=10):
     # Clear previous logs
     log_stream.seek(0)
@@ -141,20 +189,24 @@ def run_simulation_and_collect_data(num_messages=100, capacity=10):
     sg.connect(("producer", "out"), ("processor", "in"), capacity=capacity)
     sg.connect(("processor", "out"), ("consumer", "in"), capacity=capacity)
 
-    scheduler = Scheduler(SchedulerConfig(tick_interval_ms=1, shutdown_timeout_s=10.0))
+    scheduler = VisualizingScheduler(SchedulerConfig(tick_interval_ms=1, shutdown_timeout_s=10.0))
     scheduler.register(sg)
 
     print("🚀 Running simulation and collecting data...")
     scheduler.run()
     print("Simulation finished.")
 
-    # Get all collected metrics
-    all_metrics = get_metrics().get_all_metrics()
+    # Get all collected metrics from the VisualizingScheduler
+    metrics_raw = {
+        "queue_depth_history": scheduler.queue_depth_history,
+        "message_counts_history": scheduler.message_counts_history,
+        "timestamps": scheduler.timestamps,
+    }
     
     # Get all collected logs
     logs = log_stream.getvalue()
     
-    return logs, all_metrics, consumer.received_messages
+    return logs, metrics_raw, consumer.received_messages
 
 logs_raw, metrics_raw, consumed_messages = run_simulation_and_collect_data(num_messages=200, capacity=5)
 
@@ -194,14 +246,14 @@ display(producer_emits.head())
 # +
 # Extract queue depth metrics
 queue_depth_metrics = []
-for metric_name, metric_data in metrics_raw.items():
-    if metric_name.startswith('demo_app_edge_queue_depth'):
-        for timestamp, value in metric_data['values']:
-            labels = metric_data['labels']
+if 'queue_depth_history' in metrics_raw and 'timestamps' in metrics_raw:
+    timestamps = metrics_raw['timestamps']
+    for edge_id, history in metrics_raw['queue_depth_history'].items():
+        for i, value in enumerate(history):
             queue_depth_metrics.append({
-                'timestamp': timestamp,
+                'timestamp': timestamps[i],
                 'value': value,
-                'edge_id': labels.get('edge_id', 'unknown')
+                'edge_id': edge_id
             })
 
 queue_depth_df = pd.DataFrame(queue_depth_metrics)
@@ -214,17 +266,16 @@ if not queue_depth_df.empty:
 else:
     print("No queue depth metrics to display.")
 
-# Extract message processing rates (example using counter deltas)
-# This is a simplified example; for true rates, you'd typically use Prometheus rate queries.
+# Extract message processing rates
 message_counts = []
-for metric_name, metric_data in metrics_raw.items():
-    if metric_name.startswith('demo_app_node_messages_total'):
-        for timestamp, value in metric_data['values']:
-            labels = metric_data['labels']
+if 'message_counts_history' in metrics_raw and 'timestamps' in metrics_raw:
+    timestamps = metrics_raw['timestamps']
+    for node_name, history in metrics_raw['message_counts_history'].items():
+        for i, value in enumerate(history):
             message_counts.append({
-                'timestamp': timestamp,
+                'timestamp': timestamps[i],
                 'value': value,
-                'node': labels.get('node', 'unknown')
+                'node': node_name
             })
 
 message_counts_df = pd.DataFrame(message_counts)
@@ -245,4 +296,3 @@ else:
 # ## 7. Conclusion
 
 # This notebook provides a foundation for analyzing observability data from Meridian Runtime. By combining structured logging with metrics, you can gain deep insights into your dataflow's performance and behavior.
-

@@ -37,12 +37,12 @@ Use cases
 ## Documentation
 
 - Site: https://ghostweasellabs.github.io/meridian-runtime/ — Deployed via GitHub Pages (source: GitHub Actions)
-Docs: https://ghostweasellabs.github.io/meridian-runtime/
 - Quickstart: https://ghostweasellabs.github.io/meridian-runtime/docs/quickstart/
 - API: https://ghostweasellabs.github.io/meridian-runtime/docs/api/
 - Patterns: https://ghostweasellabs.github.io/meridian-runtime/docs/patterns/
 - Observability: https://ghostweasellabs.github.io/meridian-runtime/docs/observability/
 - Troubleshooting: https://ghostweasellabs.github.io/meridian-runtime/docs/troubleshooting/
+- **Interactive Notebooks**: [`notebooks/`](./notebooks/) — Jupyter notebooks for hands-on learning and experimentation
 - Note: Analytics is enabled for the docs site; see mkdocs.yml for the tracking configuration.
 
 
@@ -78,6 +78,19 @@ uv run pytest
 3) Run an example
 ```
 uv run python -m examples.hello_graph.main
+```
+
+4) Try interactive notebooks
+```bash
+# Install notebook dependencies
+uv sync --extra notebooks
+
+# Start Jupyter
+uv run jupyter lab
+
+# Navigate to notebooks/ directory and try:
+# - tutorials/01-getting-started.ipynb
+# - examples/hello-graph-interactive.ipynb
 ```
 
 4) Project layout (M1 scaffold)
@@ -147,52 +160,56 @@ Observability
 ## Minimal Example
 
 producer.py
-```
-from meridian.core import Node, Message
+```python
+from meridian.core import Node, Message, MessageType, Port, PortDirection, PortSpec
 
 class Producer(Node):
     def __init__(self, n=5):
+        super().__init__(
+            name="producer",
+            inputs=[],
+            outputs=[Port("out", PortDirection.OUTPUT, spec=PortSpec("out", int))]
+        )
         self._n = n
         self._i = 0
-
-    def name(self): return "producer"
-    def inputs(self): return {}
-    def outputs(self): return {"out": int}
 
     def on_start(self):
         self._i = 0
 
-    def on_tick(self):
+    def _handle_tick(self):
         if self._i < self._n:
-            self.emit("out", Message(payload=self._i))
+            self.emit("out", Message(type=MessageType.DATA, payload=self._i))
             self._i += 1
 ```
 
 consumer.py
-```
-from meridian.core import Node
+```python
+from meridian.core import Node, Port, PortDirection, PortSpec
 
 class Consumer(Node):
-    def name(self): return "consumer"
-    def inputs(self): return {"in": int}
-    def outputs(self): return {}
+    def __init__(self):
+        super().__init__(
+            name="consumer",
+            inputs=[Port("in", PortDirection.INPUT, spec=PortSpec("in", int))],
+            outputs=[]
+        )
 
-    def on_message(self, port, msg):
+    def _handle_message(self, port, msg):
         print(f"got: {msg.payload}")
 ```
 
 main.py
-```
-from meridian.core import Subgraph, Scheduler
+```python
+from meridian.core import Subgraph, Scheduler, SchedulerConfig
 from producer import Producer
 from consumer import Consumer
 
-g = Subgraph()
+g = Subgraph(name="hello_world")
 g.add_node(Producer(n=3))
 g.add_node(Consumer())
 g.connect(("producer", "out"), ("consumer", "in"), capacity=16)
 
-sch = Scheduler()
+sch = Scheduler(SchedulerConfig())
 sch.register(g)
 sch.run()
 ```

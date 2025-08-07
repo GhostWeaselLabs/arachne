@@ -1,6 +1,6 @@
 # Meridian Runtime Notebooks
 
-This directory contains Jupyter notebooks for interactive learning and development with Meridian Runtime.
+This directory contains interactive Jupyter notebooks for learning, exploring, and developing with Meridian Runtime. All notebooks are compatible with both Jupyter Lab/Notebook and can be run as Python scripts using Jupytext.
 
 ## Tutorials
 
@@ -17,8 +17,80 @@ This directory contains Jupyter notebooks for interactive learning and developme
 * [Sentiment Analysis Pipeline (Interactive)](./examples/sentiment-interactive.ipynb): A real-time sentiment analysis pipeline with interactive controls.
 * [Streaming Coalesce Demo (Interactive)](./examples/streaming-coalesce-interactive.ipynb): A demonstration of the `Coalesce` backpressure policy for merging messages.
 
-## Research
+## Getting Started
 
-* [Performance Analysis](./research/performance-analysis.ipynb): An interactive benchmark for analyzing scheduler performance.
-* [Control-Plane Visualization](./research/control-plane-visualization.ipynb): Visualizes the impact of control-plane messages on queue depth.
-* [Observability Analysis](./research/observability-analysis.ipynb): Analyzes and visualizes observability data (logs and metrics) from Meridian Runtime.
+### Prerequisites
+
+1. **Install notebook dependencies:**
+   ```bash
+   uv sync --extra notebooks
+   ```
+
+2. **Start Jupyter:**
+   ```bash
+   uv run jupyter lab
+   # or
+   uv run jupyter notebook
+   ```
+
+3. **Navigate to notebooks directory:**
+   ```bash
+   cd notebooks
+   ```
+
+### Learning Path
+
+1. **Start with tutorials/** - Begin with `01-getting-started.ipynb`
+2. **Explore examples/** - Interactive versions of production examples
+3. **Advanced research/** - Performance analysis and prototyping tools
+
+## Notebook Categories
+
+### Tutorials (`tutorials/`)
+- **01-getting-started.ipynb**: Basic concepts and first graph
+- **02-backpressure-policies.ipynb**: Interactive policy exploration
+- **03-control-plane-priorities.ipynb**: Priority and control flow
+- **04-observability-basics.ipynb**: Logs, metrics, and tracing
+
+### Examples (`examples/`)
+- **hello-graph-interactive.ipynb**: Interactive version of the hello-graph example
+- **minimal-hello.ipynb**: Minimal "Hello World" example demonstrating core concepts
+- **pipeline-demo-interactive.ipynb**: Data processing pipeline with validation, transformation, and kill switch
+- **sentiment-interactive.ipynb**: Real-time sentiment analysis pipeline with interactive controls
+- **streaming-coalesce-interactive.ipynb**: Demonstration of the Coalesce backpressure policy
+
+## Running Notebooks
+
+### As Jupyter Notebooks
+```bash
+uv run jupyter lab
+# Open any .ipynb file
+```
+
+### As Python Scripts
+```bash
+# Run directly as Python
+uv run python notebooks/examples/minimal-hello.py
+
+# Convert to notebook format
+uv run jupytext --to notebook notebooks/examples/minimal-hello.py
+```
+
+## Technical Notes
+
+### Performance
+- Use shorter timeouts for interactive experiments
+
+### Getting Help
+- Check the main documentation: https://ghostweasellabs.github.io/meridian-runtime/
+- Review existing examples in `examples/` directory
+- Open an issue for notebook-specific problems
+
+## Contributing
+
+When adding new notebooks:
+1. Follow the existing structure and naming conventions
+2. Include clear setup and cleanup sections
+3. Add appropriate documentation and explanations
+4. Test with different user types and gather feedback
+5. Keep notebooks self-contained and reproducible

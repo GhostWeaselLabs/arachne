@@ -10,10 +10,10 @@ Owner: GhostWeasel (Lead: doubletap-dave)
 ## [Unreleased]
 
 ### Added
-- Placeholder for upcoming changes after v1.0.0.
+- Placeholder for upcoming changes after v1.0.1.
 
 ### Changed
-- README Quickstart aligned to M1: dev loop commands (ruff, black, mypy, pytest) and scaffolded layout.
+- N/A
 
 ### Deprecated
 - N/A
@@ -23,6 +23,33 @@ Owner: GhostWeasel (Lead: doubletap-dave)
 
 ### Fixed
 - N/A
+
+### Security
+- N/A
+
+## [1.0.1] - 2025-01-14
+Critical bug fixes for backpressure handling and API consistency.
+
+### Added
+- N/A
+
+### Changed
+- N/A
+
+### Deprecated
+- N/A
+
+### Removed
+- N/A
+
+### Fixed
+- **Critical Backpressure Fix**: Fixed infinite loop in scheduler when nodes emit messages without proper MessageType specification
+- **API Consistency**: Fixed Node constructor to require proper name parameter and port specifications
+- **Message Handling**: Fixed Message constructor to require MessageType.DATA for proper backpressure policy application
+- **Port Specifications**: Fixed PortSpec to include proper type hints for validation
+- **Method Names**: Fixed Node API to use `_handle_tick()` instead of `on_tick()` for proper lifecycle handling
+- **Subgraph Construction**: Fixed Subgraph constructor to require name parameter
+- **Documentation**: Updated getting-started notebook with correct API usage and proper backpressure demonstration
 
 ### Security
 - N/A
