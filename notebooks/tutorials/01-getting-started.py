@@ -46,11 +46,13 @@ if src_path not in sys.path:
 # Let's start by defining a simple producer node that emits a sequence of integers.
 
 # +
-from meridian.core import Node, Message
+from meridian.core import Node, Message, Port, PortDirection, PortSpec
 
 class Producer(Node):
     def __init__(self, n=5):
-        super().__init__(name="producer")
+        # Create output port for emitting messages
+        output_port = Port("out", PortDirection.OUTPUT, spec=PortSpec("out"))
+        super().__init__(name="producer", outputs=[output_port])
         self._n = n
         self._i = 0
 
@@ -71,7 +73,9 @@ from meridian.core import Node
 
 class Consumer(Node):
     def __init__(self):
-        super().__init__(name="consumer")
+        # Create input port for receiving messages
+        input_port = Port("in", PortDirection.INPUT, spec=PortSpec("in"))
+        super().__init__(name="consumer", inputs=[input_port])
 
     def on_message(self, port, msg):
         print(f"Consumed message: {msg.payload}")
