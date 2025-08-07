@@ -20,3 +20,4 @@ This directory contains Jupyter notebooks for interactive learning and developme
 ## Research
 
 * [Performance Analysis](./research/performance-analysis.ipynb): An interactive benchmark for analyzing scheduler performance.
+* [Control-Plane Visualization](./research/control-plane-visualization.ipynb): Visualizes the impact of control-plane messages on queue depth.
