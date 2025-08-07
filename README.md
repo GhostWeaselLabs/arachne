@@ -3,7 +3,7 @@
 Owner: GhostWeasel (Lead: doubletap-dave)
 
 [![CI](https://github.com/GhostWeaselLabs/meridian-runtime/actions/workflows/ci.yml/badge.svg)](https://github.com/GhostWeaselLabs/meridian-runtime/actions/workflows/ci.yml)
-[![Docs](https://img.shields.io/badge/docs-site-brightgreen)](https://ghostweasellabs.github.io/meridian-runtime/)
+[![Docs](https://img.shields.io/badge/docs-site-brightgreen)](https://ghostweasellabs.github.io/meridian-runtime-docs/)
 [![Docs Deploy](https://github.com/GhostWeaselLabs/meridian-runtime/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/GhostWeaselLabs/meridian-runtime/actions/workflows/gh-pages.yml)
 
 Meridian Runtime is a lightweight, framework-agnostic graph runtime for building real‑time dataflows in Python. Model your application as small, single‑responsibility nodes connected by typed edges with bounded queues. Meridian’s scheduler enforces backpressure, supports control‑plane priorities (e.g., kill switch), and emits rich observability signals by design.
@@ -30,18 +30,18 @@ Use cases
 - Public, stable surfaces are documented across Concepts and Reference in the docs site.
 - Deprecations are announced in a MINOR release and remain available for at least one subsequent MINOR before removal.
 - See:
-  - Versioning and policy overview: https://ghostweasellabs.github.io/meridian-runtime/roadmap/release-v1.0.0/
-  - API Reference: https://ghostweasellabs.github.io/meridian-runtime/reference/api/
-  - Concepts (Architecture, Patterns): https://ghostweasellabs.github.io/meridian-runtime/concepts/architecture/
+  - Versioning and policy overview: https://ghostweasellabs.github.io/meridian-runtime-docs/roadmap/release-v1.0.0/
+  - API Reference: https://ghostweasellabs.github.io/meridian-runtime-docs/reference/api/
+  - Concepts (Architecture, Patterns): https://ghostweasellabs.github.io/meridian-runtime-docs/concepts/architecture/
 
 ## Documentation
 
-- Site: https://ghostweasellabs.github.io/meridian-runtime/ — Deployed via GitHub Pages (source: GitHub Actions)
-- Quickstart: https://ghostweasellabs.github.io/meridian-runtime/docs/quickstart/
-- API: https://ghostweasellabs.github.io/meridian-runtime/docs/api/
-- Patterns: https://ghostweasellabs.github.io/meridian-runtime/docs/patterns/
-- Observability: https://ghostweasellabs.github.io/meridian-runtime/docs/observability/
-- Troubleshooting: https://ghostweasellabs.github.io/meridian-runtime/docs/troubleshooting/
+- Site: https://ghostweasellabs.github.io/meridian-runtime-docs/ — Deployed via GitHub Pages (source: GitHub Actions)
+- Quickstart: https://ghostweasellabs.github.io/meridian-runtime-docs/getting-started/quickstart/
+- API: https://ghostweasellabs.github.io/meridian-runtime-docs/reference/api/
+- Patterns: https://ghostweasellabs.github.io/meridian-runtime-docs/concepts/patterns/
+- Observability: https://ghostweasellabs.github.io/meridian-runtime-docs/concepts/observability/
+- Troubleshooting: https://ghostweasellabs.github.io/meridian-runtime-docs/support/troubleshooting/
 - **Interactive Notebooks**: [`notebooks/`](./notebooks/) — Jupyter notebooks for hands-on learning and experimentation
 - Note: Analytics is enabled for the docs site; see mkdocs.yml for the tracking configuration.
 

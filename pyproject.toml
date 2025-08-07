@@ -36,10 +36,10 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://ghostweasellabs.github.io/meridian-runtime"
+Homepage = "https://ghostweasellabs.github.io/meridian-runtime-docs"
 Repository = "https://github.com/ghostweasellabs/meridian-runtime.git"
 Changelog = "https://github.com/ghostweasellabs/meridian-runtime/blob/main/CHANGELOG.md"
-Documentation = "https://ghostweasellabs.github.io/meridian-runtime"
+Documentation = "https://ghostweasellabs.github.io/meridian-runtime-docs"
 
 [project.optional-dependencies]
 dev = [
