@@ -80,7 +80,7 @@ sys.path.insert(0, '../..')
 
 # Import Meridian Runtime
 from meridian.core import (
-    Node, Message, MessageType, Subgraph, Scheduler, 
+    Node, Message, MessageType, Subgraph, Scheduler, SchedulerConfig,
     PortSpec, Port, PortDirection
 )
 from meridian.observability.config import ObservabilityConfig, configure_observability
@@ -225,17 +225,18 @@ Let's create a visual representation of our graph to understand the topology.
     # Create NetworkX graph for visualization
     G = nx.DiGraph()
     
-    # Add nodes
-    for node in graph.nodes:
+    # Add nodes - iterate over node objects, not node names
+    for node in graph.nodes.values():
         G.add_node(node.name, type=node.__class__.__name__)
     
     # Add edges with capacity information
     for edge in graph.edges:
+        policy_name = edge.default_policy.__class__.__name__ if edge.default_policy else "Latest"
         G.add_edge(
             edge.source_node, 
             edge.target_node, 
             capacity=edge.capacity,
-            policy=edge.policy.__class__.__name__
+            policy=policy_name
         )
     
     # Create the visualization
@@ -284,38 +285,69 @@ def run_graph_with_monitoring(graph: Subgraph, producer: InteractiveProducer,
                               consumer: InteractiveConsumer, max_ticks: int = 50):
     \"\"\"Run the graph with real-time monitoring and visualization.\"\"\"
     
-    # Create scheduler
-    scheduler = Scheduler()
+    import threading
+    import time
+    
+    # Create scheduler with short timeout for interactive use
+    scheduler = Scheduler(SchedulerConfig(
+        tick_interval_ms=100,  # Slower ticks for better monitoring
+        shutdown_timeout_s=30.0,  # 30 second timeout
+        idle_sleep_ms=10  # Shorter idle sleep for responsiveness
+    ))
     scheduler.register(graph)
     
     # Monitoring data
     producer_stats = []
     consumer_stats = []
-    tick_count = 0
+    execution_complete = threading.Event()
+    
+    def monitor_execution():
+        \"\"\"Monitor execution and collect stats.\"\"\"
+        start_time = time.time()
+        last_stats_time = start_time
+        
+        while not execution_complete.is_set() and (time.time() - start_time) < 30:
+            current_time = time.time()
+            
+            # Collect stats every 0.5 seconds
+            if current_time - last_stats_time >= 0.5:
+                producer_stat = producer.get_stats()
+                consumer_stat = consumer.get_stats()
+                
+                producer_stats.append(producer_stat)
+                consumer_stats.append(consumer_stat)
+                
+                # Print progress
+                print(f"⏱️  {current_time - start_time:.1f}s: "
+                      f"Producer sent {producer_stat['messages_sent']}, "
+                      f"Consumer received {consumer_stat['messages_received']}")
+                
+                # Check if producer is complete
+                if producer_stat["is_complete"]:
+                    print("✅ Producer completed!")
+                    execution_complete.set()
+                    break
+                
+                last_stats_time = current_time
+            
+            time.sleep(0.1)  # Check every 100ms
     
     print("🚀 Starting graph execution...")
     print("=" * 50)
     
-    # Run for a limited number of ticks to avoid infinite loops
-    while tick_count < max_ticks:
-        # Check if producer is complete
-        producer_stat = producer.get_stats()
-        if producer_stat["is_complete"]:
-            print("✅ Producer completed!")
-            break
-            
-        # Run one tick
-        scheduler._run_one_tick()
-        tick_count += 1
-        
-        # Collect stats every few ticks
-        if tick_count % 5 == 0:
-            producer_stats.append(producer.get_stats())
-            consumer_stats.append(consumer.get_stats())
-            
-            # Print progress
-            print(f"Tick {tick_count}: Producer sent {producer_stat['messages_sent']}, "
-                  f"Consumer received {consumer.get_stats()['messages_received']}")
+    # Start monitoring in a separate thread
+    monitor_thread = threading.Thread(target=monitor_execution)
+    monitor_thread.start()
+    
+    try:
+        # Run the scheduler (this will block until completion or timeout)
+        scheduler.run()
+    except Exception as e:
+        print(f"⚠️  Scheduler error: {e}")
+    finally:
+        # Signal monitoring to stop
+        execution_complete.set()
+        monitor_thread.join(timeout=1.0)
     
     print("=" * 50)
     print("🏁 Graph execution completed!")
