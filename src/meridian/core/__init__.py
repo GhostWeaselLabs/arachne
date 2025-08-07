@@ -22,6 +22,7 @@ from .message import Message, MessageType
 from .node import Node
 from .policies import BackpressureStrategy, RetryPolicy, RoutingPolicy
 from .ports import Port, PortDirection, PortSpec
+# Backward compatible re-exports for scheduler
 from .scheduler import Scheduler, SchedulerConfig
 from .subgraph import Subgraph
 
