@@ -50,11 +50,9 @@ from meridian.core import Node, Message
 
 class Producer(Node):
     def __init__(self, n=5):
+        super().__init__(name="producer")
         self._n = n
         self._i = 0
-
-    def name(self):
-        return "producer"
 
     def on_start(self):
         self._i = 0
@@ -72,8 +70,8 @@ class Producer(Node):
 from meridian.core import Node
 
 class Consumer(Node):
-    def name(self):
-        return "consumer"
+    def __init__(self):
+        super().__init__(name="consumer")
 
     def on_message(self, port, msg):
         print(f"Consumed message: {msg.payload}")
@@ -87,7 +85,7 @@ class Consumer(Node):
 from meridian.core import Subgraph, Scheduler
 
 # Create a subgraph
-graph = Subgraph()
+graph = Subgraph(name="hello_world")
 
 # Add the producer and consumer nodes
 graph.add_node(Producer(n=3))
