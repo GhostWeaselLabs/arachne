@@ -12,3 +12,4 @@ This directory contains Jupyter notebooks for interactive learning and developme
 ## Examples
 
 * [Hello, Graph! (Interactive)](./examples/hello-graph-interactive.ipynb): An interactive version of the `hello-graph` example.
+* [Minimal Hello World](./examples/minimal-hello.ipynb): A minimal "Hello World" example demonstrating core concepts.
