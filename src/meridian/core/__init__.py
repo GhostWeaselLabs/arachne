@@ -19,6 +19,7 @@ from __future__ import annotations
 
 from .edge import Edge
 from .message import Message, MessageType
+# Backward compatible re-exports for Node
 from .node import Node
 from .policies import BackpressureStrategy, RetryPolicy, RoutingPolicy
 from .ports import Port, PortDirection, PortSpec
