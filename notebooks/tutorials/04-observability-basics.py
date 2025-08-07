@@ -117,12 +117,21 @@ from meridian.observability.logging import get_logger, with_context
 from meridian.observability.metrics import get_metrics, time_block
 from meridian.observability.tracing import start_span
 
+from meridian.core import Port, PortDirection, PortSpec
+
 class InstrumentedNode(Node):
+    def __init__(self):
+        super().__init__(
+            name="instrumentednode",
+            inputs=[Port("in", PortDirection.INPUT, spec=PortSpec("in", int))],
+            outputs=[Port("out", PortDirection.OUTPUT, spec=PortSpec("out", int))],
+        )
+
     def _handle_message(self, port, msg):
         logger = get_logger()
         metrics = get_metrics()
 
-        with with_context(node=self.name, port=port, trace_id=msg.get_trace_id()):
+        with with_context(node=self.name, port=port, trace_id=msg.get_trace_id(), message_type=msg.type.value):
             logger.info("processing.start", "Starting message processing")
 
             with time_block("node_processing_duration"):
@@ -135,18 +144,20 @@ class InstrumentedNode(Node):
 
 class Producer(Node):
     def __init__(self, n=5):
+        super().__init__(
+            name="producer",
+            inputs=[],
+            outputs=[Port("out", PortDirection.OUTPUT, spec=PortSpec("out", int))]
+        )
         self._n = n
         self._i = 0
-
-    def name(self):
-        return "producer"
 
     def on_start(self):
         self._i = 0
 
-    def on_tick(self):
+    def _handle_tick(self):
         if self._i < self._n:
-            self.emit("out", Message(payload=self._i))
+            self.emit("out", Message(type=MessageType.DATA, payload=self._i))
             self._i += 1
 
 # Create a subgraph

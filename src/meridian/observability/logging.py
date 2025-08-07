@@ -23,6 +23,7 @@ _trace_id: ContextVar[str | None] = ContextVar("trace_id", default=None)
 _node_context: ContextVar[str | None] = ContextVar("node_context", default=None)
 _edge_context: ContextVar[str | None] = ContextVar("edge_context", default=None)
 _port_context: ContextVar[str | None] = ContextVar("port_context", default=None)
+_message_type_context: ContextVar[str | None] = ContextVar("message_type_context", default=None)
 
 
 @dataclass
@@ -90,6 +91,8 @@ class Logger:
             record["edge_id"] = edge
         if port := _port_context.get():
             record["port"] = port
+        if message_type := _message_type_context.get():
+            record["message_type"] = message_type
 
         # Add extra fields from config
         record.update(self._config.extra_fields)
@@ -205,6 +208,8 @@ class LogContext:
             self._tokens["edge_id"] = _edge_context.set(self._fields["edge_id"])
         if "port" in self._fields:
             self._tokens["port"] = _port_context.set(self._fields["port"])
+        if "message_type" in self._fields:
+            self._tokens["message_type"] = _message_type_context.set(self._fields["message_type"])
         return self
 
     def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
@@ -218,6 +223,8 @@ class LogContext:
                 _edge_context.reset(token)
             elif var_name == "port":
                 _port_context.reset(token)
+            elif var_name == "message_type":
+                _message_type_context.reset(token)
 
 
 def with_context(**fields: Any) -> LogContext:

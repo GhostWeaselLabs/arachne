@@ -57,28 +57,36 @@ if src_path not in sys.path:
 import time
 from meridian.core import Node, Message
 
+from meridian.core import MessageType, Port, PortDirection, PortSpec
+
 class FastProducer(Node):
     def __init__(self, n=10):
+        super().__init__(
+            name="producer",
+            inputs=[],
+            outputs=[Port("out", PortDirection.OUTPUT, spec=PortSpec("out", int))],
+        )
         self._n = n
         self._i = 0
-
-    def name(self):
-        return "producer"
 
     def on_start(self):
         self._i = 0
 
-    def on_tick(self):
+    def _handle_tick(self):
         if self._i < self._n:
             print(f"Producing message {self._i}")
-            self.emit("out", Message(payload=self._i))
+            self.emit("out", Message(type=MessageType.DATA, payload=self._i))
             self._i += 1
 
 class SlowConsumer(Node):
-    def name(self):
-        return "consumer"
+    def __init__(self):
+        super().__init__(
+            name="consumer",
+            inputs=[Port("in", PortDirection.INPUT, spec=PortSpec("in", int))],
+            outputs=[],
+        )
 
-    def on_message(self, port, msg):
+    def _handle_message(self, port, msg):
         print(f"Consuming message: {msg.payload}")
         time.sleep(0.1) # Simulate a slow consumer
 # -
@@ -91,7 +99,7 @@ class SlowConsumer(Node):
 from meridian.core import Subgraph, Scheduler
 
 # Create a subgraph
-graph = Subgraph()
+graph = Subgraph(name="block_policy_graph")
 
 # Add the producer and consumer nodes
 graph.add_node(FastProducer(n=5))
@@ -113,17 +121,18 @@ scheduler.run()
 # The "Drop" policy simply drops the new message when the edge is full.
 
 # +
-from meridian.core import Subgraph, Scheduler, OverflowPolicy
+from meridian.core import Subgraph, Scheduler
+from meridian.core.policies import drop
 
 # Create a subgraph
-graph = Subgraph()
+graph = Subgraph(name="drop_policy_graph")
 
 # Add the producer and consumer nodes
 graph.add_node(FastProducer(n=5))
 graph.add_node(SlowConsumer())
 
 # Connect the producer and consumer with the "Drop" policy
-graph.connect(("producer", "out"), ("consumer", "in"), capacity=2, overflow_policy=OverflowPolicy.DROP)
+graph.connect(("producer", "out"), ("consumer", "in"), capacity=2, policy=drop())
 
 # Create a scheduler and register the subgraph
 scheduler = Scheduler()
@@ -138,17 +147,18 @@ scheduler.run()
 # The "Latest" policy drops the oldest message in the queue to make space for the new message.
 
 # +
-from meridian.core import Subgraph, Scheduler, OverflowPolicy
+from meridian.core import Subgraph, Scheduler
+from meridian.core.policies import latest
 
 # Create a subgraph
-graph = Subgraph()
+graph = Subgraph(name="latest_policy_graph")
 
 # Add the producer and consumer nodes
 graph.add_node(FastProducer(n=5))
 graph.add_node(SlowConsumer())
 
 # Connect the producer and consumer with the "Latest" policy
-graph.connect(("producer", "out"), ("consumer", "in"), capacity=2, overflow_policy=OverflowPolicy.LATEST)
+graph.connect(("producer", "out"), ("consumer", "in"), capacity=2, policy=latest())
 
 # Create a scheduler and register the subgraph
 scheduler = Scheduler()

@@ -1,4 +1,4 @@
-
+from __future__ import annotations
 
 # ---
 # jupyter:
@@ -44,8 +44,6 @@ if src_path not in sys.path:
 # * **KillSwitch**: Publishes a shutdown signal on control-plane edge.
 
 # +
-from __future__ import annotations
-
 import time
 from typing import Any
 
@@ -156,7 +154,7 @@ class SimpleProducer(Node):
 
     def _handle_tick(self) -> None:
         if self.count < self.num_messages:
-            self.emit("out", Message(payload={"id": self.count, "data": f"message_{self.count}"}))
+            self.emit("out", Message(type=MessageType.DATA, payload={"id": self.count, "data": f"message_{self.count}"}))
             self.count += 1
         else:
             # Stop the producer once all messages are sent
@@ -210,4 +208,3 @@ run_button.on_click(run_pipeline)
 
 display(message_slider, run_button, output_area)
 # -
-

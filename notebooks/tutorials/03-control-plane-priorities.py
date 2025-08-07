@@ -88,19 +88,21 @@ class Controller(Node):
 
 class Producer(Node):
     def __init__(self, n=5):
+        super().__init__(
+            name="producer",
+            inputs=[],
+            outputs=[Port("out", PortDirection.OUTPUT, spec=PortSpec("out", int))],
+        )
         self._n = n
         self._i = 0
-
-    def name(self):
-        return "producer"
 
     def on_start(self):
         self._i = 0
 
-    def on_tick(self):
+    def _handle_tick(self):
         if self._i < self._n:
             print(f"Producing message {self._i}")
-            self.emit("out", Message(payload=self._i))
+            self.emit("out", Message(type=MessageType.DATA, payload=self._i))
             self._i += 1
 # -
 

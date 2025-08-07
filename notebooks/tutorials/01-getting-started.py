@@ -1,3 +1,4 @@
+
 # ---
 # jupyter:
 #   jupytext:
@@ -46,23 +47,25 @@ if src_path not in sys.path:
 # Let's start by defining a simple producer node that emits a sequence of integers.
 
 # +
-from meridian.core import Node, Message, Port, PortDirection, PortSpec
+from meridian.core import Node, Message, Port, PortDirection, PortSpec, MessageType
 
 class Producer(Node):
     def __init__(self, n=5):
-        # Create output port for emitting messages
-        output_port = Port("out", PortDirection.OUTPUT, spec=PortSpec("out"))
-        super().__init__(name="producer", outputs=[output_port])
+        super().__init__(
+            name="producer",
+            inputs=[],
+            outputs=[Port("out", PortDirection.OUTPUT, spec=PortSpec("out", int))],
+        )
         self._n = n
         self._i = 0
 
     def on_start(self):
         self._i = 0
 
-    def on_tick(self):
+    def _handle_tick(self):
         if self._i < self._n:
             print(f"Producing message {self._i}")
-            self.emit("out", Message(payload=self._i))
+            self.emit("out", Message(type=MessageType.DATA, payload=self._i))
             self._i += 1
 # -
 
@@ -73,9 +76,11 @@ from meridian.core import Node
 
 class Consumer(Node):
     def __init__(self):
-        # Create input port for receiving messages
-        input_port = Port("in", PortDirection.INPUT, spec=PortSpec("in"))
-        super().__init__(name="consumer", inputs=[input_port])
+        super().__init__(
+            name="consumer",
+            inputs=[Port("in", PortDirection.INPUT, spec=PortSpec("in", int))],
+            outputs=[],
+        )
 
     def on_message(self, port, msg):
         print(f"Consumed message: {msg.payload}")
