@@ -1,15 +1,16 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.17.2
-#   kernelspec:
-#     display_name: Python 3
-#     name: python3
-# ---
+
+'''
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .py
+      format_name: light
+      format_version: '1.5'
+      jupytext_version: 1.17.2
+  kernelspec:
+    display_name: Python 3
+    name: python3
+'''
 
 # # Backpressure Policies
 
@@ -60,7 +61,7 @@ from meridian.core import Node, Message
 from meridian.core import MessageType, Port, PortDirection, PortSpec
 
 class FastProducer(Node):
-    def __init__(self, n=10):
+    def __init__(self, n=20):  # Reduced for better demo
         super().__init__(
             name="producer",
             inputs=[],
@@ -68,15 +69,31 @@ class FastProducer(Node):
         )
         self._n = n
         self._i = 0
+        self.produced_count = 0
+        self.blocked_count = 0
 
     def on_start(self):
         self._i = 0
+        self.produced_count = 0
+        self.blocked_count = 0
 
     def _handle_tick(self):
-        if self._i < self._n:
-            print(f"Producing message {self._i}")
-            self.emit("out", Message(type=MessageType.DATA, payload=self._i))
-            self._i += 1
+        # Try to emit multiple messages per tick to trigger backpressure
+        for _ in range(3):  # Attempt 3 messages per tick
+            if self._i < self._n:
+                try:
+                    msg = Message(type=MessageType.DATA, payload=self._i)
+                    self.emit("out", msg)
+                    print(f"✅ Produced message {self._i}")
+                    self._i += 1
+                    self.produced_count += 1
+                except RuntimeError as e:
+                    if "Backpressure" in str(e):
+                        print(f"🚫 Blocked on message {self._i}")
+                        self.blocked_count += 1
+                        break  # Stop trying more messages this tick
+                    else:
+                        raise  # Re-raise non-backpressure errors
 
 class SlowConsumer(Node):
     def __init__(self):
@@ -85,10 +102,15 @@ class SlowConsumer(Node):
             inputs=[Port("in", PortDirection.INPUT, spec=PortSpec("in", int))],
             outputs=[],
         )
+        self.consumed_count = 0
 
     def _handle_message(self, port, msg):
-        print(f"Consuming message: {msg.payload}")
-        time.sleep(0.1) # Simulate a slow consumer
+        print(f"📥 Consuming message: {msg.payload}")
+        time.sleep(0.2)  # Reduced sleep for better demo timing
+        self.consumed_count += 1
+
+    def reset_counts(self):
+        self.consumed_count = 0
 # -
 
 # ### 4.2. The "Block" Policy (Default)
@@ -96,24 +118,35 @@ class SlowConsumer(Node):
 # The "Block" policy is the default policy. When the edge is full, the producer is blocked until the consumer has processed a message and freed up space in the queue.
 
 # +
-from meridian.core import Subgraph, Scheduler
+from meridian.core import Subgraph, Scheduler, SchedulerConfig
 
 # Create a subgraph
 graph = Subgraph(name="block_policy_graph")
 
 # Add the producer and consumer nodes
-graph.add_node(FastProducer(n=5))
+graph.add_node(FastProducer(n=20))
 graph.add_node(SlowConsumer())
 
-# Connect the producer and consumer with a small capacity
-graph.connect(("producer", "out"), ("consumer", "in"), capacity=2)
+# Connect the producer and consumer with a small capacity and Block policy
+from meridian.core.policies import Block
+graph.connect(("producer", "out"), ("consumer", "in"), capacity=2, policy=Block())
 
 # Create a scheduler and register the subgraph
-scheduler = Scheduler()
+scheduler = Scheduler(SchedulerConfig(tick_interval_ms=50, shutdown_timeout_s=5.0))
 scheduler.register(graph)
 
 # Run the scheduler
+print("🚀 Running Block Policy Demo...")
 scheduler.run()
+
+print(f"\n--- Block Policy Results ---")
+print(f"Messages produced: {graph.nodes['producer'].produced_count}")
+print(f"Messages consumed: {graph.nodes['consumer'].consumed_count}")
+print(f"Messages blocked: {graph.nodes['producer'].blocked_count}")
+print(f"----------------------------\n")
+
+# Reset consumer for next policy
+graph.nodes['consumer'].reset_counts()
 # -
 
 # ### 4.3. The "Drop" Policy
@@ -128,18 +161,28 @@ from meridian.core.policies import drop
 graph = Subgraph(name="drop_policy_graph")
 
 # Add the producer and consumer nodes
-graph.add_node(FastProducer(n=5))
+graph.add_node(FastProducer(n=20))
 graph.add_node(SlowConsumer())
 
 # Connect the producer and consumer with the "Drop" policy
 graph.connect(("producer", "out"), ("consumer", "in"), capacity=2, policy=drop())
 
 # Create a scheduler and register the subgraph
-scheduler = Scheduler()
+scheduler = Scheduler(SchedulerConfig(tick_interval_ms=50, shutdown_timeout_s=5.0))
 scheduler.register(graph)
 
 # Run the scheduler
+print("🚀 Running Drop Policy Demo...")
 scheduler.run()
+
+print(f"\n--- Drop Policy Results ---")
+print(f"Messages produced: {graph.nodes['producer'].produced_count}")
+print(f"Messages consumed: {graph.nodes['consumer'].consumed_count}")
+print(f"Messages dropped: {graph.nodes['producer'].produced_count - graph.nodes['consumer'].consumed_count}")
+print(f"----------------------------\n")
+
+# Reset consumer for next policy
+graph.nodes['consumer'].reset_counts()
 # -
 
 # ### 4.4. The "Latest" Policy
@@ -154,18 +197,72 @@ from meridian.core.policies import latest
 graph = Subgraph(name="latest_policy_graph")
 
 # Add the producer and consumer nodes
-graph.add_node(FastProducer(n=5))
+graph.add_node(FastProducer(n=20))
 graph.add_node(SlowConsumer())
 
 # Connect the producer and consumer with the "Latest" policy
 graph.connect(("producer", "out"), ("consumer", "in"), capacity=2, policy=latest())
 
 # Create a scheduler and register the subgraph
-scheduler = Scheduler()
+scheduler = Scheduler(SchedulerConfig(tick_interval_ms=50, shutdown_timeout_s=5.0))
 scheduler.register(graph)
 
 # Run the scheduler
+print("🚀 Running Latest Policy Demo...")
 scheduler.run()
+
+print(f"\n--- Latest Policy Results ---")
+print(f"Messages produced: {graph.nodes['producer'].produced_count}")
+print(f"Messages consumed: {graph.nodes['consumer'].consumed_count}")
+print(f"Messages replaced: {graph.nodes['producer'].produced_count - graph.nodes['consumer'].consumed_count}")
+print(f"----------------------------\n")
+
+# Reset consumer for next policy
+graph.nodes['consumer'].reset_counts()
+# -
+
+# ### 4.5. The "Coalesce" Policy
+
+# The "Coalesce" policy merges the new message with an existing message in the queue using a user-defined function.
+
+# +
+from meridian.core import Subgraph, Scheduler
+from meridian.core.policies import coalesce
+
+def merge_messages(old_msg, new_msg):
+    """Merge two messages by combining their payloads."""
+    old_payload = old_msg.payload if hasattr(old_msg, 'payload') else str(old_msg)
+    new_payload = new_msg.payload if hasattr(new_msg, 'payload') else str(new_msg)
+    
+    # Create a new Message with combined payload
+    return Message(
+        type=MessageType.DATA,
+        payload=f"{old_payload}+{new_payload}"
+    )
+
+# Create a subgraph
+graph = Subgraph(name="coalesce_policy_graph")
+
+# Add the producer and consumer nodes
+graph.add_node(FastProducer(n=20))
+graph.add_node(SlowConsumer())
+
+# Connect the producer and consumer with the "Coalesce" policy
+graph.connect(("producer", "out"), ("consumer", "in"), capacity=2, policy=coalesce(merge_messages))
+
+# Create a scheduler and register the subgraph
+scheduler = Scheduler(SchedulerConfig(tick_interval_ms=50, shutdown_timeout_s=5.0))
+scheduler.register(graph)
+
+# Run the scheduler
+print("🚀 Running Coalesce Policy Demo...")
+scheduler.run()
+
+print(f"\n--- Coalesce Policy Results ---")
+print(f"Messages produced: {graph.nodes['producer'].produced_count}")
+print(f"Messages consumed: {graph.nodes['consumer'].consumed_count}")
+print(f"Messages coalesced: {graph.nodes['producer'].produced_count - graph.nodes['consumer'].consumed_count}")
+print(f"----------------------------\n")
 # -
 
 # ## 5. Conclusion

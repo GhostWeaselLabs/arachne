@@ -289,7 +289,13 @@ class Node:
 
         # If connected to scheduler, use backpressure-aware emission
         if self._scheduler is not None:
-            self._scheduler._handle_node_emit(self, port, msg)
+            try:
+                self._scheduler._handle_node_emit(self, port, msg)
+            except RuntimeError as e:
+                # Backpressure applied, node is blocked from emitting
+                logger.debug("node.emit_blocked", f"Emit blocked by backpressure: {e}")
+                # Re-raise to signal to the node that it was blocked
+                raise
 
         return msg
 

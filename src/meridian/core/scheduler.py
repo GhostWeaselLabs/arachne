@@ -114,6 +114,7 @@ class Scheduler:
         self._runnable_nodes_gauge = self._metrics.gauge("scheduler_runnable_nodes")
         self._loop_latency_histogram = self._metrics.histogram("scheduler_loop_latency_seconds")
         self._priority_applied_counter = self._metrics.counter("scheduler_priority_applied_total")
+        self._blocked_nodes_gauge = self._metrics.gauge("scheduler_blocked_nodes")
 
     def register(self, unit: Node | Subgraph) -> None:
         """
@@ -245,6 +246,16 @@ class Scheduler:
                 )
                 self._runnable_nodes_gauge.set(runnable_count)
 
+                # Update blocked nodes gauge
+                blocked_count = len(
+                    [
+                        state
+                        for state in self._plan.ready_states.values()
+                        if len(state.blocked_edges) > 0
+                    ]
+                )
+                self._blocked_nodes_gauge.set(blocked_count)
+
                 # Get next runnable node
                 runnable = self._queue.get_next_runnable()
                 if runnable is None:
@@ -257,6 +268,21 @@ class Scheduler:
 
                 node_name, priority = runnable
                 ready_state = self._plan.ready_states[node_name]
+
+                # Check if node is blocked by backpressure
+                if self._is_node_blocked_by_backpressure(node_name):
+                    # Try to unblock by checking if blocked edges have capacity
+                    self._try_unblock_node(node_name)
+                    
+                    # If still blocked, yield cooperatively
+                    if self._is_node_blocked_by_backpressure(node_name):
+                        logger.debug(
+                            "scheduler.node_blocked",
+                            f"Node {node_name} blocked by backpressure, yielding",
+                            blocked_edges=list(ready_state.blocked_edges)
+                        )
+                        sleep(self._cfg.idle_sleep_ms / 1000.0)
+                        continue
 
                 # Record priority application
                 self._priority_applied_counter.inc(1)
@@ -438,22 +464,61 @@ class Scheduler:
 
         for edge in edges:
             # Determine policy based on message type and edge configuration
-            policy = Block() if msg.type == MessageType.CONTROL else None
+            # Use Block policy for CONTROL messages, respect edge's default policy for others
+            policy = Block() if msg.type == MessageType.CONTROL else edge.default_policy
 
             # Try to put the message
             result = edge.try_put(msg, policy)
 
-            with with_context(node=node.name, port=port, edge_id=edge._edge_id()):
+            with with_context(node=node.name, port=port, edge_id=edge._edge_id(), message_type=msg.type.value):
                 if result == PutResult.BLOCKED:
                     logger.debug("scheduler.backpressure", "Message blocked, applying backpressure")
-                    # TODO: Implement cooperative yielding for backpressure
+                    # Mark the SOURCE node as blocked on this edge to prevent further emissions
+                    source_node_name = node.name
+                    if source_node_name in self._plan.ready_states:
+                        self._plan.ready_states[source_node_name].blocked_edges.add(edge._edge_id())
+                    
+                    # Record backpressure metrics
+                    backpressure_labels = {
+                        "source_node": source_node_name,
+                        "target_node": edge.target_node,
+                        "edge_id": edge._edge_id()
+                    }
+                    backpressure_counter = self._metrics.counter("scheduler_backpressure_events_total", backpressure_labels)
+                    backpressure_counter.inc(1)
+                    
+                    # CRITICAL: Raise an exception to signal backpressure to the emitting node
+                    # This will cause the node's emit() call to fail, implementing true backpressure
+                    raise RuntimeError(f"Backpressure: Edge {edge._edge_id()} is full (capacity: {edge.capacity})")
+                    
                 elif result == PutResult.DROPPED:
                     logger.warn(
-                        "scheduler.message_dropped", "Message dropped due to capacity limits"
+                        "scheduler.message_dropped", 
+                        "Message dropped due to capacity limits",
+                        edge_capacity=edge.capacity,
+                        edge_size=edge.depth(),
+                    )
+                elif result == PutResult.REPLACED:
+                    logger.debug(
+                        "scheduler.message_replaced",
+                        "Message replaced older message",
+                        edge_capacity=edge.capacity,
+                        edge_size=edge.depth(),
+                    )
+                elif result == PutResult.COALESCED:
+                    logger.debug(
+                        "scheduler.message_coalesced",
+                        "Message coalesced with existing message",
+                        edge_capacity=edge.capacity,
+                        edge_size=edge.depth(),
                     )
                 else:
                     logger.debug(
-                        "scheduler.message_routed", f"Message routed successfully: {result.name}"
+                        "scheduler.message_routed",
+                        f"Message routed successfully: {result.name}",
+                        result=result.name,
+                        edge_capacity=edge.capacity,
+                        edge_size=edge.depth(),
                     )
 
     def is_running(self) -> bool:
@@ -470,6 +535,7 @@ class Scheduler:
             - nodes_count: number of nodes in the plan (when running)
             - edges_count: number of edges in the plan (when running)
             - runnable_nodes: count of nodes currently runnable (when running)
+            - blocked_nodes: count of nodes currently blocked by backpressure (when running)
         """
         if not self._running:
             return {"status": "stopped"}
@@ -482,9 +548,83 @@ class Scheduler:
             ]
         )
 
+        blocked_count = len(
+            [
+                state
+                for state in self._plan.ready_states.values()
+                if len(state.blocked_edges) > 0
+            ]
+        )
+
         return {
             "status": "running",
             "nodes_count": len(self._plan.nodes),
             "edges_count": len(self._plan.edges),
             "runnable_nodes": runnable_count,
+            "blocked_nodes": blocked_count,
         }
+
+    def _is_node_blocked_by_backpressure(self, node_name: str) -> bool:
+        """
+        Check if a node is blocked by backpressure on any of its output edges.
+
+        Parameters:
+          node_name: Name of the node to check.
+
+        Returns:
+          True if the node has any blocked edges, False otherwise.
+        """
+        ready_state = self._plan.ready_states.get(node_name)
+        return ready_state is not None and len(ready_state.blocked_edges) > 0
+
+    def _try_unblock_node(self, node_name: str) -> None:
+        """
+        Attempt to unblock a node by checking if blocked edges now have capacity.
+
+        Parameters:
+          node_name: Name of the node to try unblocking.
+
+        Behavior:
+          - Checks each blocked edge to see if it now has available capacity.
+          - Removes edges from the blocked set if they're no longer full.
+          - Updates blocked nodes gauge.
+        """
+        logger = get_logger()
+        ready_state = self._plan.ready_states.get(node_name)
+        
+        if ready_state is None or len(ready_state.blocked_edges) == 0:
+            return
+
+        # Check each blocked edge to see if it now has capacity
+        edges_to_unblock = set()
+        
+        for edge_id in ready_state.blocked_edges:
+            edge_ref = self._plan.edges.get(edge_id)
+            if edge_ref and not edge_ref.edge.is_full():
+                edges_to_unblock.add(edge_id)
+                
+                with with_context(node=node_name, edge_id=edge_id):
+                    logger.debug(
+                        "scheduler.edge_unblocked",
+                        f"Edge {edge_id} unblocked, capacity available"
+                    )
+
+        # Remove unblocked edges
+        ready_state.blocked_edges -= edges_to_unblock
+        
+        # Update blocked nodes gauge
+        blocked_count = len(
+            [
+                state
+                for state in self._plan.ready_states.values()
+                if len(state.blocked_edges) > 0
+            ]
+        )
+        self._blocked_nodes_gauge.set(blocked_count)
+
+        if edges_to_unblock:
+            logger.debug(
+                "scheduler.node_unblocked",
+                f"Node {node_name} unblocked on {len(edges_to_unblock)} edges",
+                unblocked_edges=list(edges_to_unblock)
+            )
