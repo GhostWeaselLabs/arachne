@@ -1,4 +1,3 @@
-
 # ---
 # jupyter:
 #   jupytext:
@@ -16,11 +15,28 @@
 
 # This notebook demonstrates the different backpressure policies available in Meridian Runtime. Backpressure is a critical mechanism for building robust and resilient dataflows. It allows a system to gracefully handle load spikes and prevent downstream components from being overwhelmed.
 
-# ## 1. The Problem: Unbounded Queues
+# ## 1. Setup: Add Project to Python Path
+
+# This cell adds the project's `src` directory to the Python path. This is necessary for the notebook to find and import the `meridian` module.
+
+# +
+import sys
+import os
+
+# Add the project's 'src' directory to the Python path
+# This is necessary for the notebook to find the 'meridian' module
+# We assume the notebook is run from the 'notebooks/tutorials' directory.
+src_path = os.path.abspath('../../src')
+if src_path not in sys.path:
+    sys.path.insert(0, src_path)
+    print(f"Added '{src_path}' to the Python path.")
+# -
+
+# ## 2. The Problem: Unbounded Queues
 
 # In a typical dataflow, a producer sends messages to a consumer through a queue. If the producer is faster than the consumer, the queue will grow indefinitely, eventually leading to memory exhaustion and system failure. This is known as the "unbounded queue" problem.
 
-# ## 2. Meridian Runtime's Solution: Bounded Edges and Backpressure Policies
+# ## 3. Meridian Runtime's Solution: Bounded Edges and Backpressure Policies
 
 # Meridian Runtime solves this problem by using **bounded edges** (queues with a fixed capacity) and **backpressure policies**. When an edge is full, the runtime applies a backpressure policy to prevent the queue from growing further. Meridian Runtime provides four backpressure policies:
 
@@ -29,11 +45,11 @@
 # * **Latest**: The oldest message in the queue is dropped to make space for the new message.
 # * **Coalesce**: The new message is merged with an existing message in the queue.
 
-# ## 3. Demonstrating the Backpressure Policies
+# ## 4. Demonstrating the Backpressure Policies
 
 # Let's see how these policies work in practice. We'll use a simple graph with a fast producer and a slow consumer to simulate a load spike.
 
-# ### 3.1. The Base Graph
+# ### 4.1. The Base Graph
 
 # First, let's define the producer and consumer nodes.
 
@@ -67,7 +83,7 @@ class SlowConsumer(Node):
         time.sleep(0.1) # Simulate a slow consumer
 # -
 
-# ### 3.2. The "Block" Policy (Default)
+# ### 4.2. The "Block" Policy (Default)
 
 # The "Block" policy is the default policy. When the edge is full, the producer is blocked until the consumer has processed a message and freed up space in the queue.
 
@@ -92,7 +108,7 @@ scheduler.register(graph)
 scheduler.run()
 # -
 
-# ### 3.3. The "Drop" Policy
+# ### 4.3. The "Drop" Policy
 
 # The "Drop" policy simply drops the new message when the edge is full.
 
@@ -117,7 +133,7 @@ scheduler.register(graph)
 scheduler.run()
 # -
 
-# ### 3.4. The "Latest" Policy
+# ### 4.4. The "Latest" Policy
 
 # The "Latest" policy drops the oldest message in the queue to make space for the new message.
 
@@ -142,6 +158,6 @@ scheduler.register(graph)
 scheduler.run()
 # -
 
-# ## 4. Conclusion
+# ## 5. Conclusion
 
 # This notebook has demonstrated the different backpressure policies available in Meridian Runtime. By choosing the right policy for your use case, you can build robust and resilient dataflows that can handle load spikes and prevent system failures.

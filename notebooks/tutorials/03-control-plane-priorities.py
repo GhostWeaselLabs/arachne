@@ -1,4 +1,3 @@
-
 # ---
 # jupyter:
 #   jupytext:
@@ -16,19 +15,36 @@
 
 # This notebook demonstrates how to use control-plane messages to prioritize critical operations in Meridian Runtime. In a real-time dataflow, it's often necessary to ensure that certain messages, such as shutdown commands or configuration updates, are processed before normal data messages. Meridian Runtime provides a mechanism for this called **control-plane priorities**.
 
-# ## 1. The Problem: Starvation
+# ## 1. Setup: Add Project to Python Path
+
+# This cell adds the project's `src` directory to the Python path. This is necessary for the notebook to find and import the `meridian` module.
+
+# +
+import sys
+import os
+
+# Add the project's 'src' directory to the Python path
+# This is necessary for the notebook to find the 'meridian' module
+# We assume the notebook is run from the 'notebooks/tutorials' directory.
+src_path = os.path.abspath('../../src')
+if src_path not in sys.path:
+    sys.path.insert(0, src_path)
+    print(f"Added '{src_path}' to the Python path.")
+# -
+
+# ## 2. The Problem: Starvation
 
 # In a busy dataflow, it's possible for a high volume of data messages to "starve" control messages. This means that the control messages may be stuck in a queue for a long time, waiting for the data messages to be processed. This can be a serious problem if the control messages are time-sensitive, such as a command to shut down the system.
 
-# ## 2. Meridian Runtime's Solution: Control-Plane Priorities
+# ## 3. Meridian Runtime's Solution: Control-Plane Priorities
 
 # Meridian Runtime solves this problem by giving priority to **control messages**. Control messages are messages with the `MessageType.CONTROL` type. When the scheduler selects the next message to process, it will always choose a control message over a data message if one is available.
 
-# ## 3. Demonstrating Control-Plane Priorities
+# ## 4. Demonstrating Control-Plane Priorities
 
 # Let's see how this works in practice. We'll use a graph with a worker node that can be controlled by a controller node.
 
-# ### 3.1. The Worker and Controller Nodes
+# ### 4.1. The Worker and Controller Nodes
 
 # First, let's define the worker and controller nodes.
 
@@ -88,7 +104,7 @@ class Producer(Node):
             self._i += 1
 # -
 
-# ### 3.2. Building and Running the Graph
+# ### 4.2. Building and Running the Graph
 
 # Now, let's wire up the nodes in a subgraph and run it with the scheduler.
 
@@ -110,6 +126,6 @@ scheduler.register(sg)
 scheduler.run()
 # -
 
-# ## 4. Conclusion
+# ## 5. Conclusion
 
 # This notebook has demonstrated how to use control-plane priorities to ensure that critical messages are processed in a timely manner. By using `MessageType.CONTROL` for your control messages, you can build robust and reliable dataflows that can handle high volumes of data without starving critical operations.

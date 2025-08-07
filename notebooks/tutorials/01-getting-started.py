@@ -1,4 +1,3 @@
-
 # ---
 # jupyter:
 #   jupytext:
@@ -16,7 +15,24 @@
 
 # This notebook provides a hands-on introduction to the core concepts of Meridian Runtime. We'll build a simple "Hello, World!" graph with a producer, a consumer, and an edge connecting them.
 
-# ## 1. Core Concepts
+# ## 1. Setup: Add Project to Python Path
+
+# This cell adds the project's `src` directory to the Python path. This is necessary for the notebook to find and import the `meridian` module.
+
+# +
+import sys
+import os
+
+# Add the project's 'src' directory to the Python path
+# This is necessary for the notebook to find the 'meridian' module
+# We assume the notebook is run from the 'notebooks/tutorials' directory.
+src_path = os.path.abspath('../../src')
+if src_path not in sys.path:
+    sys.path.insert(0, src_path)
+    print(f"Added '{src_path}' to the Python path.")
+# -
+
+# ## 2. Core Concepts
 
 # Meridian Runtime is based on a few simple primitives:
 
@@ -25,7 +41,7 @@
 # * **Subgraph**: A composition of nodes and edges.
 # * **Scheduler**: Drives the execution of the graph.
 
-# ## 2. The "Hello, World!" Example
+# ## 3. The "Hello, World!" Example
 
 # Let's start by defining a simple producer node that emits a sequence of integers.
 
@@ -63,7 +79,7 @@ class Consumer(Node):
         print(f"Consumed message: {msg.payload}")
 # -
 
-# ## 3. Building and Running the Graph
+# ## 4. Building and Running the Graph
 
 # Now, let's wire up the producer and consumer in a subgraph and run it with the scheduler.
 
@@ -88,6 +104,6 @@ scheduler.register(graph)
 scheduler.run()
 # -
 
-# ## 4. Conclusion
+# ## 5. Conclusion
 
 # You've successfully built and run your first Meridian Runtime graph! This simple example demonstrates the core concepts of nodes, edges, and the scheduler. In the next tutorial, we'll explore backpressure and overflow policies.

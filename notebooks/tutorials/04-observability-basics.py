@@ -1,4 +1,3 @@
-
 # ---
 # jupyter:
 #   jupytext:
@@ -16,7 +15,24 @@
 
 # This notebook provides an introduction to the observability features in Meridian Runtime. Observability is crucial for understanding the behavior of a system, debugging issues, and monitoring performance. Meridian Runtime provides a comprehensive observability system with structured logging, metrics collection, and distributed tracing.
 
-# ## 1. Configuring Observability
+# ## 1. Setup: Add Project to Python Path
+
+# This cell adds the project's `src` directory to the Python path. This is necessary for the notebook to find and import the `meridian` module.
+
+# +
+import sys
+import os
+
+# Add the project's 'src' directory to the Python path
+# This is necessary for the notebook to find the 'meridian' module
+# We assume the notebook is run from the 'notebooks/tutorials' directory.
+src_path = os.path.abspath('../../src')
+if src_path not in sys.path:
+    sys.path.insert(0, src_path)
+    print(f"Added '{src_path}' to the Python path.")
+# -
+
+# ## 2. Configuring Observability
 
 # The first step is to configure the observability system. You can do this using the `ObservabilityConfig` class and the `configure_observability` function.
 
@@ -37,7 +53,7 @@ config = ObservabilityConfig(
 configure_observability(config)
 # -
 
-# ## 2. Structured Logging
+# ## 3. Structured Logging
 
 # Meridian Runtime uses structured logging to make it easy to search and analyze logs. You can use the `get_logger` function to get a logger instance.
 
@@ -56,7 +72,7 @@ logger.error("node.error", "Failed to process message",
             port="input")
 # -
 
-# ## 3. Metrics Collection
+# ## 4. Metrics Collection
 
 # Meridian Runtime can collect a variety of metrics to help you monitor the performance of your dataflows. You can use the `get_metrics` function to get a metrics collector instance.
 
@@ -78,7 +94,7 @@ processing_time = metrics.histogram("processing_duration_seconds")
 processing_time.observe(0.125)
 # -
 
-# ## 4. Distributed Tracing
+# ## 5. Distributed Tracing
 
 # Distributed tracing allows you to trace the flow of a request across multiple nodes in your dataflow. You can use the `start_span` function to create a new trace span.
 
@@ -91,7 +107,7 @@ with start_span("process_message", {"message_id": "123", "node": "worker"}):
     print("Processing message...")
 # -
 
-# ## 5. Putting It All Together
+# ## 6. Putting It All Together
 
 # Let's see how to use these features in a simple graph.
 
@@ -145,6 +161,6 @@ scheduler.register(sg)
 scheduler.run()
 # -
 
-# ## 6. Conclusion
+# ## 7. Conclusion
 
 # This notebook has provided a basic introduction to the observability features in Meridian Runtime. By using structured logging, metrics collection, and distributed tracing, you can gain deep insights into the behavior of your dataflows, making it easier to debug issues and monitor performance.
