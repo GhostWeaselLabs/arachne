@@ -1,0 +1,59 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "Meridian Runtime",
+  "description": "A minimal, reusable graph runtime for Python with bounded edges, fairness, and observability for building real-time dataflows.",
+  "folders": [
+    "docs",
+    "src/meridian",
+    "examples",
+    "notebooks/tutorials"
+  ],
+  "excludeFolders": [
+    "tests",
+    "benchmarks",
+    "site",
+    "build",
+    "dist",
+    ".venv",
+    ".uv",
+    ".mypy_cache",
+    ".ruff_cache",
+    ".pytest_cache",
+    "src/meridian_runtime.egg-info"
+  ],
+  "excludeFiles": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "pyproject.toml",
+    "ruff.toml",
+    "mypy.ini",
+    "Makefile",
+    "RELEASE_NOTES.md",
+    "SUPPORT.md"
+  ],
+  "rules": [
+    "Use MessageType.DATA for normal data messages, MessageType.CONTROL for control signals",
+    "Always specify name parameter when creating Node and Subgraph instances",
+    "Define proper input/output ports with PortSpec including type hints",
+    "Use _handle_tick() method for periodic work, not on_tick()",
+    "Implement proper backpressure handling with bounded edges and overflow policies",
+    "Use structured logging and metrics for observability",
+    "Follow the Node lifecycle: on_start, on_message, on_tick, on_stop",
+    "Use uv for package management and development workflow",
+    "Implement proper error handling without exposing sensitive data in logs",
+    "Use PortSpec with type hints for proper validation",
+    "Connect nodes using graph.connect(('source', 'port'), ('target', 'port'))",
+    "Use Scheduler.run() for execution, not manual step-by-step approaches"
+  ],
+  "previousVersions": [
+    {
+      "tag": "v1.0.1",
+      "title": "version 1.0.1"
+    },
+    {
+      "tag": "v1.0.0",
+      "title": "version 1.0.0"
+    }
+  ]
+}
