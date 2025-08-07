@@ -10,7 +10,7 @@ Owner: GhostWeasel (Lead: doubletap-dave)
 ## [Unreleased]
 
 ### Added
-- Placeholder for upcoming changes after v1.0.1.
+- Placeholder for upcoming changes after v1.0.2.
 
 ### Changed
 - N/A
@@ -23,6 +23,29 @@ Owner: GhostWeasel (Lead: doubletap-dave)
 
 ### Fixed
 - N/A
+
+### Security
+- N/A
+
+## [1.0.2] - 2025-01-14
+Documentation URL fixes and Context7 integration.
+
+### Added
+- N/A
+
+### Changed
+- N/A
+
+### Deprecated
+- N/A
+
+### Removed
+- N/A
+
+### Fixed
+- **Documentation URLs**: Fixed PyPI package metadata to point to correct meridian-runtime-docs site
+- **Context7 Integration**: Added comprehensive Context7 configuration for better AI coding assistance
+- **README Links**: Updated all documentation links to point to meridian-runtime-docs repository
 
 ### Security
 - N/A
