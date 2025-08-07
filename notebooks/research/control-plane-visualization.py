@@ -46,7 +46,7 @@ from collections import deque
 
 from meridian.core import Subgraph, Scheduler, Message, MessageType, Node, PortSpec, SchedulerConfig
 from meridian.core.ports import Port, PortDirection
-from meridian.observability.logging import configure_observability, ObservabilityConfig
+from meridian.observability.config import configure_observability, ObservabilityConfig
 
 # Configure observability to capture logs for visualization
 configure_observability(

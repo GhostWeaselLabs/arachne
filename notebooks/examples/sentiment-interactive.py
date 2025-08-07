@@ -346,10 +346,8 @@ def run_sentiment_pipeline(b):
         with with_context(node="driver"):
             logger.info("demo.start", "Starting sentiment pipeline demo")
 
-        # Run in a separate thread to keep notebook interactive
-        pipeline_thread = threading.Thread(target=sched.run)
-        pipeline_thread.start()
-        pipeline_thread.join() # Wait for pipeline to complete
+        # Run the pipeline
+        sched.run()
 
         with with_context(node="driver"):
             logger.info("demo.stop", "Sentiment pipeline stopped")

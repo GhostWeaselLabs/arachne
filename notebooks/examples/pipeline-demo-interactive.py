@@ -137,10 +137,9 @@ class KillSwitch(Node):
 # Now, let's build the pipeline and run it with the scheduler. We'll also add a simple producer to feed messages into the pipeline.
 
 # +
-from meridian.core import Subgraph, Scheduler
+from meridian.core import Subgraph, Scheduler, SchedulerConfig
 import ipywidgets as widgets
 from IPython.display import display
-import threading
 
 class SimpleProducer(Node):
     def __init__(self, num_messages: int = 10):
@@ -154,11 +153,9 @@ class SimpleProducer(Node):
 
     def _handle_tick(self) -> None:
         if self.count < self.num_messages:
+            print(f"Producer emitting message {self.count}")
             self.emit("out", Message(type=MessageType.DATA, payload={"id": self.count, "data": f"message_{self.count}"}))
             self.count += 1
-        else:
-            # Stop the producer once all messages are sent
-            self.stop()
 
 # Create a slider for the number of messages
 message_slider = widgets.IntSlider(value=10, min=1, max=100, step=1, description='Messages:')
@@ -193,15 +190,17 @@ def run_pipeline(b):
         sg.connect(("control", "out"), ("sink", "control"), capacity=1) # Kill switch to sink
 
         # Create scheduler and run
-        sched = Scheduler()
+        sched = Scheduler(SchedulerConfig(
+            tick_interval_ms=100,
+            shutdown_timeout_s=3.0
+        ))
         sched.register(sg)
 
-        # Run in a separate thread to keep notebook interactive
-        pipeline_thread = threading.Thread(target=sched.run)
-        pipeline_thread.start()
-        pipeline_thread.join() # Wait for pipeline to complete
+        # Run the pipeline
+        sched.run()
 
-        print(f"\nSink processed {sink.count} messages.")
+        print(f"\n✅ Validator saw {validator.seen} messages, {validator.valid} were valid")
+        print(f"✅ Sink processed {sink.count} messages")
         print("=== Pipeline Demo Finished ===")
 
 run_button.on_click(run_pipeline)
