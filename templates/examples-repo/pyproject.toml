@@ -1,0 +1,25 @@
+[project]
+name = "meridian-runtime-examples"
+version = "0.0.0"
+description = "Examples and notebooks for Meridian Runtime"
+readme = "README.md"
+requires-python = ">=3.11"
+# NOTE: Pin meridian-runtime appropriately once published
+# dependencies = ["meridian-runtime>=1.0.0"]
+dependencies = [
+    "pytest>=8.2",
+    "ipykernel>=6.29",
+    "nbconvert>=7.16",
+    "jupyter>=1.0",
+]
+
+[tool.uv]
+package = true
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["scripts"]
+
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"

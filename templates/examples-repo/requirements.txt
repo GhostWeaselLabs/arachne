@@ -1,0 +1,5 @@
+# Optional: only if you prefer requirements.txt over pyproject
+pytest>=8.2
+ipykernel>=6.29
+nbconvert>=7.16
+jupyter>=1.0
