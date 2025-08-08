@@ -106,4 +106,5 @@ site/
 # ---- Crush tooling cache ----
 .crush/
 .cursor/
+.kiro/
 .meridian/artifacts/
