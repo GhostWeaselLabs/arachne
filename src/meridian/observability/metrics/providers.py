@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Mapping, Dict
 
-from .config import PrometheusConfig, DEFAULT_LATENCY_BUCKETS
+from .config import DEFAULT_LATENCY_BUCKETS, PrometheusConfig
 from .instruments import Counter, Gauge, Histogram, Metrics
 
 
@@ -74,7 +74,7 @@ class PrometheusHistogram:
         self._name = name
         self._labels = labels or {}
         self._buckets = buckets or list(DEFAULT_LATENCY_BUCKETS)
-        self._bucket_counts: Dict[float, int] = {bucket: 0 for bucket in self._buckets}
+        self._bucket_counts: dict[float, int] = {bucket: 0 for bucket in self._buckets}
         self._bucket_counts[float("inf")] = 0
         self._sum = 0.0
         self._count = 0

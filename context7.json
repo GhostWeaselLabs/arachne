@@ -3,33 +3,29 @@
   "projectTitle": "Meridian Runtime",
   "description": "A minimal, reusable graph runtime for Python with bounded edges, fairness, and observability for building real-time dataflows.",
   "folders": [
-    "docs",
-    "src/meridian",
-    "examples",
-    "notebooks/tutorials",
-    "docs/concepts",
-    "docs/reference",
-    "docs/getting-started",
-    "docs/examples"
+    "docs"
   ],
   "excludeFolders": [
+    "src",
     "tests",
     "benchmarks",
     "site",
     "build",
     "dist",
     "scripts",
+    ".git",
     ".venv",
     ".uv",
     ".mypy_cache",
     ".ruff_cache",
     ".pytest_cache",
-    "src/meridian_runtime.egg-info"
+    "notebooks",
+    "notebooks/.ipynb_checkpoints"
   ],
   "excludeFiles": [
     "CHANGELOG.md",
     "LICENSE",
-    "README.md",
+    "LICENSE.md",
     "pyproject.toml",
     "ruff.toml",
     "mypy.ini",
@@ -38,6 +34,10 @@
     "SUPPORT.md",
     "404.md",
     "tags.md",
+    "mkdocs.yml",
+    "uv.lock",
+    "package.json",
+    "package-lock.json",
     ".DS_Store"
   ],
   "rules": [
@@ -52,7 +52,7 @@
     "Use uv for package management and development workflow",
     "Implement proper error handling without exposing sensitive data in logs",
     "Use PortSpec with type hints for proper validation",
-    "Connect nodes using graph.connect(('source', 'port'), ('target', 'port'))",
+    "Connect nodes using Subgraph.connect(('source', 'port'), ('target', 'port'))",
     "Use Scheduler.run() for execution, not manual step-by-step approaches",
     "Configure observability with ObservabilityConfig before using logging/metrics/tracing",
     "Use Message constructor with type parameter: Message(type=MessageType.DATA, payload=...)",
@@ -73,13 +73,12 @@
     "Configure observability once at application startup, not per-node"
   ],
   "previousVersions": [
-    {
-      "tag": "v1.0.1",
-      "title": "version 1.0.1"
-    },
-    {
-      "tag": "v1.0.0",
-      "title": "version 1.0.0"
-    }
+    { "tag": "v1.2.0", "title": "version 1.2.0" },
+    { "tag": "v1.1.2", "title": "version 1.1.2" },
+    { "tag": "v1.1.1", "title": "version 1.1.1" },
+    { "tag": "v1.1.0", "title": "version 1.1.0" },
+    { "tag": "v1.0.2", "title": "version 1.0.2" },
+    { "tag": "v1.0.1", "title": "version 1.0.1" },
+    { "tag": "v1.0.0", "title": "version 1.0.0" }
   ]
 }

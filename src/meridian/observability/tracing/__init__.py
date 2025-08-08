@@ -1,15 +1,15 @@
 from __future__ import annotations
 
 from .config import TracingConfig
+from .context import generate_trace_id, get_span_id, get_trace_id, set_trace_id, start_span
 from .providers import (
-    get_tracer,
-    configure_tracing,
-    is_tracing_enabled,
     InMemoryTracer,
     NoopTracer,
+    configure_tracing,
+    get_tracer,
+    is_tracing_enabled,
 )
-from .spans import Span, NoopSpan, OpenTelemetrySpan
-from .context import start_span, set_trace_id, get_trace_id, get_span_id, generate_trace_id
+from .spans import NoopSpan, OpenTelemetrySpan, Span
 
 __all__ = [
     "TracingConfig",

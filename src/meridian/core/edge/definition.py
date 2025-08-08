@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+import time
 from collections import deque
 from dataclasses import dataclass, field
-import time
 from typing import Generic, TypeVar
 
 from ...observability.logging import get_logger, with_context

@@ -32,15 +32,14 @@ from __future__ import annotations
 
 import time
 from threading import Thread
-from typing import List
 
 import pytest
 
 from meridian.core.node import Node
+from meridian.core.policies import Drop, Latest
 from meridian.core.ports import Port, PortDirection, PortSpec
 from meridian.core.scheduler import Scheduler, SchedulerConfig
 from meridian.core.subgraph import Subgraph
-from meridian.core.policies import Latest, Drop, PutResult
 
 
 class LatestProducer(Node):
@@ -101,8 +100,8 @@ class MixedConsumer(Node):
             ],
             outputs=[],
         )
-        self.latest_seen: List[int] = []
-        self.drop_seen: List[int] = []
+        self.latest_seen: list[int] = []
+        self.drop_seen: list[int] = []
 
     def _handle_message(self, port: str, msg) -> None:
         # Slow the consumer slightly to keep queues pressured.
@@ -125,8 +124,8 @@ def test_mixed_overflow_policies_under_burst_load() -> None:
 
     # Wire subgraph: two inputs to the same consumer; tiny capacities to induce pressure.
     sg = Subgraph.from_nodes("mixed_policies", [lprod, dprod, cons])
-    e_latest = sg.connect(("latest_prod", "out"), ("consumer", "latest_in"), capacity=2)
-    e_drop = sg.connect(("drop_prod", "out"), ("consumer", "drop_in"), capacity=2)
+    sg.connect(("latest_prod", "out"), ("consumer", "latest_in"), capacity=2)
+    sg.connect(("drop_prod", "out"), ("consumer", "drop_in"), capacity=2)
 
     # Inject edges into producers for direct raw puts (policy applied at put-time).
     # Edges were appended in order; latest edge first, then drop edge.

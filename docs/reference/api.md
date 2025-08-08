@@ -1,4 +1,22 @@
+---
+title: API Reference
+icon: material/api
+---
+
 # API Reference
+
+## Core
+
+- `meridian.core.Message`, `MessageType`
+- `meridian.core.Port`, `PortDirection`, `PortSpec`
+- `meridian.core.Edge`
+- `meridian.core.Node`
+- `meridian.core.Scheduler`, `SchedulerConfig`
+- `meridian.core.Subgraph`
+
+## Built-in nodes
+
+See [Built-in nodes](built-in-nodes.md) for a categorized overview and examples.
 
 Complete API documentation for Meridian Runtime classes, methods, and configuration options.
 

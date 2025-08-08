@@ -18,7 +18,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 # Import core types with TYPE_CHECKING to avoid import cycles at runtime.
-from typing import TYPE_CHECKING, Any, Any as _Any, Protocol, TypeAlias, runtime_checkable
+from typing import TYPE_CHECKING, Any, Protocol, TypeAlias, runtime_checkable
+from typing import Any as _Any
 
 if TYPE_CHECKING:
     from meridian.core.node import Node as _Node

@@ -23,7 +23,6 @@ from __future__ import annotations
 
 import time
 from threading import Thread
-from typing import List, Tuple
 
 import pytest
 
@@ -33,8 +32,7 @@ from meridian.core.ports import Port, PortDirection, PortSpec
 from meridian.core.scheduler import Scheduler, SchedulerConfig
 from meridian.core.subgraph import Subgraph
 
-
-Event = Tuple[str, str]  # (node_name, event_name)
+Event = tuple[str, str]  # (node_name, event_name)
 
 
 class FaultyNode(Node):
@@ -43,7 +41,7 @@ class FaultyNode(Node):
     def __init__(
         self,
         name: str,
-        events: List[Event],
+        events: list[Event],
         raise_on_start: bool = False,
         raise_on_message: bool = False,
         raise_on_tick: bool = False,
@@ -90,7 +88,7 @@ class FaultyNode(Node):
 class HealthyNode(Node):
     """Node that records lifecycle and produces/consumes to prove scheduler continues running."""
 
-    def __init__(self, name: str, events: List[Event], produce: bool = False) -> None:
+    def __init__(self, name: str, events: list[Event], produce: bool = False) -> None:
         super().__init__(
             name=name,
             inputs=(
@@ -106,7 +104,7 @@ class HealthyNode(Node):
         )
         self._events = events
         self._produce = produce
-        self.received: List[int] = []
+        self.received: list[int] = []
         self.sent = 0
 
     def on_start(self) -> None:
@@ -144,7 +142,7 @@ def run_for_short_time(sched: Scheduler, seconds: float = 0.2) -> None:
 
 @pytest.mark.unit
 def test_error_isolation_on_start_does_not_prevent_others_from_starting() -> None:
-    events: List[Event] = []
+    events: list[Event] = []
 
     faulty = FaultyNode("faulty", events, raise_on_start=True)
     healthy = HealthyNode("healthy", events, produce=False)
@@ -171,7 +169,7 @@ def test_error_isolation_on_start_does_not_prevent_others_from_starting() -> Non
 
 @pytest.mark.unit
 def test_error_isolation_on_message_and_tick_other_nodes_progress() -> None:
-    events: List[Event] = []
+    events: list[Event] = []
 
     # Healthy source produces messages; faulty fails on message to exercise isolation.
     source = HealthyNode("source", events, produce=True)
@@ -179,8 +177,8 @@ def test_error_isolation_on_message_and_tick_other_nodes_progress() -> None:
     sink = HealthyNode("sink", events, produce=False)
 
     sg = Subgraph.from_nodes("g", [source, faulty, sink])
-    e1 = sg.connect(("source", "out"), ("faulty", "in"), capacity=2)
-    e2 = sg.connect(("faulty", "out"), ("sink", "in"), capacity=2)
+    sg.connect(("source", "out"), ("faulty", "in"), capacity=2)
+    sg.connect(("faulty", "out"), ("sink", "in"), capacity=2)
 
     cfg = SchedulerConfig(
         tick_interval_ms=2, fairness_ratio=(4, 2, 1), max_batch_per_node=4, idle_sleep_ms=0
@@ -205,7 +203,7 @@ def test_error_isolation_on_message_and_tick_other_nodes_progress() -> None:
 
 @pytest.mark.unit
 def test_error_isolation_on_tick_and_stop() -> None:
-    events: List[Event] = []
+    events: list[Event] = []
 
     # Faulty node fails on tick and on stop; verify shutdown still completes and other node runs.
     faulty = FaultyNode("faulty", events, raise_on_tick=True, raise_on_stop=True)
