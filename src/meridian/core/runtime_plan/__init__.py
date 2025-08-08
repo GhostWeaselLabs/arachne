@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from .plan import (
-    PriorityBand,
-    ReadyState,
     EdgeRef,
     NodeRef,
+    PriorityBand,
+    ReadyState,
     RuntimePlan,
 )
 

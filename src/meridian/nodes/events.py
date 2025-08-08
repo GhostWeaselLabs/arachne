@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 import time
-from typing import Any, Callable, Dict, Iterable
+from collections.abc import Callable
+from typing import Any
 
-from .base import FunctionNode, NodeConfig, setup_standard_ports
 from ..core.message import Message, MessageType
+from .base import FunctionNode, NodeConfig, setup_standard_ports
 
 
 class EventAggregator(FunctionNode):
@@ -33,7 +33,7 @@ class EventAggregator(FunctionNode):
         self._agg = aggregation_fn
         self._key_fn = key_fn
         # key -> (buffer, window_start_ms)
-        self._buffers: Dict[str, tuple[list[Any], float]] = {}
+        self._buffers: dict[str, tuple[list[Any], float]] = {}
         self._default_key = "__all__"
 
     def _now_ms(self) -> float:
@@ -103,7 +103,7 @@ class EventCorrelator(FunctionNode):
         self._complete = completion_predicate
         self._timeout_ms = max(1, int(timeout_ms))
         # key -> (items, first_seen_ms)
-        self._groups: Dict[str, tuple[list[Any], float]] = {}
+        self._groups: dict[str, tuple[list[Any], float]] = {}
 
     def _now_ms(self) -> float:
         return time.monotonic() * 1000.0

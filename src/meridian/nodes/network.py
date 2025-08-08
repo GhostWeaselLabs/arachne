@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
-from typing import Any, Callable, Deque, Dict
-from urllib import request, error as urlerror
 from collections import deque
+from typing import Any
+from urllib import request
 
-from .base import ErrorPolicy, FunctionNode, NodeConfig, create_error_message, setup_standard_ports
 from ..core.message import Message, MessageType
+from .base import ErrorPolicy, FunctionNode, NodeConfig, create_error_message, setup_standard_ports
 
 
 class HttpClientNode(FunctionNode):
@@ -47,7 +46,7 @@ class HttpClientNode(FunctionNode):
         body = payload.get("body")
         data_bytes = None
         if body is not None:
-            if isinstance(body, (bytes, bytearray)):
+            if isinstance(body, bytes | bytearray):
                 data_bytes = bytes(body)
             else:
                 # Encode JSON by default
@@ -116,7 +115,7 @@ class WebSocketNode(FunctionNode):
 
 
 # Simple in-memory message queue registry for tests
-_QUEUES: Dict[str, Deque[Any]] = {}
+_QUEUES: dict[str, deque[Any]] = {}
 
 
 class MessageQueueNode(FunctionNode):

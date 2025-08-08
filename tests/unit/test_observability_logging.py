@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from io import StringIO
 import json
+from io import StringIO
 
 import pytest
 

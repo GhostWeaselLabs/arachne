@@ -24,16 +24,15 @@ from __future__ import annotations
 
 import time
 from threading import Thread
-from typing import Any, List, Tuple
 
 import pytest
 
 from meridian.core.message import Message, MessageType
 from meridian.core.node import Node
 from meridian.core.ports import Port, PortDirection, PortSpec
+from meridian.core.runtime_plan import PriorityBand
 from meridian.core.scheduler import Scheduler, SchedulerConfig
 from meridian.core.subgraph import Subgraph
-from meridian.core.runtime_plan import PriorityBand
 
 
 class DataProducer(Node):
@@ -95,7 +94,7 @@ class SlowConsumer(Node):
             ],
             outputs=[],
         )
-        self.received: List[Tuple[str, int]] = []
+        self.received: list[tuple[str, int]] = []
 
     def _handle_message(self, port: str, msg: Message) -> None:
         # Simulate slow processing

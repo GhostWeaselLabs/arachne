@@ -18,7 +18,6 @@ Timing:
 from __future__ import annotations
 
 import time
-from typing import Any, List
 from threading import Thread
 
 import pytest
@@ -80,7 +79,7 @@ class SlowConsumer(Node):
             inputs=[Port("in", PortDirection.INPUT, spec=PortSpec("in", schema=int))],
             outputs=[],
         )
-        self.received: List[int] = []
+        self.received: list[int] = []
 
     def _handle_message(self, port: str, msg: Message) -> None:
         # Simulate slow processing but keep it short to avoid long wall time

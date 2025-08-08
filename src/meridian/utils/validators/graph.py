@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 # Import core types - will need to check these exist
-from typing import TYPE_CHECKING, Any as _Any, TypeAlias
+from typing import TYPE_CHECKING, TypeAlias
+from typing import Any as _Any
 
 from .issue import Issue
 

@@ -6,9 +6,9 @@ import time
 from meridian.core import Scheduler, SchedulerConfig, Subgraph
 from meridian.nodes import (
     HttpServerNode,
-    Router,
     MapTransformer,
     MetricsCollectorNode,
+    Router,
     SerializationNode,
 )
 

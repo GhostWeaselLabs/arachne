@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import time
-from unittest.mock import patch
 
 from meridian.core import Message, MessageType, Node, Scheduler, SchedulerConfig, Subgraph
 from meridian.core.runtime_plan import PriorityBand
@@ -347,7 +346,7 @@ def test_pending_priority_application() -> None:
     producer = Producer("Producer")
     consumer = Consumer("Consumer")
     sg = Subgraph.from_nodes("Test", [producer, consumer])
-    edge_id = sg.connect(("Producer", "out"), ("Consumer", "in"), capacity=10)
+    sg.connect(("Producer", "out"), ("Consumer", "in"), capacity=10)
 
     # The pending priority should be applied during registration
     sch.register(sg)

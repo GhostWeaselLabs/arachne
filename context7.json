@@ -73,6 +73,7 @@
     "Configure observability once at application startup, not per-node"
   ],
   "previousVersions": [
+    { "tag": "v1.2.0", "title": "version 1.2.0" },
     { "tag": "v1.1.2", "title": "version 1.1.2" },
     { "tag": "v1.1.1", "title": "version 1.1.1" },
     { "tag": "v1.1.0", "title": "version 1.1.0" },

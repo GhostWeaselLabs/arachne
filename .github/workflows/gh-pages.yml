@@ -16,7 +16,7 @@ on:
   workflow_dispatch: {}
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
   pages: write
 
@@ -110,6 +110,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout (for deploy script)
+        uses: actions/checkout@v4
+
       - name: Download site artifact
         uses: actions/download-artifact@v4
         with:
@@ -118,33 +121,7 @@ jobs:
 
       - name: Deploy to meridian-runtime-docs repository
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Prefer a PAT with access to the docs repo; fallback to GITHUB_TOKEN (may lack cross-repo perms)
+          GITHUB_TOKEN: ${{ secrets.DOCS_PUSH_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
-          # Configure git for the target repository
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          
-          # Use GitHub CLI to clone and push to the target repository
-          gh repo clone ghostweasellabs/meridian-runtime-docs target-repo
-          cd target-repo
-          
-          # Remove all existing content and copy new site
-          rm -rf *
-          cp -r ../site/* .
-          
-          # Add all files and commit
-          git add -A
-          
-          # Check if there are changes to commit
-          if git diff --staged --quiet; then
-            echo "No changes to commit - docs are already up to date"
-          else
-            git commit -m "Deploy docs from meridian-runtime@${{ github.sha }}
-            
-            Built from: ${{ github.repository }}@${{ github.sha }}
-            Triggered by: ${{ github.event_name }}
-            Workflow: ${{ github.workflow }}"
-            
-            # Push to the target repository using GitHub CLI
-            gh repo sync --force
-          fi
+          python scripts/deploy-docs.py

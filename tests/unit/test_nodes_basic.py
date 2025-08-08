@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from collections import deque
-from typing import Any, Iterator
+from collections.abc import Iterator
+from typing import Any
 
-from meridian.core import Message, MessageType
+from meridian.core import MessageType
 from meridian.nodes import (
     BatchConsumer,
     BatchProducer,
@@ -11,14 +11,12 @@ from meridian.nodes import (
     DataProducer,
     FlatMapTransformer,
     MapTransformer,
-    NodeConfig,
     NodeTestHarness,
 )
 
 
 def gen_seq(n: int) -> Iterator[int]:
-    for i in range(n):
-        yield i
+    yield from range(n)
 
 
 def test_data_producer_emits_and_completes() -> None:

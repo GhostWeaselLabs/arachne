@@ -1,8 +1,14 @@
 from __future__ import annotations
 
-from meridian.core import Message, MessageType
-from meridian.nodes import Merger, Router, Splitter
-from meridian.nodes import NodeTestHarness, setup_standard_ports, FunctionNode
+from meridian.core import Message
+from meridian.nodes import (
+    FunctionNode,
+    Merger,
+    NodeTestHarness,
+    Router,
+    Splitter,
+    setup_standard_ports,
+)
 
 
 class Tap(FunctionNode):

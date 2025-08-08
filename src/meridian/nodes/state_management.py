@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import time
 from collections import deque
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Callable, Deque, Dict, Optional
+from typing import Any
 
-from .base import FunctionNode, NodeConfig, setup_standard_ports
 from ..core.message import Message, MessageType
+from .base import FunctionNode, NodeConfig, setup_standard_ports
 
 
 class WindowType(str, Enum):
@@ -90,8 +91,8 @@ class SessionNode(FunctionNode):
         self._timeout = max(1, int(session_timeout_ms))
         self._max = max(1, int(max_sessions))
         self._key_fn = session_key_fn or (lambda x: str(x))
-        self._sessions: Dict[str, _Session] = {}
-        self._order: Deque[str] = deque()
+        self._sessions: dict[str, _Session] = {}
+        self._order: deque[str] = deque()
 
     def _now_ms(self) -> float:
         return time.monotonic() * 1000.0
@@ -168,7 +169,7 @@ class CounterNode(FunctionNode):
         self._keys = counter_keys
         self._interval_ms = max(1, int(summary_interval_ms))
         self._reset = reset_on_summary
-        self._counts: Dict[str, float] = {k: 0.0 for k in self._keys}
+        self._counts: dict[str, float] = {k: 0.0 for k in self._keys}
         self._last_emit_ms = 0.0
 
     def _now_ms(self) -> float:
@@ -182,7 +183,7 @@ class CounterNode(FunctionNode):
             if isinstance(payload, dict):
                 for k in self._keys:
                     v = payload.get(k)
-                    if isinstance(v, (int, float)):
+                    if isinstance(v, int | float):
                         self._counts[k] += float(v)
             elif isinstance(payload, str) and payload in self._keys:
                 self._counts[payload] += 1.0

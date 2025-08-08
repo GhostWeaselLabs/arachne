@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from .config import PriorityQueueConfig
-from .queue import PrioritySchedulingQueue
 from .processor import NodeProcessor
+from .queue import PrioritySchedulingQueue
 
 __all__ = [
     "PriorityQueueConfig",

@@ -97,10 +97,20 @@ lint.select = [
 ]
 lint.ignore = [
   "E203", # whitespace before ':' (Black compatible)
+  "E501", # line length enforced by formatter; too noisy in docs/tests/examples
 ]
 
 [tool.ruff.lint.isort]
 known-first-party = ["meridian"]
+
+[tool.ruff.lint.per-file-ignores]
+# Allow non-top-level imports in test bootstrapping
+"tests/**" = ["E402"]
+# Examples and benchmarks may include instructional long lines; allow that.
+"examples/**" = ["E702"]
+"benchmarks/**" = []
+# Scripts may intentionally import modules only to assert availability.
+"scripts/test_notebook_setup.py" = ["F401"]
 
 # ----------------------------
 # Black (format)

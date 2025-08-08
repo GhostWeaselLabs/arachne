@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import time
-from typing import Any, Callable, Iterator
+from collections.abc import Callable, Iterator
+from typing import Any
 
-from .base import FunctionNode, NodeConfig, setup_standard_ports
 from ..core.message import Message, MessageType
+from .base import FunctionNode, NodeConfig, setup_standard_ports
 
 
 class DataProducer(FunctionNode):

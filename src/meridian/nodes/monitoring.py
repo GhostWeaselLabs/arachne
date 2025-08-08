@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 import random
-from dataclasses import dataclass
-from typing import Any, Callable, Dict
+from collections.abc import Callable
+from typing import Any
 
-from .base import FunctionNode, NodeConfig, setup_standard_ports
 from ..core.message import Message, MessageType
 from ..observability.metrics import get_metrics
+from .base import FunctionNode, NodeConfig, setup_standard_ports
 
 
 class MetricsCollectorNode(FunctionNode):
@@ -32,7 +32,7 @@ class MetricsCollectorNode(FunctionNode):
         self._window_ms = max(1, int(aggregation_window_ms))
         self._extractors = metric_extractors
         self._metrics = get_metrics()
-        self._accum: Dict[str, float] = {k: 0.0 for k in metric_extractors}
+        self._accum: dict[str, float] = {k: 0.0 for k in metric_extractors}
         self._count: int = 0
         self._last_emit_ms = 0.0
 

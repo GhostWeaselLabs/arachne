@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 
-from meridian.core import Message, MessageType
 from meridian.nodes import (
     EncryptionAlgorithm,
     EncryptionMode,

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import sys
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, TextIO
-import sys
 
 
 class LogLevel(str, Enum):

@@ -1,16 +1,14 @@
 from __future__ import annotations
 
-import gzip
-import io
 import os
 import time
 from collections import OrderedDict, deque
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Deque
+from typing import Any
 
-from .base import FunctionNode, NodeConfig, setup_standard_ports
 from ..core.message import Message, MessageType
+from .base import FunctionNode, NodeConfig, setup_standard_ports
 
 
 class EvictionPolicy(str, Enum):
@@ -143,7 +141,7 @@ class BufferNode(FunctionNode):
         self._capacity = max(1, int(buffer_size))
         self._strategy = persistence_strategy
         self._flush_ms = max(1, int(flush_interval_ms))
-        self._buf: Deque[Any] = deque()
+        self._buf: deque[Any] = deque()
         self._last_flush_ms = 0.0
 
     def _now_ms(self) -> float:
@@ -236,7 +234,7 @@ class FileReaderNode(FunctionNode):
             return
         self._last_poll_ms = now
         try:
-            with open(self._path, "r", encoding="utf-8") as f:
+            with open(self._path, encoding="utf-8") as f:
                 f.seek(self._offset)
                 for line in f:
                     self.emit(self._out, Message(MessageType.DATA, line.rstrip("\n")))

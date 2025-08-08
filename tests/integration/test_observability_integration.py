@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from io import StringIO
 import time
+from io import StringIO
 
 from meridian.core import Message, MessageType, Node, Scheduler, SchedulerConfig, Subgraph
 from meridian.observability.config import configure_observability, get_development_config

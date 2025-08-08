@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import asyncio
 import threading
-import time
 from collections import deque
+from collections.abc import Awaitable, Callable
 from concurrent.futures import Future
-from typing import Any, Awaitable, Callable, Deque, Dict, Tuple
+from typing import Any
 
+from ..core.message import Message, MessageType
 from .base import (
     DistributionStrategy,
     ErrorPolicy,
@@ -15,7 +16,6 @@ from .base import (
     create_error_message,
     setup_standard_ports,
 )
-from ..core.message import Message, MessageType
 
 
 class WorkerPool(FunctionNode):
@@ -102,9 +102,9 @@ class AsyncWorker(FunctionNode):
         # Sequencing and queues
         self._next_seq: int = 0
         self._next_emit: int = 0
-        self._waiting: Deque[Tuple[int, Message]] = deque()
+        self._waiting: deque[tuple[int, Message]] = deque()
         self._pending: int = 0
-        self._completed: Dict[int, Tuple[bool, Any, Message]] = {}
+        self._completed: dict[int, tuple[bool, Any, Message]] = {}
 
         # Async loop management
         self._loop: asyncio.AbstractEventLoop | None = None

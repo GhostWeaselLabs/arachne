@@ -1,6 +1,6 @@
-from meridian.core import Message, MessageType, Node
-from meridian.observability.metrics import get_metrics
 import pytest
+
+from meridian.core import Message, MessageType, Node
 
 
 class Harness(Node):

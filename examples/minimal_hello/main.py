@@ -12,7 +12,7 @@ Run with: python examples/minimal_hello/main.py
 
 from __future__ import annotations
 
-from meridian.core import Subgraph, Scheduler, Message, MessageType, Node, PortSpec
+from meridian.core import Message, MessageType, Node, PortSpec, Scheduler, Subgraph
 from meridian.core.ports import Port, PortDirection
 
 
