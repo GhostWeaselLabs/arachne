@@ -105,6 +105,7 @@ nav:
       - FAQ: support/faq.md
       - Troubleshooting: support/TROUBLESHOOTING.md
       - How to report issues: support/HOW-TO-REPORT-ISSUES.md
+      - Deprecation policy: support/deprecation-policy.md
   - Contributing:
       - Guide: contributing/guide.md
       - Style Guide: contributing/docs-conventions.md

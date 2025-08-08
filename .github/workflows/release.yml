@@ -6,7 +6,7 @@ on:
       - "v*"
 
 permissions:
-  contents: read
+  contents: write
   id-token: write # Required for PyPI Trusted Publishing (OIDC)
 
 concurrency:
@@ -81,3 +81,15 @@ jobs:
           echo "Installing meridian-runtime==${VERSION}"
           python -m pip install "meridian-runtime==${VERSION}"
           python -c "import meridian; print('Imported meridian ok, version:', getattr(meridian, '__version__', 'unknown'))"
+
+      - name: Create GitHub Release (auto-notes)
+        if: ${{ success() }}
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: ${{ github.ref_name }}
+          generate_release_notes: true
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-') }}
