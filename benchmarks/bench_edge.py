@@ -32,17 +32,17 @@ import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 try:
     from meridian.core import Edge
     from meridian.core.policies import Latest
     from meridian.core.ports import Port, PortDirection, PortSpec
     from meridian.observability.metrics import (
+        NoopMetrics,  # type: ignore[attr-defined]
         PrometheusMetrics,
         configure_metrics,
         get_metrics,
-        NoopMetrics,  # type: ignore[attr-defined]
     )
 except Exception as e:  # pragma: no cover
     print(json.dumps({"error": f"Failed to import meridian runtime: {e}"}))
@@ -97,7 +97,7 @@ def _time_now_ns() -> int:
     return time.perf_counter_ns()
 
 
-def _run_put_get_once(n_items: int, batch: int, capacity: int) -> Tuple[float, int]:
+def _run_put_get_once(n_items: int, batch: int, capacity: int) -> tuple[float, int]:
     """
     Execute n_items put operations (using Latest policy to avoid excessive growth),
     then drain until empty. Returns (seconds, processed_count).
@@ -130,14 +130,14 @@ def _ops_per_sec(processed: int, seconds: float) -> float:
     return float(processed) / seconds
 
 
-def _run_bench_series(cfg: BenchConfig, metrics_mode: str) -> Dict[str, Any]:
+def _run_bench_series(cfg: BenchConfig, metrics_mode: str) -> dict[str, Any]:
     """
     Run warmups then measured iterations; return summary stats.
     """
     resolved_mode = _ensure_metrics(metrics_mode)
-    warmup_times: List[float] = []
-    measure_times: List[float] = []
-    measure_processed: List[int] = []
+    warmup_times: list[float] = []
+    measure_times: list[float] = []
+    measure_processed: list[int] = []
 
     # Warmups
     for _ in range(cfg.warmup_iters):
@@ -183,7 +183,7 @@ def _run_bench_series(cfg: BenchConfig, metrics_mode: str) -> Dict[str, Any]:
     }
 
 
-def _percentile(values: List[float], pct: float) -> float:
+def _percentile(values: list[float], pct: float) -> float:
     """
     Compute percentile using nearest-rank on sorted data.
     """
@@ -198,7 +198,7 @@ def _percentile(values: List[float], pct: float) -> float:
     return data[k]
 
 
-def _write_current_json(doc: Dict[str, Any]) -> None:
+def _write_current_json(doc: dict[str, Any]) -> None:
     out_path = Path("benchmarks") / "current.edge.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     tmp = out_path.with_suffix(".tmp")
@@ -210,8 +210,8 @@ def _write_current_json(doc: Dict[str, Any]) -> None:
 def _main() -> int:
     cfg = BenchConfig()
 
-    results: List[Dict[str, Any]] = []
-    modes: List[str]
+    results: list[dict[str, Any]] = []
+    modes: list[str]
     if cfg.metrics_env in ("on", "off"):
         modes = [cfg.metrics_env]
     else:
@@ -239,12 +239,12 @@ def _main() -> int:
     return 0
 
 
-def _summarize(results: List[Dict[str, Any]]) -> Dict[str, Any]:
+def _summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
     """
     Provide a compact summary focused on ops/sec and overhead of metrics.
     """
-    summary: Dict[str, Any] = {}
-    ops: Dict[str, float] = {}
+    summary: dict[str, Any] = {}
+    ops: dict[str, float] = {}
     for r in results:
         mode = r.get("mode", "?")
         ops_sec = float(r["results"]["ops_per_sec"])

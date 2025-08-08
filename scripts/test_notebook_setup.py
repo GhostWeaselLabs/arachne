@@ -3,9 +3,10 @@
 Test script to validate Jupyter notebook setup for Meridian Runtime.
 """
 
-import sys
 import json
+import sys
 from pathlib import Path
+
 
 def test_imports():
     """Test that all required libraries can be imported."""
@@ -64,7 +65,7 @@ def test_meridian_import():
     sys.path.insert(0, str(project_root))
     
     try:
-        from meridian.core import Node, Message, MessageType, Subgraph, Scheduler
+        from meridian.core import Message, MessageType, Node, Scheduler, Subgraph
         print("✅ Meridian Runtime core imported successfully")
     except ImportError as e:
         print(f"❌ Meridian Runtime core import failed: {e}")
@@ -116,7 +117,7 @@ def test_notebook_files():
         return False
     
     try:
-        with open(getting_started, 'r') as f:
+        with open(getting_started) as f:
             notebook_data = json.load(f)
         
         # Validate notebook structure

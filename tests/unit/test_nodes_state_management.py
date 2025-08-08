@@ -2,8 +2,14 @@ from __future__ import annotations
 
 import time
 
-from meridian.core import Message, MessageType
-from meridian.nodes import CounterNode, SessionNode, StateMachineNode, WindowNode, WindowType, NodeTestHarness
+from meridian.nodes import (
+    CounterNode,
+    NodeTestHarness,
+    SessionNode,
+    StateMachineNode,
+    WindowNode,
+    WindowType,
+)
 
 
 def test_state_machine_emits_transitions() -> None:

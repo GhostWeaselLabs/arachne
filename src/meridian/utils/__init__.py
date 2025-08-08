@@ -10,10 +10,10 @@ __all__ = [
     "require",
 ]
 
-from datetime import UTC, datetime
 import os
 import secrets
 import time
+from datetime import UTC, datetime
 
 
 def new_trace_id(entropy_bytes: int = 16) -> str:

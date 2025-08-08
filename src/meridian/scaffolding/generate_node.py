@@ -7,8 +7,8 @@ Generates node class skeletons with proper typing, lifecycle hooks, and tests.
 from __future__ import annotations
 
 import argparse
-from pathlib import Path
 import sys
+from pathlib import Path
 
 from .parsers.ports import (
     parse_ports,

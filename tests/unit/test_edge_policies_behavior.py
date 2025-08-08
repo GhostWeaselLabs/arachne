@@ -127,7 +127,7 @@ class TestCoalescePolicy:
 
         def merge(a: Any, b: Any) -> Any:
             # Simple numeric sum or string concat for demonstration
-            if isinstance(a, (int, float)) and isinstance(b, (int, float)):
+            if isinstance(a, int | float) and isinstance(b, int | float):
                 return a + b
             return f"{a}|{b}"
 

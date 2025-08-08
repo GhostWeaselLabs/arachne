@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 # pytest marker: soak
 # Long-running stability test to detect unbounded growth and resource leaks.
 # This runs a modest topology for a shortened duration by default (2–3 minutes locally)
@@ -29,7 +27,6 @@ from __future__ import annotations
 #   - Total processed increases over time (progress).
 #   - Queue depth remains bounded (≤ capacity) — checked via periodic snapshots.
 #   - If psutil present, RSS memory does not show monotonic, unbounded growth beyond a tolerance.
-
 from __future__ import annotations
 
 import json
@@ -40,7 +37,7 @@ import threading
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 import pytest
 
@@ -49,7 +46,7 @@ try:
 except Exception:  # pragma: no cover - psutil optional
     psutil = None  # type: ignore[assignment]
 
-from meridian.core import Node, Scheduler, SchedulerConfig, Subgraph, Message, MessageType
+from meridian.core import Message, MessageType, Node, Scheduler, SchedulerConfig, Subgraph
 from meridian.core.ports import Port, PortDirection, PortSpec
 from meridian.observability.metrics import (
     PrometheusMetrics,
@@ -71,7 +68,7 @@ class SoakConfig:
     idle_sleep_ms: int = 0
     tick_interval_ms: int = 1
     shutdown_timeout_s: float = 5.0
-    fairness_ratio: Tuple[int, int, int] = (4, 2, 1)
+    fairness_ratio: tuple[int, int, int] = (4, 2, 1)
     max_batch_per_node: int = 128
 
 
@@ -126,7 +123,7 @@ def _artifact_path(suite: str, name: str) -> Path:
     return base / f"{name}.json"
 
 
-def _export_json(enabled: bool, suite: str, name: str, payload: Dict[str, Any]) -> None:
+def _export_json(enabled: bool, suite: str, name: str, payload: dict[str, Any]) -> None:
     if not enabled:
         return
     path = _artifact_path(suite, name)
@@ -149,19 +146,19 @@ def _maybe_enable_metrics() -> None:
         configure_metrics(PrometheusMetrics())
 
 
-def _mk_ports(n: int = 4) -> Tuple[List[Port], List[Port]]:
-    outs: List[Port] = []
-    ins: List[Port] = []
+def _mk_ports(n: int = 4) -> tuple[list[Port], list[Port]]:
+    outs: list[Port] = []
+    ins: list[Port] = []
     for i in range(n):
         outs.append(Port(f"o{i}", PortDirection.OUTPUT, PortSpec(f"o{i}", int)))
         ins.append(Port(f"i{i}", PortDirection.INPUT, PortSpec(f"i{i}", int)))
     return outs, ins
 
 
-def _mk_subgraph(cfg: SoakConfig) -> Tuple[Subgraph, List[Consumer]]:
+def _mk_subgraph(cfg: SoakConfig) -> tuple[Subgraph, list[Consumer]]:
     outs, ins = _mk_ports()
-    producers: List[Producer] = []
-    consumers: List[Consumer] = []
+    producers: list[Producer] = []
+    consumers: list[Consumer] = []
 
     for p in range(cfg.producers):
         producers.append(Producer(f"prod{p}", outs[p % len(outs)], cfg.producer_burst_max))
@@ -176,7 +173,7 @@ def _mk_subgraph(cfg: SoakConfig) -> Tuple[Subgraph, List[Consumer]]:
     return g, consumers
 
 
-def _get_scheduler_hist(metrics: PrometheusMetrics) -> Tuple[float, int, Dict[float, int]]:
+def _get_scheduler_hist(metrics: PrometheusMetrics) -> tuple[float, int, dict[float, int]]:
     hists = metrics.get_all_histograms()
     for key, hist in hists.items():
         if key.endswith("scheduler_loop_latency_seconds"):
@@ -184,7 +181,7 @@ def _get_scheduler_hist(metrics: PrometheusMetrics) -> Tuple[float, int, Dict[fl
     return (0.0, 0, {})
 
 
-def _p95_from_buckets(buckets: Dict[float, int], total: int) -> float:
+def _p95_from_buckets(buckets: dict[float, int], total: int) -> float:
     if total <= 0:
         return float("nan")
     target = math.ceil(total * 0.95)
@@ -203,7 +200,7 @@ def _sample_rss_bytes() -> int | None:
         return None
 
 
-def _bounded_growth(samples: List[int], tolerance_ratio: float = 0.20) -> bool:
+def _bounded_growth(samples: list[int], tolerance_ratio: float = 0.20) -> bool:
     """
     Heuristic: final RSS must not exceed min(RSS) by more than tolerance_ratio fraction,
     allowing warmup and fluctuations but flagging monotonic unbounded growth.
@@ -216,7 +213,7 @@ def _bounded_growth(samples: List[int], tolerance_ratio: float = 0.20) -> bool:
     return high <= int(low * (1.0 + tolerance_ratio))
 
 
-def _periodic_monitor(seconds: float, interval: float, consumers: List[Consumer]) -> Dict[str, Any]:
+def _periodic_monitor(seconds: float, interval: float, consumers: list[Consumer]) -> dict[str, Any]:
     """
     Periodically record RSS and processed counters to detect trends.
     """
@@ -224,7 +221,7 @@ def _periodic_monitor(seconds: float, interval: float, consumers: List[Consumer]
     # Use a minimum of 1s and target ~20 samples over the run window.
     adaptive_interval = max(1.0, min(interval, max(1.0, seconds / 20.0)))
 
-    data: Dict[str, Any] = {
+    data: dict[str, Any] = {
         "rss_bytes": [],  # type: ignore[assignment]
         "processed": [],
         "timestamps": [],

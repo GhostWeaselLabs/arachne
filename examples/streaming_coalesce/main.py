@@ -4,7 +4,6 @@ import argparse
 import random
 import time
 from dataclasses import dataclass
-from typing import List, Tuple
 
 from meridian.core import (
     Message,
@@ -17,10 +16,9 @@ from meridian.core import (
     SchedulerConfig,
     Subgraph,
 )
-from meridian.core.policies import Coalesce, Policy
+from meridian.core.policies import Coalesce
 from meridian.observability.config import ObservabilityConfig, configure_observability
 from meridian.observability.logging import get_logger, with_context
-
 
 # ---------------------------
 # Domain model
@@ -134,7 +132,7 @@ class SinkNode(Node):
         )
         self._keep = keep
         self._verbose = verbose
-        self._buf: List[WindowAgg] = []
+        self._buf: list[WindowAgg] = []
         self._last_summary = 0.0
 
     def _handle_message(self, port: str, msg: Message) -> None:

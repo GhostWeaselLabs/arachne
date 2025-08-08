@@ -4,10 +4,9 @@ import argparse
 import random
 import threading
 import time
-from typing import Iterable, List, Tuple
+from collections.abc import Iterable
 
 from meridian.core import (
-    Edge,
     Message,
     MessageType,
     Node,
@@ -18,13 +17,11 @@ from meridian.core import (
     SchedulerConfig,
     Subgraph,
 )
-from meridian.core.policies import Block, Latest
 from meridian.observability.config import (
     ObservabilityConfig,
     configure_observability,
 )
 from meridian.observability.logging import get_logger, with_context
-
 
 # ---------------------------
 # Domain helpers
@@ -35,7 +32,7 @@ POSITIVE_WORDS = {"good", "great", "awesome", "excellent", "love", "like", "win"
 NEGATIVE_WORDS = {"bad", "terrible", "awful", "hate", "dislike", "lose", "worse", "nope"}
 
 
-def tokenize(text: str) -> List[str]:
+def tokenize(text: str) -> list[str]:
     return [w.strip(".,!?;:").lower() for w in text.split() if w.strip()]
 
 
@@ -167,7 +164,7 @@ class SinkNode(Node):
         )
         self._keep = keep
         self._verbose = verbose
-        self._buffer: list[Tuple[List[str], float]] = []
+        self._buffer: list[tuple[list[str], float]] = []
 
     def _handle_message(self, port: str, msg: Message) -> None:
         logger = get_logger()

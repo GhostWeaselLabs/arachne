@@ -5,11 +5,12 @@ This script uses the GitHub API to push the built site files.
 """
 
 import os
-import sys
-import subprocess
-import tempfile
 import shutil
+import subprocess
+import sys
+import tempfile
 from pathlib import Path
+
 
 def run_command(cmd, cwd=None, env=None):
     """Run a command and return the result."""
@@ -85,7 +86,7 @@ def main():
             return
         
         # Commit
-        commit_msg = f"Deploy docs from meridian-runtime@$(git rev-parse HEAD)"
+        commit_msg = "Deploy docs from meridian-runtime@$(git rev-parse HEAD)"
         if not run_command(f'git commit -m "{commit_msg}"', cwd=target_path, env=env):
             sys.exit(1)
         

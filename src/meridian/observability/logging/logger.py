@@ -6,13 +6,19 @@ from typing import Any, TextIO
 
 from .config import LogConfig, LogLevel
 from .context import (
-    LogContext,
-    get_trace_id as _get_trace_id_ctx,
-    get_node as _get_node_ctx,
     get_edge_id as _get_edge_ctx,
-    get_port as _get_port_ctx,
+)
+from .context import (
     get_message_type as _get_msg_type_ctx,
-    with_context,
+)
+from .context import (
+    get_node as _get_node_ctx,
+)
+from .context import (
+    get_port as _get_port_ctx,
+)
+from .context import (
+    get_trace_id as _get_trace_id_ctx,
 )
 
 

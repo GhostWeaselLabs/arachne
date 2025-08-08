@@ -4,7 +4,6 @@ import time
 
 from meridian.core import Scheduler, SchedulerConfig, Subgraph
 from meridian.nodes import (
-    BatchConsumer,
     CounterNode,
     DataConsumer,
     DataProducer,
@@ -16,8 +15,7 @@ from meridian.nodes import (
 
 
 def _gen(n: int):
-    for i in range(n):
-        yield i
+    yield from range(n)
 
 
 def _run_for(s: Scheduler, seconds: float) -> None:

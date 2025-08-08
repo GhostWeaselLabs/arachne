@@ -38,12 +38,11 @@ import threading
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
-
+from typing import Any
 
 # ---- Runtime imports (assumes meridian-runtime is installed / in PYTHONPATH)
 try:
-    from meridian.core import Node, Scheduler, SchedulerConfig, Subgraph, Message, MessageType
+    from meridian.core import Message, MessageType, Node, Scheduler, SchedulerConfig, Subgraph
     from meridian.core.ports import Port, PortDirection, PortSpec
     from meridian.observability.metrics import (
         PrometheusMetrics,
@@ -66,7 +65,7 @@ class BenchSchedConfig:
     tick_interval_ms: int = int(os.getenv("MERIDIAN_BENCH_SCHED_TICK_MS", "1"))
     idle_sleep_ms: int = int(os.getenv("MERIDIAN_BENCH_SCHED_IDLE_MS", "0"))
     shutdown_timeout_s: float = float(os.getenv("MERIDIAN_BENCH_SCHED_SHUTDOWN_S", "2.0"))
-    fairness_ratio: Tuple[int, int, int] = tuple(
+    fairness_ratio: tuple[int, int, int] = tuple(
         int(x) for x in os.getenv("MERIDIAN_BENCH_SCHED_FAIRNESS", "4,2,1").split(",")
     )  # type: ignore[assignment]
     max_batch_per_node: int = int(os.getenv("MERIDIAN_BENCH_SCHED_MAX_BATCH", "128"))
@@ -81,7 +80,7 @@ def _artifact_path() -> Path:
 
 
 def _percentile_from_histogram_cumulative(
-    buckets: Dict[float, int], total: int, pct: float
+    buckets: dict[float, int], total: int, pct: float
 ) -> float:
     """
     Estimate percentile from a cumulative histogram mapping (upper_bound -> cumulative count).
@@ -171,19 +170,19 @@ class Consumer(Node):
 
 
 # ---- Topology assembly
-def _mk_ports(n: int = 4) -> Tuple[List[Port], List[Port]]:
-    outs: List[Port] = []
-    ins: List[Port] = []
+def _mk_ports(n: int = 4) -> tuple[list[Port], list[Port]]:
+    outs: list[Port] = []
+    ins: list[Port] = []
     for i in range(n):
         outs.append(Port(f"o{i}", PortDirection.OUTPUT, PortSpec(f"o{i}", int)))
         ins.append(Port(f"i{i}", PortDirection.INPUT, PortSpec(f"i{i}", int)))
     return outs, ins
 
 
-def _mk_subgraph(cfg: BenchSchedConfig) -> Tuple[Subgraph, List[Consumer]]:
+def _mk_subgraph(cfg: BenchSchedConfig) -> tuple[Subgraph, list[Consumer]]:
     outs, ins = _mk_ports(max(cfg.producers, cfg.consumers))
-    producers: List[Producer] = []
-    consumers: List[Consumer] = []
+    producers: list[Producer] = []
+    consumers: list[Consumer] = []
 
     for p in range(cfg.producers):
         producers.append(Producer(f"prod{p}", outs[p % len(outs)], burst_max=8))
@@ -199,7 +198,7 @@ def _mk_subgraph(cfg: BenchSchedConfig) -> Tuple[Subgraph, List[Consumer]]:
 
 
 # ---- Metrics extraction
-def _get_scheduler_loop_hist() -> Tuple[float, int, Dict[float, int]]:
+def _get_scheduler_loop_hist() -> tuple[float, int, dict[float, int]]:
     """
     Returns (sum, count, buckets) for scheduler_loop_latency_seconds.
     """
@@ -214,7 +213,7 @@ def _get_scheduler_loop_hist() -> Tuple[float, int, Dict[float, int]]:
 
 
 # ---- Benchmark runner
-def _run_scheduler(cfg: BenchSchedConfig) -> Dict[str, Any]:
+def _run_scheduler(cfg: BenchSchedConfig) -> dict[str, Any]:
     # Deterministic randomness for repeatability
     random.seed(cfg.seed)
 
@@ -293,7 +292,7 @@ def _run_scheduler(cfg: BenchSchedConfig) -> Dict[str, Any]:
     }
 
 
-def _write_current(doc: Dict[str, Any]) -> None:
+def _write_current(doc: dict[str, Any]) -> None:
     out = _artifact_path()
     tmp = out.with_suffix(".tmp")
     with tmp.open("w", encoding="utf-8") as f:

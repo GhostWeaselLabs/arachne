@@ -6,12 +6,11 @@ from meridian.core import Message, MessageType
 from meridian.nodes import (
     BackoffStrategy,
     CircuitBreakerNode,
-    NodeConfig,
     NodeTestHarness,
+    RetryNode,
     ThrottleNode,
     TimeoutAction,
     TimeoutNode,
-    RetryNode,
 )
 
 

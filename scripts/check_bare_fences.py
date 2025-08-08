@@ -37,18 +37,18 @@ from __future__ import annotations
 
 import argparse
 import sys
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable, List, Tuple
 
 
-def find_bare_fences(path: Path) -> List[Tuple[int, str]]:
+def find_bare_fences(path: Path) -> list[tuple[int, str]]:
     """
     Return a list of (line_number, line_content) where a bare fence is found.
 
     A "bare fence" is a line that, after stripping trailing newline characters,
     is exactly three backticks with no language specifier.
     """
-    results: List[Tuple[int, str]] = []
+    results: list[tuple[int, str]] = []
     try:
         # Use strict UTF-8 with fallback to ignoring errors to avoid crashes
         with path.open("r", encoding="utf-8", errors="ignore") as f:

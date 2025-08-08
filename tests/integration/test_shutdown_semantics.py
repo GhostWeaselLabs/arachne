@@ -34,7 +34,6 @@ from __future__ import annotations
 
 import time
 from threading import Thread
-from typing import List, Tuple
 
 import pytest
 
@@ -43,14 +42,13 @@ from meridian.core.ports import Port, PortDirection, PortSpec
 from meridian.core.scheduler import Scheduler, SchedulerConfig
 from meridian.core.subgraph import Subgraph
 
-
-Event = Tuple[str, str]  # (node_name, event_name)
+Event = tuple[str, str]  # (node_name, event_name)
 
 
 class RecordingProducer(Node):
     """Producer that records lifecycle and bursts raw ints to downstream edge."""
 
-    def __init__(self, name: str, events: List[Event]) -> None:
+    def __init__(self, name: str, events: list[Event]) -> None:
         super().__init__(
             name=name,
             inputs=[],
@@ -84,7 +82,7 @@ class RecordingProducer(Node):
 class RecordingProcessor(Node):
     """Middle node that forwards inputs to outputs, recording lifecycle events."""
 
-    def __init__(self, name: str, events: List[Event]) -> None:
+    def __init__(self, name: str, events: list[Event]) -> None:
         super().__init__(
             name=name,
             inputs=[Port("in", PortDirection.INPUT, spec=PortSpec("in", schema=int))],
@@ -121,14 +119,14 @@ class RecordingProcessor(Node):
 class RecordingConsumer(Node):
     """Consumer that records lifecycle events and captures received values."""
 
-    def __init__(self, name: str, events: List[Event]) -> None:
+    def __init__(self, name: str, events: list[Event]) -> None:
         super().__init__(
             name=name,
             inputs=[Port("in", PortDirection.INPUT, spec=PortSpec("in", schema=int))],
             outputs=[],
         )
         self._events = events
-        self.received: List[int] = []
+        self.received: list[int] = []
 
     def on_start(self) -> None:
         self._events.append((self.name, "on_start"))
@@ -165,7 +163,7 @@ class RecordingConsumer(Node):
 
 @pytest.mark.integration
 def test_shutdown_semantics_and_lifecycle_ordering() -> None:
-    events: List[Event] = []
+    events: list[Event] = []
 
     # Create nodes
     prod = RecordingProducer("producer", events)
@@ -174,8 +172,8 @@ def test_shutdown_semantics_and_lifecycle_ordering() -> None:
 
     # Wire subgraph: producer -> processor -> consumer with tiny capacities
     sg = Subgraph.from_nodes("shutdown", [prod, proc, cons])
-    e1 = sg.connect(("producer", "out"), ("processor", "in"), capacity=2)
-    e2 = sg.connect(("processor", "out"), ("consumer", "in"), capacity=2)
+    sg.connect(("producer", "out"), ("processor", "in"), capacity=2)
+    sg.connect(("processor", "out"), ("consumer", "in"), capacity=2)
 
     # Inject edges to enable direct raw puts from producer
     prod.set_edge_for_testing(sg.edges[-2])
