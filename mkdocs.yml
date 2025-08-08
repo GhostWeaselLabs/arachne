@@ -97,6 +97,7 @@ nav:
       - Observability: concepts/observability.md
   - Reference:
       - API: reference/api.md
+      - Built-in nodes: reference/built-in-nodes.md
       - Glossary: concepts/glossary.md
   - Support:
       - FAQ: support/faq.md
