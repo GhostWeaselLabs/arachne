@@ -82,6 +82,7 @@ nav:
       - Quickstart: getting-started/quickstart.md
   - Guides:
       - Examples: guides/examples.md
+      - Migration & extension: guides/migration-extension.md
       - Local Development: guides/local-development.md
   - Examples:
       - Overview: examples/index.md
