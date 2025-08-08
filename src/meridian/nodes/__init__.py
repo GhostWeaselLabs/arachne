@@ -1,19 +1,6 @@
 from __future__ import annotations
 
-import sys as _sys
-
-from .core import (
-    Edge,
-    Message,
-    MessageType,
-    Node,
-    Port,
-    PortDirection,
-    Scheduler,
-    SchedulerConfig,
-    Subgraph,
-)
-from .nodes import (
+from .base import (
     FunctionNode,
     ErrorPolicy,
     MergeStrategy,
@@ -23,35 +10,18 @@ from .nodes import (
     create_error_message,
     validate_callable,
     setup_standard_ports,
-    NodeTestHarness,
-    # Basic nodes
-    DataProducer,
-    BatchProducer,
-    DataConsumer,
-    BatchConsumer,
-    MapTransformer,
-    FilterTransformer,
-    FlatMapTransformer,
-    Router,
-    Merger,
-    Splitter,
-    EventAggregator,
-    EventCorrelator,
-    TriggerNode,
-    WorkerPool,
-    AsyncWorker,
-    CacheNode,
-    BufferNode,
-    FileWriterNode,
-    FileReaderNode,
-    HttpClientNode,
-    HttpServerNode,
-    WebSocketNode,
-    MessageQueueNode,
-    MetricsCollectorNode,
-    HealthCheckNode,
-    AlertingNode,
-    SamplingNode,
+)
+from .testing import NodeTestHarness
+from .producers import DataProducer, BatchProducer
+from .consumers import DataConsumer, BatchConsumer
+from .transformers import MapTransformer, FilterTransformer, FlatMapTransformer
+from .controllers import Router, Merger, Splitter
+from .events import EventAggregator, EventCorrelator, TriggerNode
+from .workers import WorkerPool, AsyncWorker
+from .storage import CacheNode, BufferNode, FileWriterNode, FileReaderNode
+from .network import HttpClientNode, HttpServerNode, WebSocketNode, MessageQueueNode
+from .monitoring import MetricsCollectorNode, HealthCheckNode, AlertingNode, SamplingNode
+from .data_processing import (
     ValidationNode,
     SerializationNode,
     CompressionNode,
@@ -62,36 +32,11 @@ from .nodes import (
     CompressionMode,
     EncryptionAlgorithm,
     EncryptionMode,
-    ThrottleNode,
-    CircuitBreakerNode,
-    RetryNode,
-    TimeoutNode,
-    RateLimitAlgorithm,
-    BackoffStrategy,
-    TimeoutAction,
-    StateMachineNode,
-    SessionNode,
-    CounterNode,
-    WindowNode,
-    WindowType,
 )
+from .flow_control import ThrottleNode, CircuitBreakerNode, RetryNode, TimeoutNode, RateLimitAlgorithm, BackoffStrategy, TimeoutAction
+from .state_management import StateMachineNode, SessionNode, CounterNode, WindowNode, WindowType
 
 __all__ = [
-    "__version__",
-    "core",
-    "observability",
-    "utils",
-    # Convenience re-exports
-    "Message",
-    "MessageType",
-    "Node",
-    "Subgraph",
-    "Edge",
-    "Port",
-    "PortDirection",
-    "Scheduler",
-    "SchedulerConfig",
-    # Built-in nodes base exports
     "FunctionNode",
     "ErrorPolicy",
     "MergeStrategy",
@@ -162,14 +107,3 @@ __all__ = [
     "WindowNode",
     "WindowType",
 ]
-
-__version__ = "0.0.0"
-
-_PKG_NAME = "meridian"
-_MIN_PY = (3, 11)
-
-if _sys.version_info < _MIN_PY:
-    raise RuntimeError(
-        f"{_PKG_NAME} requires Python {'.'.join(map(str, _MIN_PY))}+; "
-        f"detected {_sys.version.split()[0]}"
-    )

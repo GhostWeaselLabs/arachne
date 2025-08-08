@@ -32,7 +32,8 @@ classifiers = [
 dependencies = [
     "jupytext>=1.17.2",
     "mkdocs>=1.6.1",
- "mkdocs-material>=9.6.16",
+    "mkdocs-material>=9.6.16",
+    "cryptography>=42.0.0",
 ]
 
 [project.urls]
