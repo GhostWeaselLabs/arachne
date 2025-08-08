@@ -3,8 +3,7 @@ from __future__ import annotations
 import asyncio
 from typing import Any
 
-from meridian.core import MessageType
-from meridian.nodes import AsyncWorker, NodeConfig, NodeTestHarness, WorkerPool
+from meridian.nodes import AsyncWorker, NodeTestHarness, WorkerPool
 
 
 def test_worker_pool_round_robin() -> None:

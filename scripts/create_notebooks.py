@@ -4,8 +4,8 @@ Script to create Jupyter notebooks for Meridian Runtime tutorials and examples.
 """
 
 import json
-import os
 from pathlib import Path
+
 
 def create_cell(cell_type: str, source: str, metadata: dict = None) -> dict:
     """Create a notebook cell."""

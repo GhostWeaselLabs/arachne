@@ -1,8 +1,8 @@
 """Unit tests for meridian.utils.time module."""
 
-from datetime import UTC, datetime
 import re
 import time
+from datetime import UTC, datetime
 
 import pytest
 

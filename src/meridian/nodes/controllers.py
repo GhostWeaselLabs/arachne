@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
-from .base import FunctionNode, NodeConfig, setup_standard_ports
 from ..core.message import Message, MessageType
+from .base import FunctionNode, NodeConfig, setup_standard_ports
 
 
 class Router(FunctionNode):

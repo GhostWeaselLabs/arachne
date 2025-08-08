@@ -6,10 +6,10 @@ clear, copy-paste-friendly examples.
 
 from __future__ import annotations
 
+import time
 from collections.abc import Generator
 from contextlib import contextmanager
 from datetime import UTC, datetime
-import time
 
 
 def now_ts_ms() -> int:

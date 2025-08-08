@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+import time
 from collections.abc import Iterable
 from dataclasses import dataclass, field
-import time
 from typing import TYPE_CHECKING, Any
 
 from ...observability.logging import get_logger, with_context

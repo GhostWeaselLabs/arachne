@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 # pytest marker: stress
 # This test drives a minimal topology under sustained load, measures scheduler loop latency
 # via PrometheusMetrics histogram (already instrumented in Scheduler), and enforces optional
@@ -16,7 +14,6 @@ from __future__ import annotations
 #    "scheduler_loop_latency_seconds" (namespaced by the configured PrometheusMetrics adapter).
 #  - To compare metrics-on vs metrics-off overhead locally, you can run this test twice:
 #      1) default (NoopMetrics) and 2) with MERIDIAN_METRICS=on to enable PrometheusMetrics.
-
 from __future__ import annotations
 
 import json
@@ -27,12 +24,11 @@ import threading
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 import pytest
 
-from meridian.core import Node, Scheduler, SchedulerConfig, Subgraph, Message, MessageType
-from meridian.core.policies import Block
+from meridian.core import Message, MessageType, Node, Scheduler, SchedulerConfig, Subgraph
 from meridian.core.ports import Port, PortDirection, PortSpec
 from meridian.observability.metrics import (
     PrometheusMetrics,
@@ -58,7 +54,7 @@ class ThroughputConfig:
     producer_burst_max: int = 8  # producer emits [1..burst] items per tick with random burst size
     producer_sleep_ms: int = 0  # optional per-producer sleep to simulate pacing
     consumer_batch_max: int = 16  # consumer drains up to N per tick
-    fairness_ratio: Tuple[int, int, int] = (4, 2, 1)  # control, high, normal
+    fairness_ratio: tuple[int, int, int] = (4, 2, 1)  # control, high, normal
     max_batch_per_node: int = 128
     idle_sleep_ms: int = 0
     tick_interval_ms: int = 1
@@ -154,7 +150,7 @@ def _artifact_path(suite: str, name: str) -> Path:
     return base / f"{name}.json"
 
 
-def _export_json(enabled: bool, suite: str, name: str, payload: Dict[str, Any]) -> None:
+def _export_json(enabled: bool, suite: str, name: str, payload: dict[str, Any]) -> None:
     if not enabled:
         return
     path = _artifact_path(suite, name)
@@ -162,7 +158,7 @@ def _export_json(enabled: bool, suite: str, name: str, payload: Dict[str, Any]) 
         json.dump(payload, f, indent=2, sort_keys=True)
 
 
-def _histogram_p95_from_buckets(buckets: Dict[float, int], total: int) -> float:
+def _histogram_p95_from_buckets(buckets: dict[float, int], total: int) -> float:
     """
     Compute approximate p95 from cumulative histogram buckets.
     Args:
@@ -184,7 +180,7 @@ def _histogram_p95_from_buckets(buckets: Dict[float, int], total: int) -> float:
 
 def _get_scheduler_latency_histogram(
     metrics_provider: PrometheusMetrics,
-) -> Tuple[float, int, Dict[float, int]]:
+) -> tuple[float, int, dict[float, int]]:
     """
     Find the scheduler_loop_latency_seconds histogram in the provided PrometheusMetrics.
     Returns tuple (sum, count, buckets). If not found, returns (0.0, 0, {}).
@@ -198,21 +194,21 @@ def _get_scheduler_latency_histogram(
     return (0.0, 0, {})
 
 
-def _mk_ports() -> Tuple[List[Port], List[Port]]:
-    outs: List[Port] = []
-    ins: List[Port] = []
+def _mk_ports() -> tuple[list[Port], list[Port]]:
+    outs: list[Port] = []
+    ins: list[Port] = []
     for i in range(4):  # create a small pool of ports to wire producers/consumers
         outs.append(Port(f"o{i}", PortDirection.OUTPUT, PortSpec(f"o{i}", int)))
         ins.append(Port(f"i{i}", PortDirection.INPUT, PortSpec(f"i{i}", int)))
     return outs, ins
 
 
-def _mk_subgraph(cfg: ThroughputConfig) -> Tuple[Subgraph, List[Consumer]]:
+def _mk_subgraph(cfg: ThroughputConfig) -> tuple[Subgraph, list[Consumer]]:
     # Create ports, nodes
     outs, ins = _mk_ports()
 
-    producers: List[Producer] = []
-    consumers: List[Consumer] = []
+    producers: list[Producer] = []
+    consumers: list[Consumer] = []
 
     # We reuse ports round-robin to keep the topology small yet active.
     for p in range(cfg.producers):

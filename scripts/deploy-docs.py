@@ -5,11 +5,12 @@ This script uses the GitHub API to push the built site files.
 """
 
 import os
-import sys
-import subprocess
-import tempfile
 import shutil
+import subprocess
+import sys
+import tempfile
 from pathlib import Path
+
 
 def run_command(cmd, cwd=None, env=None):
     """Run a command and return the result."""
@@ -85,12 +86,16 @@ def main():
             return
         
         # Commit
-        commit_msg = f"Deploy docs from meridian-runtime@$(git rev-parse HEAD)"
+        # Compose a helpful commit message with upstream SHA if available
+        upstream_sha = os.environ.get('GITHUB_SHA', '')
+        commit_msg = (
+            f"Deploy docs from meridian-runtime@{upstream_sha}" if upstream_sha else "Deploy docs"
+        )
         if not run_command(f'git commit -m "{commit_msg}"', cwd=target_path, env=env):
             sys.exit(1)
         
-        # Push
-        if not run_command("git push origin main", cwd=target_path, env=env):
+        # Push (default branch is main in docs repo)
+        if not run_command("git push origin HEAD:main", cwd=target_path, env=env):
             sys.exit(1)
     
     print("Deployment completed successfully!")

@@ -6,16 +6,16 @@ from time import monotonic, sleep
 from ...observability.logging import get_logger, with_context
 from ...observability.metrics import get_metrics, time_block
 from ...observability.tracing import start_span
-from ..message import Message, MessageType
+from ..message import Message
 from ..node import Node
 from ..priority_queue import NodeProcessor, PriorityQueueConfig, PrioritySchedulingQueue
 from ..runtime_plan import PriorityBand, RuntimePlan
 from ..subgraph import Subgraph
 from .config import SchedulerConfig
 from .execution import (
+    handle_node_emit,
     is_node_blocked_by_backpressure,
     try_unblock_node,
-    handle_node_emit,
 )
 
 

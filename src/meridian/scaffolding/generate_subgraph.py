@@ -7,8 +7,8 @@ Generates subgraph class skeletons with wiring stubs and tests.
 from __future__ import annotations
 
 import argparse
-from pathlib import Path
 import sys
+from pathlib import Path
 
 from .parsers.ports import snake_case
 from .templates.subgraph import generate_subgraph_template, generate_subgraph_test_template

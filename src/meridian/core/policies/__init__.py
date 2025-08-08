@@ -1,20 +1,20 @@
 from __future__ import annotations
 
 from .definitions import (
-    PutResult,
-    Policy,
+    BackpressureStrategy,
     Block,
+    Coalesce,
     Drop,
     Latest,
-    Coalesce,
+    Policy,
+    PutResult,
+    RetryPolicy,
+    Routable,
+    RoutingPolicy,
     block,
+    coalesce,
     drop,
     latest,
-    coalesce,
-    RetryPolicy,
-    BackpressureStrategy,
-    RoutingPolicy,
-    Routable,
 )
 
 __all__ = [

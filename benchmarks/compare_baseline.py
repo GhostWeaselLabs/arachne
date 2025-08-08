@@ -85,8 +85,7 @@ import os
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Tuple
-
+from typing import Any
 
 # ---------------------------
 # Configuration and constants
@@ -141,7 +140,7 @@ class CompareConfig:
 # ---------------------------
 
 
-def _load_json(path: Path) -> Dict[str, Any]:
+def _load_json(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as f:
         return json.load(f)
 
@@ -168,7 +167,7 @@ def _get_env_float(name: str, default: float) -> float:
 # ---------------------------
 
 
-def _infer_section(current: Dict[str, Any], override: str | None) -> str | None:
+def _infer_section(current: dict[str, Any], override: str | None) -> str | None:
     """
     Try to infer which section of the baseline to compare against from the "current" doc,
     unless an explicit override is provided.
@@ -182,12 +181,12 @@ def _infer_section(current: Dict[str, Any], override: str | None) -> str | None:
     return None
 
 
-def _flatten_current_to_metrics(current: Dict[str, Any], section: str | None) -> Dict[str, float]:
+def _flatten_current_to_metrics(current: dict[str, Any], section: str | None) -> dict[str, float]:
     """
     Extracts a normalized metric dict from the current document using known conventions.
     Keys will match baseline metric names where possible.
     """
-    metrics: Dict[str, float] = {}
+    metrics: dict[str, float] = {}
 
     # If section isn't known, try to discover by available fields (edge or scheduler shapes)
     sec = section or current.get("name")
@@ -217,19 +216,19 @@ def _flatten_current_to_metrics(current: Dict[str, Any], section: str | None) ->
     # Generic fallbacks: copy any numeric summary fields directly if they match baseline names
     if "summary" in current and isinstance(current["summary"], dict):
         for k, v in current["summary"].items():
-            if isinstance(v, (int, float)) and k not in metrics:
+            if isinstance(v, int | float) and k not in metrics:
                 metrics[k] = float(v)
 
     # Also permit a "metrics" top-level numeric map
     if "metrics" in current and isinstance(current["metrics"], dict):
         for k, v in current["metrics"].items():
-            if isinstance(v, (int, float)) and k not in metrics:
+            if isinstance(v, int | float) and k not in metrics:
                 metrics[k] = float(v)
 
     return metrics
 
 
-def _get_nested(obj: Dict[str, Any], *keys: str) -> Any:
+def _get_nested(obj: dict[str, Any], *keys: str) -> Any:
     cur = obj
     for k in keys:
         if isinstance(cur, dict) and k in cur:
@@ -246,10 +245,10 @@ def _get_nested(obj: Dict[str, Any], *keys: str) -> Any:
 
 def _compare_metrics(
     section: str,
-    baseline: Dict[str, Any],
-    current_metrics: Dict[str, float],
+    baseline: dict[str, Any],
+    current_metrics: dict[str, float],
     threshold_pct: float,
-) -> Tuple[bool, Dict[str, Any], Dict[str, str]]:
+) -> tuple[bool, dict[str, Any], dict[str, str]]:
     """
     Compare current_metrics against baseline[section].
 
@@ -261,8 +260,8 @@ def _compare_metrics(
       messages: human-readable messages for logs
     """
     ok = True
-    details: Dict[str, Any] = {}
-    messages: Dict[str, str] = {}
+    details: dict[str, Any] = {}
+    messages: dict[str, str] = {}
 
     base_section = baseline.get(section, {})
     if not isinstance(base_section, dict):
@@ -272,7 +271,7 @@ def _compare_metrics(
         return True, details, messages  # do not fail if section isn't present
 
     for metric, base_value in base_section.items():
-        if not isinstance(base_value, (int, float)):
+        if not isinstance(base_value, int | float):
             continue
 
         cur_value = current_metrics.get(metric)

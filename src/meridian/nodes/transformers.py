@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from typing import Any, Callable, Iterable
+from collections.abc import Callable, Iterable
+from typing import Any
 
-from .base import FunctionNode, NodeConfig, setup_standard_ports
 from ..core.message import Message, MessageType
+from .base import FunctionNode, NodeConfig, setup_standard_ports
 
 
 class MapTransformer(FunctionNode):
@@ -63,7 +64,7 @@ class FilterTransformer(FunctionNode):
             try:
                 if self._predicate(msg.payload):
                     self.emit(self._out, msg)
-            except Exception as e:
+            except Exception:
                 # Route error via base policy
                 self._safe_call_user_function(original_message=msg)  # type: ignore[call-arg]
                 raise

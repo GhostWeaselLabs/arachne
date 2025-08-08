@@ -4,10 +4,10 @@ Tests end-to-end generation and basic functionality of generated code.
 """
 
 import os
-from pathlib import Path
 import subprocess
 import sys
 import tempfile
+from pathlib import Path
 
 import pytest
 

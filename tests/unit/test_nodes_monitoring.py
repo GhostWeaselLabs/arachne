@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import time
 
-from meridian.core import Message, MessageType
 from meridian.nodes import (
     AlertingNode,
     HealthCheckNode,

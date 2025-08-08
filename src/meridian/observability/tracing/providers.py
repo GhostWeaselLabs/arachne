@@ -1,10 +1,13 @@
 from __future__ import annotations
 
-from typing import Any
 import uuid
+from collections.abc import Iterator
+from contextlib import contextmanager
+from contextvars import ContextVar
+from typing import Any
 
 from .config import TracingConfig
-from .spans import Span, NoopSpan, OpenTelemetrySpan
+from .spans import NoopSpan, OpenTelemetrySpan, Span
 
 
 class Tracer:
@@ -109,11 +112,6 @@ def configure_tracing(config: TracingConfig) -> None:
 def is_tracing_enabled() -> bool:
     return get_tracer().is_enabled()
 
-
-# Context helpers (implemented here to avoid circular deps)
-from contextlib import contextmanager
-from typing import Iterator
-from contextvars import ContextVar
 
 _current_trace_id: ContextVar[str | None] = ContextVar("current_trace_id", default=None)
 _current_span_id: ContextVar[str | None] = ContextVar("current_span_id", default=None)

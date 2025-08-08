@@ -3,7 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TextIO
 
-from .logging import LogLevel, configure as configure_logging
+from .logging import LogLevel
+from .logging import configure as configure_logging
 from .metrics import PrometheusConfig, PrometheusMetrics, configure_metrics
 from .tracing import TracingConfig, configure_tracing
 

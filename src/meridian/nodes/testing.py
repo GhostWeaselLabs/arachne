@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import time
 from collections import defaultdict
 from dataclasses import dataclass, field
-import time
-from typing import Any, DefaultDict
+from typing import Any
 
 from ..core.message import Message, MessageType
 from ..core.node import Node
@@ -16,7 +16,7 @@ class _FakeScheduler:
     """
 
     def __init__(self) -> None:
-        self._emitted: DefaultDict[tuple[str, str], list[Message]] = defaultdict(list)
+        self._emitted: defaultdict[tuple[str, str], list[Message]] = defaultdict(list)
 
     def _handle_node_emit(self, node: Node, port: str, msg: Message) -> None:  # noqa: D401 - internal hook
         self._emitted[(node.name, port)].append(msg)

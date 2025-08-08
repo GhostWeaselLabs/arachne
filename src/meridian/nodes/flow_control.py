@@ -1,14 +1,15 @@
 from __future__ import annotations
 
+import threading
 import time
 from collections import deque
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Callable, Deque, Dict, Optional, Tuple
-import threading
+from typing import Any
 
-from .base import ErrorPolicy, FunctionNode, NodeConfig, create_error_message, setup_standard_ports
 from ..core.message import Message, MessageType
+from .base import ErrorPolicy, FunctionNode, NodeConfig, create_error_message, setup_standard_ports
 
 
 class RateLimitAlgorithm(str, Enum):
@@ -51,7 +52,7 @@ class ThrottleNode(FunctionNode):
         self._capacity = max(1, int(burst_size or max(1, int(rate_limit)) ))
         self._tokens = self._capacity
         self._last_refill = time.monotonic()
-        self._queue: Deque[Message] = deque()
+        self._queue: deque[Message] = deque()
 
     def _refill(self) -> None:
         now = time.monotonic()
@@ -196,7 +197,7 @@ class RetryNode(FunctionNode):
         self._dlq = dead_letter_port
         self._max = max(0, int(max_retries))
         self._strategy = backoff_strategy
-        self._pending: Deque[_RetryItem] = deque()
+        self._pending: deque[_RetryItem] = deque()
 
     def _backoff_ms(self, attempt: int) -> float:
         # Keep delays small for cooperative tests
@@ -225,7 +226,7 @@ class RetryNode(FunctionNode):
     def _handle_tick(self) -> None:
         # Process ready items
         now = self._now_ms()
-        to_requeue: Deque[_RetryItem] = deque()
+        to_requeue: deque[_RetryItem] = deque()
         while self._pending:
             item = self._pending.popleft()
             if item.next_time_ms > now:
@@ -282,10 +283,10 @@ class TimeoutNode(FunctionNode):
         self._out = output_port
         self._timeout_ms = max(1, int(timeout_ms))
         self._action = timeout_action
-        self._running: Optional[_TimeoutItem] = None
-        self._result: Optional[Tuple[bool, Any]] = None  # (success, value or exception)
+        self._running: _TimeoutItem | None = None
+        self._result: tuple[bool, Any] | None = None  # (success, value or exception)
         self._job_id: int = 0
-        self._active_job_id: Optional[int] = None
+        self._active_job_id: int | None = None
 
     def _now_ms(self) -> float:
         return time.monotonic() * 1000.0
@@ -301,7 +302,7 @@ class TimeoutNode(FunctionNode):
         def _run(job_id: int, data: Any) -> None:
             try:
                 value = self._user_function(data)  # type: ignore[misc]
-                result: Tuple[bool, Any] = (True, value)
+                result: tuple[bool, Any] = (True, value)
             except Exception as e:  # noqa: BLE001
                 result = (False, e)
             # Only record if still active (not timed out)

@@ -2,14 +2,12 @@ from __future__ import annotations
 
 import base64
 import gzip
-import io
 import json
-from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Callable
+from typing import Any
 
-from .base import ErrorPolicy, FunctionNode, NodeConfig, create_error_message, setup_standard_ports
 from ..core.message import Message, MessageType
+from .base import ErrorPolicy, FunctionNode, NodeConfig, create_error_message, setup_standard_ports
 
 
 class SchemaType(str, Enum):
@@ -168,7 +166,7 @@ class CompressionNode(FunctionNode):
         self._mode = mode
 
     def _to_bytes(self, payload: Any) -> bytes:
-        if isinstance(payload, (bytes, bytearray)):
+        if isinstance(payload, bytes | bytearray):
             return bytes(payload)
         if isinstance(payload, str):
             return payload.encode("utf-8")
@@ -185,7 +183,7 @@ class CompressionNode(FunctionNode):
                         out = gzip.compress(data, compresslevel=self._level)
                         self.emit(self._out, Message(MessageType.DATA, out))
                     else:
-                        raw = msg.payload if isinstance(msg.payload, (bytes, bytearray)) else base64.b64decode(msg.payload) if isinstance(msg.payload, str) else bytes(msg.payload)
+                        raw = msg.payload if isinstance(msg.payload, bytes | bytearray) else base64.b64decode(msg.payload) if isinstance(msg.payload, str) else bytes(msg.payload)
                         out = gzip.decompress(raw)
                         self.emit(self._out, Message(MessageType.DATA, out))
                 else:
@@ -223,7 +221,7 @@ class EncryptionNode(FunctionNode):
         self._mode = mode
 
     def _to_bytes(self, payload: Any) -> bytes:
-        if isinstance(payload, (bytes, bytearray)):
+        if isinstance(payload, bytes | bytearray):
             return bytes(payload)
         if isinstance(payload, str):
             return payload.encode("utf-8")
@@ -234,8 +232,9 @@ class EncryptionNode(FunctionNode):
             return
         if msg.type == MessageType.DATA:
             try:
-                from cryptography.hazmat.primitives.ciphers.aead import AESGCM, ChaCha20Poly1305
                 import os
+
+                from cryptography.hazmat.primitives.ciphers.aead import AESGCM, ChaCha20Poly1305
 
                 aad = json.dumps(msg.headers or {}, sort_keys=True).encode("utf-8")
                 if self._mode == EncryptionMode.ENCRYPT:
