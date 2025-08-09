@@ -8,9 +8,13 @@ This document describes a safe procedure to migrate `examples/` and `notebooks/`
 - New empty repository created, e.g. `GhostWeaselLabs/meridian-runtime-examples`
 - Obtain its Git URL (SSH or HTTPS)
 
-## Dry run
+## Backup and dry run
 
 ```
+# Create an anchor tag and archive current trees
+uv run python scripts/migration_backup.py --paths examples notebooks
+
+# Dry run the split and push to verify commands
 uv run python scripts/migrate_with_history.py --remote-name examples-origin --remote-url git@github.com:GhostWeaselLabs/meridian-runtime-examples.git
 ```
 
