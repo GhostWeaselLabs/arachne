@@ -54,7 +54,7 @@
   - Update any other documentation files that reference examples or notebooks
   - _Requirements: 2.1, 2.2_
 
-- [ ] 3.2 Create user migration guidance
+- [x] 3.2 Create user migration guidance
   - Write migration guide explaining the change to users
   - Create redirect notices for common example access patterns
   - Update contribution guidelines to direct example contributions to new repo
@@ -82,7 +82,7 @@
   - Remove example-related CI/CD workflows from main repository
   - _Requirements: 1.5, 5.1_
 
-- [ ] 5.1 Update main repository CI/CD configuration
+- [x] 5.1 Update main repository CI/CD configuration
   - Remove example testing from main repository CI workflows
   - Update GitHub Actions to exclude examples and notebooks directories
   - Modify any scripts or tools that reference the removed directories
