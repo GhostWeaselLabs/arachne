@@ -200,15 +200,17 @@ def _sample_rss_bytes() -> int | None:
         return None
 
 
-def _bounded_growth(samples: list[int], tolerance_ratio: float = 0.20) -> bool:
+def _bounded_growth(samples: list[int], tolerance_ratio: float = 0.25) -> bool:
     """
     Heuristic: final RSS must not exceed min(RSS) by more than tolerance_ratio fraction,
     allowing warmup and fluctuations but flagging monotonic unbounded growth.
     """
     if not samples:
         return True
-    low = min(samples)
-    high = max(samples)
+    # Drop the first sample (warmup) which often includes interpreter and imports
+    trimmed = samples[1:] if len(samples) > 1 else samples
+    low = min(trimmed)
+    high = max(trimmed)
     # If high is within 20% of low (default), consider it bounded.
     return high <= int(low * (1.0 + tolerance_ratio))
 

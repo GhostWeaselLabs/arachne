@@ -99,6 +99,8 @@ Key capabilities:
 
 Run:
 ```bash
+git clone https://github.com/GhostWeaselLabs/meridian-runtime-examples.git
+cd meridian-runtime-examples
 uv run python examples/sentiment/main.py --human --timeout-s 6.0
 ```
 
@@ -125,6 +127,8 @@ Key capabilities:
 
 Run:
 ```bash
+git clone https://github.com/GhostWeaselLabs/meridian-runtime-examples.git
+cd meridian-runtime-examples
 uv run python examples/streaming_coalesce/main.py --human --timeout-s 5.0
 ```
 

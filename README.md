@@ -42,7 +42,7 @@ Use cases
 - Patterns: https://ghostweasellabs.github.io/meridian-runtime-docs/concepts/patterns/
 - Observability: https://ghostweasellabs.github.io/meridian-runtime-docs/concepts/observability/
 - Troubleshooting: https://ghostweasellabs.github.io/meridian-runtime-docs/support/troubleshooting/
-- **Interactive Notebooks**: [`notebooks/`](./notebooks/) — Jupyter notebooks for hands-on learning and experimentation
+- **Examples & Notebooks**: `meridian-runtime-examples` repository — clone from https://github.com/GhostWeaselLabs/meridian-runtime-examples
 - Note: Analytics is enabled for the docs site; see mkdocs.yml for the tracking configuration.
 
 
@@ -77,18 +77,17 @@ uv run pytest
 
 3) Run an example
 ```
-uv run python -m examples.hello_graph.main
+git clone https://github.com/GhostWeaselLabs/meridian-runtime-examples.git
+cd meridian-runtime-examples
+uv run python examples/hello_graph/main.py
 ```
 
-4) Try interactive notebooks
+4) Try interactive notebooks (in the examples repo)
 ```bash
-# Install notebook dependencies
-uv sync --extra notebooks
-
 # Start Jupyter
 uv run jupyter lab
 
-# Navigate to notebooks/ directory and try:
+# In the examples repo, navigate to notebooks/ and try:
 # - tutorials/01-getting-started.ipynb
 # - examples/hello-graph-interactive.ipynb
 ```
@@ -103,8 +102,7 @@ src/meridian/
     __init__.py
   utils/
     __init__.py
-examples/
-  __init__.py
+examples/  (moved to external meridian-runtime-examples repo)
 tests/
   unit/
     test_smoke.py

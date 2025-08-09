@@ -169,4 +169,4 @@ This guide shows how to:
     ```
 
 !!! info
-    Need a richer tutorial? See the example modules under the repository `examples/` directory and the [Built‑in nodes reference](../reference/built-in-nodes.md).
+    Need a richer tutorial? See the example modules in the `meridian-runtime-examples` repository and the [Built‑in nodes reference](../reference/built-in-nodes.md).
