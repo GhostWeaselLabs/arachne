@@ -1,0 +1,20 @@
+{
+  "completed": [
+    "preflight",
+    "ensure_remote"
+  ],
+  "split_branches": [
+    "subtree-split/examples",
+    "subtree-split/notebooks",
+    "subtree-split/examples",
+    "subtree-split/notebooks"
+  ],
+  "completed_splits": [
+    "subtree-split/examples",
+    "subtree-split/notebooks",
+    "subtree-split/examples",
+    "subtree-split/notebooks"
+  ],
+  "pushed": true,
+  "cleaned": true
+}
