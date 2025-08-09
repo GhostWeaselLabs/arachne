@@ -1,0 +1,17 @@
+name: Example request
+description: Request a new example or enhancement
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem should the example demonstrate?
+      description: Describe the use case and expected learning outcome
+      placeholder: I'd like an example that shows...
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: Preferred libraries, constraints, runtime expectations

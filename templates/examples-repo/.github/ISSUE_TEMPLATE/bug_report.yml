@@ -1,0 +1,30 @@
+name: Bug report
+description: Report a problem with an example or notebook
+labels: [bug]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the issue and steps to reproduce
+      placeholder: The example X fails when I run Y...
+    validations:
+      required: true
+  - type: input
+    id: example-path
+    attributes:
+      label: Example/notebook path
+      placeholder: examples/sentiment/ or notebooks/examples/minimal-hello.ipynb
+  - type: dropdown
+    id: python-version
+    attributes:
+      label: Python version
+      options:
+        - 3.11
+        - 3.12
+        - 3.13
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs and output
+      render: bash
