@@ -27,7 +27,7 @@ Use MkDocs Material features to make examples clear, skimmable, and copy‑paste
 **Examples:**
 
 - Use `uv run python` instead of uv run python
-- Use `examples/sentiment/main.py` instead of examples/sentiment/main.py
+- Use `meridian-runtime-examples/examples/sentiment/main.py` instead of examples/sentiment/main.py
 - Use `MessageType.DATA` instead of MessageType.DATA
 - Use `--human` flag instead of --human flag
 
@@ -67,7 +67,7 @@ def build_graph(sg):
 
 - Use `title="path/to/file.py"` to orient readers.
 
-```python title="examples/hello_graph/main.py"
+```python title="meridian-runtime-examples/examples/hello_graph/main.py"
 from meridian.core import Message, MessageType
 # ...
 ```

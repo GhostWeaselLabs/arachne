@@ -48,7 +48,7 @@ Ensure the following before cutting a release:
 - `README`: current quickstart, status, links to docs
 - `docs/plan`: updated if scope changed
 - `docs/support`: updated troubleshooting if necessary
-- `examples/`: runnable with pinned deps (or `uv`) and instructions
+- Examples and notebooks are maintained in the external `meridian-runtime-examples` repository. Ensure example smoke tests pass there prior to release.
 
 ### Observability and Privacy Posture
 

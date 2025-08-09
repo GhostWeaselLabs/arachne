@@ -21,7 +21,7 @@ A concise explanation of the component being documented (API surface, module, CL
 Quick links
 - How-to guide: ../guides/<related-guide>.md
 - Concepts: ../concepts/<related-concept>.md
-- Examples: ../examples/index.md
+- Examples: ../examples/index.md (code in external `meridian-runtime-examples` repository)
 
 ---
 

@@ -167,7 +167,7 @@ uv run pytest -q tests/path::TestClass::test_method
 
 - `src/meridian/*`: runtime and library code
 - `tests/*`: unit, integration, and property‑based tests
-- `examples/*`: runnable examples and recipes
+- `meridian-runtime-examples/examples/*`: runnable examples and recipes
 - `docs/roadmap/*`: milestone plans and decision records
 - `docs/contributing/*`: this guide and release process
 - `docs/support/*`: issue reporting, troubleshooting, and templates
@@ -330,7 +330,7 @@ For major updates, open an issue or small PR to validate impact. Keep dependency
     - Versioning (SemVer)
     - Changelog updates
     - Tagging and packaging
-    - Release verification (examples/tests)
+- Release verification (examples repo tests)
 - Any public API change must include release notes and migration steps.
 
 ---
