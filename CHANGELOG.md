@@ -13,13 +13,13 @@ Owner: GhostWeasel (Lead: doubletap-dave)
 - Placeholder for upcoming changes after v1.0.2.
 
 ### Changed
-- N/A
+- Documentation updated to reference external `meridian-runtime-examples` repository for all runnable examples and notebooks.
 
 ### Deprecated
 - N/A
 
 ### Removed
-- N/A
+- Moved `examples/` and `notebooks/` out of this repository. All runnable examples and Jupyter notebooks now live in `https://github.com/GhostWeaselLabs/meridian-runtime-examples`.
 
 ### Fixed
 - N/A
