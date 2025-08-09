@@ -68,7 +68,7 @@ If a problem isn't covered here, open an issue with full context (OS, Python, co
 
 - Run examples using module form to ensure proper PYTHONPATH:
 
-    - `uv run python -m examples.hello_graph.main`
+    - `git clone https://github.com/GhostWeaselLabs/meridian-runtime-examples.git && cd meridian-runtime-examples && uv run python examples/hello_graph/main.py`
 
 **See also**
 
@@ -404,7 +404,7 @@ If a problem isn't covered here, open an issue with full context (OS, Python, co
 - Use module execution for tests/examples to avoid path issues:
 
     - `uv run pytest`
-    - `uv run python -m examples.pipeline_demo.main`
+    - `git clone https://github.com/GhostWeaselLabs/meridian-runtime-examples.git && cd meridian-runtime-examples && uv run python examples/pipeline_demo/main.py`
 
 **Key metrics to monitor:**
 

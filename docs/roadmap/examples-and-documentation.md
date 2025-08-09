@@ -101,8 +101,10 @@ Deliver runnable, composable examples and concise documentation that demonstrate
 uv init
 uv lock
 uv sync
-uv run python -m examples.hello_graph.main
-uv run python -m examples.pipeline_demo.main
+git clone https://github.com/GhostWeaselLabs/meridian-runtime-examples.git
+cd meridian-runtime-examples
+uv run python examples/hello_graph/main.py
+uv run python examples/pipeline_demo/main.py
 ```
 
 ### Optional observability

@@ -256,9 +256,11 @@ Make examples minimal and runnable when possible.
 - Avoid unnecessary dependencies or setup in snippets.
 - When demonstrating runtime behavior, prefer module execution style:
 
-  ```bash
-  uv run python -m examples.hello_graph.main
-  ```
+```bash
+  git clone https://github.com/GhostWeaselLabs/meridian-runtime-examples.git
+  cd meridian-runtime-examples
+  uv run python examples/hello_graph/main.py
+```
 
 ### Shell
 
