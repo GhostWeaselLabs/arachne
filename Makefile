@@ -4,10 +4,6 @@
 #
 # Usage:
 #   make help
-#   make demo-sentiment
-#   make demo-coalesce
-#   make demo-sentiment-debug
-#   make demo-coalesce-quiet
 #   make docs-build
 #   make docs-serve
 #   make docs-check-links
@@ -63,67 +59,10 @@ help:
 	@echo
 
 # --------------------------------------------------------------------
-# Minimal Hello World demo
+# Examples moved
 # --------------------------------------------------------------------
-.PHONY: demo-minimal
-demo-minimal:
-	$(PYTHON) examples/minimal_hello/main.py
-
-# --------------------------------------------------------------------
-# Sentiment demo
-# --------------------------------------------------------------------
-.PHONY: demo-sentiment
-demo-sentiment:
-	$(PYTHON) examples/sentiment/main.py --human \
-		--rate-hz $(RATE_HZ) \
-		--control-period $(CONTROL_PERIOD) \
-		--keep $(KEEP) \
-		--tick-ms $(TICK_MS) \
-		--max-batch $(MAX_BATCH) \
-		--timeout-s $(TIMEOUT_S) \
-		--cap-text $(CAP_TEXT) \
-		--cap-tokens $(CAP_TOKENS) \
-		--cap-scored $(CAP_SCORED) \
-		--cap-control $(CAP_CONTROL)
-
-.PHONY: demo-sentiment-debug
-demo-sentiment-debug:
-	$(PYTHON) examples/sentiment/main.py --human --debug \
-		--rate-hz $(RATE_HZ) \
-		--control-period $(CONTROL_PERIOD) \
-		--keep $(KEEP) \
-		--tick-ms $(TICK_MS) \
-		--max-batch $(MAX_BATCH) \
-		--timeout-s $(TIMEOUT_S) \
-		--cap-text $(CAP_TEXT) \
-		--cap-tokens $(CAP_TOKENS) \
-		--cap-scored $(CAP_SCORED) \
-		--cap-control $(CAP_CONTROL)
-
-# --------------------------------------------------------------------
-# Streaming coalesce demo
-# --------------------------------------------------------------------
-.PHONY: demo-coalesce
-demo-coalesce:
-	$(PYTHON) examples/streaming_coalesce/main.py --human \
-		--rate-hz $(COAL_RATE_HZ) \
-		--tick-ms $(COAL_TICK_MS) \
-		--max-batch $(COAL_MAX_BATCH) \
-		--timeout-s $(COAL_TIMEOUT_S) \
-		--cap-sensor-to-agg $(CAP_SENSOR_TO_AGG) \
-		--cap-agg-to-sink $(CAP_AGG_TO_SINK) \
-		--keep $(COAL_KEEP)
-
-.PHONY: demo-coalesce-quiet
-demo-coalesce-quiet:
-	$(PYTHON) examples/streaming_coalesce/main.py --human --quiet \
-		--rate-hz $(COAL_RATE_HZ) \
-		--tick-ms $(COAL_TICK_MS) \
-		--max-batch $(COAL_MAX_BATCH) \
-		--timeout-s $(COAL_TIMEOUT_S) \
-		--cap-sensor-to-agg $(CAP_SENSOR_TO_AGG) \
-		--cap-agg-to-sink $(CAP_AGG_TO_SINK) \
-		--keep $(COAL_KEEP)
+# NOTE: Example demo targets were removed. Examples now live in the
+#       meridian-runtime-examples repository.
 
 # --------------------------------------------------------------------
 # Documentation (MkDocs)

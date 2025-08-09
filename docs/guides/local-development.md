@@ -143,13 +143,14 @@ Guidance:
 
 ## Running examples
 
-List available examples:
+List available examples (in the examples repo):
 
 ```bash
-ls examples/
+git clone https://github.com/GhostWeaselLabs/meridian-runtime-examples.git
+ls meridian-runtime-examples/examples/
 ```
 
-Run an example:
+Run an example (from the examples repo root):
 
 ```bash
 # Direct execution
@@ -158,11 +159,6 @@ python examples/hello_graph/main.py
 python examples/sentiment/main.py --human --timeout-s 6.0
 python examples/streaming_coalesce/main.py --human --timeout-s 5.0
 python examples/pipeline_demo/main.py
-
-# Using make targets (with configurable parameters)
-make demo-minimal
-make demo-sentiment
-make demo-coalesce
 ```
 
 Troubleshooting examples:
@@ -173,8 +169,8 @@ Troubleshooting examples:
 !!! tip
     **Make Target Parameters**: Override demo parameters with environment variables:
     ```bash
-    RATE_HZ=20 TICK_MS=10 make demo-sentiment
-    COAL_RATE_HZ=600 CAP_AGG_TO_SINK=8 make demo-coalesce
+    RATE_HZ=20 TICK_MS=10 python examples/sentiment/main.py --human
+    COAL_RATE_HZ=600 CAP_AGG_TO_SINK=8 python examples/streaming_coalesce/main.py --human
     ```
 
 ---

@@ -12,7 +12,7 @@ tags:
 
 A focused example that demonstrates the coalescing policy in the Meridian runtime. It simulates a high-rate sensor stream, converts each reading into a small aggregate, and uses a coalescing edge to merge items under burst pressure without losing information.
 
-Code location: `examples/streaming_coalesce/`
+Code location: `meridian-runtime-examples/examples/streaming_coalesce/`
 
 - Entry point: `examples/streaming_coalesce/main.py`
 - Local README: `examples/streaming_coalesce/README.md`
@@ -43,7 +43,7 @@ Code location: `examples/streaming_coalesce/`
 
 ## How to run
 
-From the repository root:
+From the examples repository root (`meridian-runtime-examples`):
 
 ```bash
 python examples/streaming_coalesce/main.py --human --timeout-s 5.0

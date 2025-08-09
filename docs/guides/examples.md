@@ -141,7 +141,7 @@ Observe:
 
 ## Available Examples
 
-The examples are organized in the `examples/` folder with detailed documentation:
+The examples are organized in the external `meridian-runtime-examples` repository under the `examples/` folder with detailed documentation:
 
 - **[Minimal Hello](../examples/minimal-hello.md)** - Basic node lifecycle and wiring
 - **[Hello Graph](../examples/hello-graph.md)** - Modular design with observability

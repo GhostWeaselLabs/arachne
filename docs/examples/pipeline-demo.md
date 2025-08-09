@@ -12,7 +12,7 @@ tags:
 
 A comprehensive example demonstrating multi-stage data processing with validation, transformation, and control flow. This example shows how to build complex graph topologies with multiple processing stages and error handling.
 
-Code location: `examples/pipeline_demo/`
+Code location: `meridian-runtime-examples/examples/pipeline_demo/`
 
 - Entry point: `examples/pipeline_demo/main.py`
 - Control: `examples/pipeline_demo/control.py`
@@ -48,7 +48,7 @@ Code location: `examples/pipeline_demo/`
 
 ## How to run
 
-From the repository root:
+From the examples repository root (`meridian-runtime-examples`):
 
 ```bash
 python examples/pipeline_demo/main.py

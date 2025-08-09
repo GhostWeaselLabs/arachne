@@ -12,9 +12,9 @@ tags:
 
 A complete, runnable example demonstrating basic node creation and graph wiring with proper lifecycle management. This example shows the fundamental building blocks of the Meridian runtime.
 
-Code location: `examples/minimal_hello/`
+Code location: `meridian-runtime-examples/examples/minimal_hello/`
 
-- Entry point: `examples/minimal_hello/main.py`
+- Entry point: `meridian-runtime-examples/examples/minimal_hello/main.py`
 
 ---
 
@@ -39,7 +39,7 @@ Code location: `examples/minimal_hello/`
 
 ## How to run
 
-From the repository root:
+From the examples repository root (`meridian-runtime-examples`):
 
 ```bash
 python examples/minimal_hello/main.py

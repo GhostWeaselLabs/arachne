@@ -12,7 +12,7 @@ tags:
 
 A modular example with separate producer and consumer modules, demonstrating proper project structure and observability integration. This example shows how to organize complex nodes into separate files with comprehensive logging.
 
-Code location: `examples/hello_graph/`
+Code location: `meridian-runtime-examples/examples/hello_graph/`
 
 - Entry point: `examples/hello_graph/main.py`
 - Producer: `examples/hello_graph/producer.py`
@@ -42,7 +42,7 @@ Code location: `examples/hello_graph/`
 
 ## How to run
 
-From the repository root:
+From the examples repository root (`meridian-runtime-examples`):
 
 ```bash
 python examples/hello_graph/main.py

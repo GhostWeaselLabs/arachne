@@ -8,7 +8,10 @@ tags:
 
 # Examples {#examples}
 
-Welcome to the Meridian Runtime example gallery. Every example here is a real, runnable program from the `examples/` directory—no pseudocode, no hand-waving. Each one is designed to show off a core capability of the runtime, with real dataflow, real backpressure, and real observability. Copy, run, and adapt.
+!!! info "Examples moved"
+    Examples and notebooks now live in the separate public repository `meridian-runtime-examples`. Clone it to run examples locally: `https://github.com/GhostWeaselLabs/meridian-runtime-examples`.
+
+Welcome to the Meridian Runtime example gallery. Each example is a real, runnable program in the external examples repository, designed to show off core capabilities of the runtime with real dataflow, backpressure, and observability. Copy, run, and adapt.
 
 ---
 
@@ -25,6 +28,8 @@ Welcome to the Meridian Runtime example gallery. Every example here is a real, r
 
 **How to run:**
 ```bash
+git clone https://github.com/GhostWeaselLabs/meridian-runtime-examples.git
+cd meridian-runtime-examples
 python examples/minimal_hello/main.py
 ```
 
@@ -47,6 +52,8 @@ python examples/minimal_hello/main.py
 
 **How to run:**
 ```bash
+git clone https://github.com/GhostWeaselLabs/meridian-runtime-examples.git
+cd meridian-runtime-examples
 python examples/hello_graph/main.py
 ```
 
@@ -69,6 +76,8 @@ python examples/hello_graph/main.py
 
 **How to run:**
 ```bash
+git clone https://github.com/GhostWeaselLabs/meridian-runtime-examples.git
+cd meridian-runtime-examples
 python examples/sentiment/main.py --human --timeout-s 6.0
 ```
 
@@ -92,6 +101,8 @@ python examples/sentiment/main.py --human --timeout-s 6.0
 **How to run:**
 
 ```bash
+git clone https://github.com/GhostWeaselLabs/meridian-runtime-examples.git
+cd meridian-runtime-examples
 python examples/streaming_coalesce/main.py --human --timeout-s 5.0
 ```
 
@@ -114,6 +125,8 @@ python examples/streaming_coalesce/main.py --human --timeout-s 5.0
 
 **How to run:**
 ```bash
+git clone https://github.com/GhostWeaselLabs/meridian-runtime-examples.git
+cd meridian-runtime-examples
 python examples/pipeline_demo/main.py
 ```
 
@@ -123,7 +136,7 @@ python examples/pipeline_demo/main.py
 
 ## How to run examples {#how-to-run-examples}
 
-From the repository root, use Python directly or `uv run` if you use `uv`:
+From the examples repository root (`meridian-runtime-examples`), use Python directly or `uv run`:
 
 ```bash
 # Minimal Hello World (start here!)
@@ -149,7 +162,7 @@ python examples/pipeline_demo/main.py
 
 ## Contributing new examples {#contributing-new-examples}
 
-- Place code under `examples/<example_name>/`
+- Contribute in `meridian-runtime-examples` under `examples/<example_name>/`
 - Keep a small `README.md` in the example directory with:
 
     - What it demonstrates

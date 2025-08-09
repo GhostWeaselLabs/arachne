@@ -63,6 +63,8 @@ Expected output: `✓ Setup working! Received: Hello Meridian!`
 
 ## Run an example {#run-an-example}
 ```bash
+git clone https://github.com/GhostWeaselLabs/meridian-runtime-examples.git
+cd meridian-runtime-examples
 uv run python examples/sentiment/main.py --human --timeout-s 6.0
 ```
 

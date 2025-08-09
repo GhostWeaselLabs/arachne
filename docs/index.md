@@ -61,8 +61,11 @@ uv run pytest --cov=src --cov-fail-under=80
 ### Run the examples
 
 ```bash
+git clone https://github.com/GhostWeaselLabs/meridian-runtime-examples.git
+cd meridian-runtime-examples
+
 # Hello graph (minimal)
-uv run python -m examples.hello_graph.main
+uv run python examples/hello_graph/main.py
 
 # Sentiment pipeline (control-plane preemption, backpressure)
 uv run python examples/sentiment/main.py --human --timeout-s 6.0
@@ -110,10 +113,10 @@ src/meridian/
   core/           # nodes, edges, subgraphs, scheduler
   observability/  # logs, metrics, tracing hooks
   utils/          # shared utilities
-examples/
-  hello_graph/          # minimal runnable example
-  sentiment/            # control-plane overrides and priorities
-  streaming_coalesce/   # coalescing policy under burst pressure
+ examples/  (in `meridian-runtime-examples`)
+   hello_graph/          # minimal runnable example
+   sentiment/            # control-plane overrides and priorities
+   streaming_coalesce/   # coalescing policy under burst pressure
 tests/
   unit/           # unit tests
   integration/    # end-to-end graph tests

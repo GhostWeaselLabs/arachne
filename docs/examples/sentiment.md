@@ -12,7 +12,7 @@ tags:
 
 A small, end-to-end example that simulates a real-time text processing pipeline with a control-plane channel. It demonstrates priorities, bounded queues, observability, and graceful shutdown in the Meridian runtime.
 
-Code location: `examples/sentiment/`
+Code location: `meridian-runtime-examples/examples/sentiment/`
 
 - Entry point: `examples/sentiment/main.py`
 - Local README: `examples/sentiment/README.md`
@@ -46,7 +46,7 @@ Code location: `examples/sentiment/`
 
 ## How to run
 
-From the repository root:
+From the examples repository root (`meridian-runtime-examples`):
 
 ```bash
 python examples/sentiment/main.py --human --timeout-s 6.0
