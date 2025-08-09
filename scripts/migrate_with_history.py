@@ -8,7 +8,7 @@ import sys
 import threading
 import time
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 
@@ -56,7 +56,7 @@ class StatusReporter:
         self._last_activity = time.monotonic()
 
     def _timestamp(self) -> str:
-        return datetime.now(timezone.utc).isoformat()
+        return datetime.now(UTC).isoformat()
 
     def log(self, level: str, *, phase: str, step: str, message: str, repo: str | None = None, progress: dict | None = None, duration_ms: int | None = None, commit: str | None = None) -> None:
         self.touch()
