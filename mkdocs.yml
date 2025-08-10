@@ -89,6 +89,7 @@ nav:
       - Overview: examples/index.md
       - Minimal Hello: examples/minimal-hello.md
       - Hello Graph: examples/hello-graph.md
+      - Simple Web Server: examples/simple-web-server.md
       - Sentiment: examples/sentiment.md
       - Streaming Coalesce: examples/streaming-coalesce.md
       - Pipeline Demo: examples/pipeline-demo.md

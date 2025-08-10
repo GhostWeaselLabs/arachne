@@ -145,6 +145,9 @@ python examples/minimal_hello/main.py
 # Hello Graph
 python examples/hello_graph/main.py
 
+# Simple web server (simulated)
+python examples/simple_web_server/main.py
+
 # Sentiment pipeline
 python examples/sentiment/main.py --human --timeout-s 6.0
 
